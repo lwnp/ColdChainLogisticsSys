@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.xzit</groupId>
-        <artifactId>ColdChainLogisticsSys</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <artifactId>sys-api</artifactId>
     </parent>
-    <artifactId>common</artifactId>
+    <artifactId>api-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>common</name>
-    <description>common</description>
+    <name>api-user</name>
+    <description>api-user</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -24,14 +24,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
     </dependencies>
 

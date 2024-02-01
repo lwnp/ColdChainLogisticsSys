@@ -7,6 +7,9 @@
         <artifactId>ColdChainLogisticsSys</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <modules>
+        <module>api-user</module>
+    </modules>
     <packaging>pom</packaging>
     <artifactId>sys-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
