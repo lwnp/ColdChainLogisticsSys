@@ -25,6 +25,7 @@
 		<springboot.version>3.0.13</springboot.version>
 		<spring.authorization.server.version>1.1.4</spring.authorization.server.version>
 		<knife4j.version>4.4.0</knife4j.version>
+		<project.version>0.0.1-SNAPSHOT</project.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
