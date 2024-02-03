@@ -3,3 +3,8 @@ server:
 spring:
   application:
     name: authorization_service
+  main:
+    allow-circular-references: true
+  mvc:
+    converters:
+      preferred-json-mapper: gson

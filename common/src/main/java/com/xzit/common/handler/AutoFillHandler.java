@@ -16,7 +16,6 @@ public class AutoFillHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-
         this.setFieldValByName("createTime",LocalDateTime.now().format(formatter),metaObject);
 
     }
