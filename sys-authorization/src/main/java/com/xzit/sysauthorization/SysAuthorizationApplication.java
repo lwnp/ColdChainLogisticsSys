@@ -2,8 +2,10 @@ package com.xzit.sysauthorization;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication(scanBasePackages = {"com.xzit.api.user"})
+@SpringBootApplication(scanBasePackages = {"com.xzit"})
+@EnableFeignClients(basePackages = {"com.xzit.api.**.feign"})
 public class SysAuthorizationApplication {
 
     public static void main(String[] args) {

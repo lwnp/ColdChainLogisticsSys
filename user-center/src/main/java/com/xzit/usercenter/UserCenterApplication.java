@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {"com.xzit"})
-@EnableFeignClients(basePackages = {"com.xzit.api.**"})
+@EnableFeignClients(basePackages = {"com.xzit.api.**.feign"})
 public class UserCenterApplication {
 
     public static void main(String[] args) {
