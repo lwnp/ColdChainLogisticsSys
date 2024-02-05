@@ -26,6 +26,8 @@
 		<spring.authorization.server.version>1.1.4</spring.authorization.server.version>
 		<knife4j.version>4.4.0</knife4j.version>
 		<project.version>0.0.1-SNAPSHOT</project.version>
+		<refelctions.version>0.10.2</refelctions.version>
+		<nacos.client.version>2.3.0</nacos.client.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -80,6 +82,13 @@
 				<artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
 				<version>${knife4j.version}</version>
 			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+			<dependency>
+				<groupId>org.reflections</groupId>
+				<artifactId>reflections</artifactId>
+				<version>${refelctions.version}</version>
+			</dependency>
+
 
 
 		</dependencies>

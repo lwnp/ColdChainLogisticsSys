@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.xzit</groupId>
+        <artifactId>common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <artifactId>sys-api</artifactId>
     </parent>
-    <artifactId>api-user</artifactId>
+    <artifactId>common-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>api-user</name>
-    <description>api-user</description>
+    <name>common-user</name>
+    <description>common-user</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -26,20 +26,25 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.xzit</groupId>
-            <artifactId>common-user</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.xzit</groupId>
-            <artifactId>common-sys</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
