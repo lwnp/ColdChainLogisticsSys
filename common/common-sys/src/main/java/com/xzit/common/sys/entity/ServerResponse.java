@@ -1,5 +1,7 @@
 package com.xzit.common.sys.entity;
 
+import lombok.Getter;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -7,7 +9,7 @@ import java.io.Serializable;
  * 响应类型
  * @param <T>
  */
-
+@Getter
 public class ServerResponse <T> implements Serializable {
     @Serial
     private static final long serialVersionUID=2L;

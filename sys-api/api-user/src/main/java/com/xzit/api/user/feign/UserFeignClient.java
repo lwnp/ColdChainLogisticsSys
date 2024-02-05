@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @FeignClient(value = "user-service",contextId = "user")
 public interface UserFeignClient {
-    @GetMapping("/")
+    @GetMapping("/userDetails/getUserDetailsByUsername")
     ServerResponse<UserDetailsDTO> getUserDetailsByUsername(String username);
 
 }
