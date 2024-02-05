@@ -8,8 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 
 @SpringBootTest
 class SysAuthorizationApplicationTests {
-    @Autowired
-    UserFeignClient userFeignClient;
+
 
     @Test
     void contextLoads() {

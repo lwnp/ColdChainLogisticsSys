@@ -3,3 +3,5 @@ server:
 spring:
   application:
     name: user-service
+  main:
+    allow-bean-definition-overriding: true

@@ -17,6 +17,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailsDTO getUserByUsername(String username) {
         AuthUser user=new LambdaQueryChainWrapper<>(userMapper).eq(AuthUser::getUsername,username).one();
-        return BeanCopyUtil.copyObject(user, UserDetailsDTO.class);
+        return  user==null?null:BeanCopyUtil.copyObject(user, UserDetailsDTO.class);
     }
 }
