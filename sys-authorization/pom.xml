@@ -57,6 +57,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.xzit</groupId>
+            <artifactId>api-user</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
     </dependencies>
 

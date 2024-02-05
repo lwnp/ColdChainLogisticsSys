@@ -42,6 +42,7 @@
 				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
 				<version>${spring.cloud.alibaba.version}</version>
 				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
 			<dependency>
