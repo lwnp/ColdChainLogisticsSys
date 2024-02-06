@@ -5,20 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuDTO {
-    Long id;
+public class MenuRoleDTO {
     String name;
     String path;
-    List<MenuDTO> childMenu;
-    LocalDateTime creatTime;
-    LocalDateTime updateTime;
-
-
+    List<MenuRoleDTO> childMenu;
 }
