@@ -5,4 +5,5 @@ import com.xzit.common.user.model.dto.UserDetailsDTO;
 
 public interface UserService {
     UserDetailsDTO getUserByUsername(String username);
+    Boolean updateUserLoginTime(Long userId);
 }
