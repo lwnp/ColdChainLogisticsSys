@@ -22,6 +22,9 @@ spring:
             user-info-uri: http://127.0.0.1:9999/userinfo
             user-name-attribute: sub
   cloud:
+    loadbalancer:
+      nacos:
+        enabled: true
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848

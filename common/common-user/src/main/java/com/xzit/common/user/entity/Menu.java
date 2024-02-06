@@ -1,9 +1,6 @@
 package com.xzit.common.user.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +12,14 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo {
+@TableName("t_menu")
+public class Menu {
     @TableId(type= IdType.AUTO,value = "id")
     Long id;
-    String nickname;
-    String avatar;
-    String email;
-    String phone;
+    String name;
+    String path;
+    @TableField("parent_id")
+    Long parentId;
     @TableField(fill = FieldFill.INSERT,value = "create_time")
     LocalDateTime createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")
