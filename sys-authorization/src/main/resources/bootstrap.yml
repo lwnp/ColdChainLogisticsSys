@@ -6,8 +6,7 @@ spring:
           system-client-oidc:
             provider: system-client-provider
             client-id: system-client
-            authorization-grant-type:
-              - authorization_code
+            authorization-grant-type: authorization_code
             client-name: system-client-oidc
             scope:
               - profile

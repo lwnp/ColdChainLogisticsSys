@@ -19,6 +19,4 @@ public class MenuDTO {
     List<MenuDTO> childMenu;
     LocalDateTime creatTime;
     LocalDateTime updateTime;
-
-
 }
