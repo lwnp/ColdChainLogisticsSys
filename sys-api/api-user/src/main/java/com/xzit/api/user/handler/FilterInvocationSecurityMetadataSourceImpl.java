@@ -1,4 +1,4 @@
-package com.xzit.sysauthorization.handler;
+package com.xzit.api.user.handler;
 
 import com.xzit.common.user.model.dto.ResourceRoleDTO;
 import jakarta.annotation.PostConstruct;
@@ -12,12 +12,14 @@ import java.util.List;
 @Component
 public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocationSecurityMetadataSource {
 
+
     private static List<ResourceRoleDTO> resourceRoleList;
     public void clearDataSource(){
         resourceRoleList=null;
     }
     @PostConstruct
     public void loadDataSource(){
+        resourceRoleList=null;
 
     }
     @Override
