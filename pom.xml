@@ -29,6 +29,8 @@
 		<refelctions.version>0.10.2</refelctions.version>
 		<nacos.client.version>2.3.0</nacos.client.version>
 		<spring.security.oauth2.core.version>6.1.0</spring.security.oauth2.core.version>
+		<spring.security.client.version>6.0.8</spring.security.client.version>
+		<spring.security.cas.version>6.1.0</spring.security.cas.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -99,6 +101,17 @@
 				<groupId>org.reflections</groupId>
 				<artifactId>reflections</artifactId>
 				<version>${refelctions.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-oauth2-client</artifactId>
+				<version>${spring.security.client.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-cas</artifactId>
+				<version>${spring.security.cas.version}</version>
 			</dependency>
 
 

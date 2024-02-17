@@ -1,4 +1,25 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          system-client-oidc:
+            provider: system-client-provider
+            client-id: system-client
+            authorization-grant-type: authorization_code
+            client-name: system-client-oidc
+            scope:
+              - profile
+              - openid
+            client-secret: marshmello
+            redirect-uri: http://127.0.0.1:8888/login/oauth2/code/system-client-oidc
+        provider:
+          system-client-provider:
+            authorization-uri: http://127.0.0.1:9999/oauth2/authorize
+            token-uri: http://127.0.0.1:9999/oauth2/token
+            jwk-set-uri: http://127.0.0.1:9999/oauth2/jwks
+            user-info-uri: http://127.0.0.1:9999/userinfo
+            user-name-attribute: sub
   data:
     redis:
       host: localhost

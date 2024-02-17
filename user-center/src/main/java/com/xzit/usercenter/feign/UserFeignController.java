@@ -5,7 +5,6 @@ import com.xzit.api.user.feign.UserFeignClient;
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.user.model.dto.UserDetailsDTO;
-import com.xzit.usercenter.mapper.UserMapper;
 import com.xzit.usercenter.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;

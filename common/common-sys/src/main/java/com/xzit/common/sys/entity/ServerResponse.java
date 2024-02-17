@@ -1,6 +1,8 @@
 package com.xzit.common.sys.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serial;
@@ -12,6 +14,7 @@ import java.io.Serializable;
  */
 @Getter
 @ToString
+@NoArgsConstructor
 public class ServerResponse <T> implements Serializable {
     @Serial
     private static final long serialVersionUID=2L;
