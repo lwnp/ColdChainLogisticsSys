@@ -22,7 +22,6 @@ public class SecurityConfig {
                 .authorizeExchange(conf->conf.pathMatchers("/logout").permitAll().anyExchange().authenticated())
                 .cors(ServerHttpSecurity.CorsSpec::disable)
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .oauth2Client(withDefaults())
                 .oauth2Login(withDefaults())
                 .logout(logout ->
                         logout.logoutSuccessHandler(oidcLogoutSuccessHandler(clientRegistrationRepository)));
