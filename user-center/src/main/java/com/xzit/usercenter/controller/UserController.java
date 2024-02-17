@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
-    @GetMapping("/test")
+    @GetMapping("/user/test")
     String test(){
         return "hello";
     }

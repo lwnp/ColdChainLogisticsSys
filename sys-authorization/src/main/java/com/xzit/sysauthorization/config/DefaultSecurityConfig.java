@@ -26,7 +26,10 @@ public class DefaultSecurityConfig {
                                 .requestMatchers("/css/**","/login","/img/**","/js/**","/libs/**","/oauth2/consent").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(login-> login.loginPage("/login")
+                .formLogin(login-> {
+                            login.loginPage("/login");
+                            login.successHandler(authenticationSuccessHandler);
+                        }
                 )
                 .oauth2Login(oauth2Login -> {
                             oauth2Login.loginPage("/login");
