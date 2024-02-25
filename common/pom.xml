@@ -10,6 +10,7 @@
     <modules>
         <module>common-user</module>
         <module>common-sys</module>
+        <module>common-doc</module>
     </modules>
     <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
