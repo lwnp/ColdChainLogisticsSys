@@ -5,15 +5,20 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.xzit.sysauthorization.constant.AuthorizationConstant;
+import com.xzit.common.sys.constant.AuthorizationConstant;
+import com.xzit.sysauthorization.oauth2custom.conver.PasswordAuthenticationConverter;
+import com.xzit.sysauthorization.oauth2custom.provider.PasswordAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,9 +30,11 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedCli
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
@@ -41,6 +48,7 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -58,12 +66,23 @@ public class SecurityConfig {
     PasswordEncoder encoder;
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    @Lazy
+    OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
-    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
+    public SecurityFilterChain authorizationServerSecurityFilterChain(
+            HttpSecurity http
+            , AuthenticationManager authenticationManager
+            , OAuth2AuthorizationService authorizationService
+            , OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator)
             throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+                .tokenEndpoint(conf->{
+                    conf.accessTokenRequestConverter(new PasswordAuthenticationConverter())
+                            .authenticationProvider(new PasswordAuthenticationProvider(authenticationManager, authorizationService, tokenGenerator));
+                })
                 .oidc(Customizer.withDefaults())
                 .authorizationEndpoint(conf->conf.consentPage("/oauth2/consent"));
         http
@@ -98,7 +117,22 @@ public class SecurityConfig {
         return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(authorizedClientService);
     }
 
+    @Bean
+    OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource) {
+        JwtGenerator jwtGenerator = new JwtGenerator(new NimbusJwtEncoder(jwkSource));
+        jwtGenerator.setJwtCustomizer(jwtCustomizer);
 
+        OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
+        OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
+        return new DelegatingOAuth2TokenGenerator(
+                jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         KeyPair keyPair = generateRsaKey();
@@ -149,6 +183,7 @@ public class SecurityConfig {
                     s.add(ClientAuthenticationMethod.CLIENT_SECRET_JWT);
                 })
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri(AuthorizationConstant.CLIENT_REDIRECT_URI)
                 .postLogoutRedirectUri(AuthorizationConstant.POST_LOGOUT_URI)
@@ -173,6 +208,7 @@ public class SecurityConfig {
 
         OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder
                 .builder()
+                .password()
                 .authorizationCode()
                 .refreshToken()
                 .build();

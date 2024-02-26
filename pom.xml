@@ -21,16 +21,17 @@
 		<spring.cloud.version>2022.0.5</spring.cloud.version>
 		<alibaba.druid.version>1.2.21</alibaba.druid.version>
 		<mybatis.plus.version>3.5.5</mybatis.plus.version>
-		<minio.version>8.5.7</minio.version>
+		<minio.version>8.5.5</minio.version>
 		<springboot.version>3.0.13</springboot.version>
 		<spring.authorization.server.version>1.2.1</spring.authorization.server.version>
-		<knife4j.version>4.4.0</knife4j.version>
+		<knife4j.version>4.3.0</knife4j.version>
 		<project.version>0.0.1-SNAPSHOT</project.version>
 		<refelctions.version>0.10.2</refelctions.version>
 		<nacos.client.version>2.3.0</nacos.client.version>
 		<spring.security.oauth2.core.version>6.1.0</spring.security.oauth2.core.version>
 		<spring.security.client.version>6.0.8</spring.security.client.version>
 		<spring.security.cas.version>6.1.0</spring.security.cas.version>
+		<hutool.version>5.8.23</hutool.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -113,6 +114,18 @@
 				<artifactId>spring-security-cas</artifactId>
 				<version>${spring.security.cas.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.github.xiaoymin</groupId>
+				<artifactId>knife4j-gateway-spring-boot-starter</artifactId>
+				<version>${knife4j.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+			<dependency>
+				<groupId>cn.hutool</groupId>
+				<artifactId>hutool-all</artifactId>
+				<version>${hutool.version}</version>
+			</dependency>
+
 
 
 

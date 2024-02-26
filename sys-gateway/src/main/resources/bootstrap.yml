@@ -58,3 +58,9 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/user/**
+knife4j:
+  gateway:
+    enabled: true
+    discover:
+      enabled: true
+      excluded-services: gateway,authorization_service
