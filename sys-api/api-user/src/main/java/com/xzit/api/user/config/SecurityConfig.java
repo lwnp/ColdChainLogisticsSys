@@ -46,7 +46,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(conf->conf.requestMatchers("/feign/**").permitAll()
+                .authorizeHttpRequests(conf->conf.requestMatchers("/feign/**",
+                                "/doc.html",
+                                "/webjars/**" ,
+                                "/v3/**",
+                                " /swagger-resources/**").permitAll()
                         .anyRequest().access(((authentication, object) -> {
                             AntPathMatcher antPathMatcher=new AntPathMatcher();
                             boolean isMatch=false;

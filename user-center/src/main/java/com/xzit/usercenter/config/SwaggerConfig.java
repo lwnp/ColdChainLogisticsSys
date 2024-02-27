@@ -25,9 +25,9 @@ public class SwaggerConfig {
                                         .type(SecurityScheme.Type.OAUTH2)
                                         .name(HttpHeaders.AUTHORIZATION)
                                         .flows(new OAuthFlows()
-                                                .authorizationCode(
-                                                        new OAuthFlow().authorizationUrl(AuthorizationConstant.AUTHORIZE_URL)
-                                                                .tokenUrl(AuthorizationConstant.TOKEN_URL)
+                                                .password(
+                                                        new OAuthFlow().tokenUrl(AuthorizationConstant.TOKEN_URL)
+                                                                .refreshUrl(AuthorizationConstant.TOKEN_URL)
                                                 )
                                         )
                                         // 安全模式使用Bearer令牌（即JWT）
