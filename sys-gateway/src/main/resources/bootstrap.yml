@@ -29,12 +29,16 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/user/**
+          filters:
+            - StripPrefix=1
 knife4j:
   gateway:
     enabled: true
+    strategy: discover
     discover:
       enabled: true
-      excluded-services: gateway,authorization_service
+      version: openapi3
+  cors: true
 logging:
   level:
     org.springframework.security: trace

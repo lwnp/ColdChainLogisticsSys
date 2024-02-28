@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.AntPathMatcher;
@@ -32,6 +33,8 @@ import java.util.List;
 public class SecurityConfig {
     @Autowired
     ResourceFeignClient resourceFeignClient;
+    @Autowired
+    AccessDeniedHandler accessDeniedHandler;
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -46,24 +49,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(conf->conf.requestMatchers("/feign/**",
+                .authorizeHttpRequests(conf-> conf.requestMatchers("/feign/**",
                                 "/doc.html",
-                                "/webjars/**" ,
+                                "/webjars/**",
                                 "/v3/**",
-                                " /swagger-resources/**").permitAll()
+                                "/swagger-resources/**").permitAll()
                         .anyRequest().access(((authentication, object) -> {
-                            AntPathMatcher antPathMatcher=new AntPathMatcher();
-                            boolean isMatch=false;
+                            AntPathMatcher antPathMatcher = new AntPathMatcher();
+                            boolean isMatch = false;
                             String requestURI = object.getRequest().getRequestURI();
-                            List<ResourceRoleDTO> resourceRoles=resourceFeignClient.listResourceRoles().getData();
-                            for (ResourceRoleDTO resourceRoleDTO:resourceRoles){
-                                if(antPathMatcher.match(requestURI,resourceRoleDTO.getUrl())){
-                                    isMatch=true;
-                                    List<String> roles=resourceRoleDTO.getRoleList();
+                            List<ResourceRoleDTO> resourceRoles = resourceFeignClient.listResourceRoles().getData();
+                            for (ResourceRoleDTO resourceRoleDTO : resourceRoles) {
+                                if (antPathMatcher.match(requestURI, resourceRoleDTO.getUrl())) {
+                                    isMatch = true;
+                                    List<String> roles = resourceRoleDTO.getRoleList();
                                     Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
-                                    for(GrantedAuthority authority:authorities){
-                                        for(String role:roles){
-                                            if(authority.getAuthority().equals(role)){
+                                    for (GrantedAuthority authority : authorities) {
+                                        for (String role : roles) {
+                                            if (authority.getAuthority().equals(role)) {
                                                 return new AuthorizationDecision(true);
                                             }
                                         }
@@ -81,6 +84,7 @@ public class SecurityConfig {
                         })))
                 .oauth2ResourceServer(oauth2-> {
                     oauth2.jwt(Customizer.withDefaults());
+                    oauth2.accessDeniedHandler(accessDeniedHandler);
                 })
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
     @Operation(summary = "测试")
-    @GetMapping("/user/test")
+    @GetMapping("/test")
     String test(){
         return "hello";
     }
