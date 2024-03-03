@@ -13,16 +13,15 @@ import java.time.format.DateTimeFormatter;
  */
 @Component
 public class AutoFillHandler implements MetaObjectHandler {
-    DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName("createTime",LocalDateTime.now().format(formatter),metaObject);
+        this.setFieldValByName("createTime",LocalDateTime.now(),metaObject);
 
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("updateTime",LocalDateTime.now().format(formatter),metaObject);
+        this.setFieldValByName("updateTime",LocalDateTime.now(),metaObject);
     }
 }

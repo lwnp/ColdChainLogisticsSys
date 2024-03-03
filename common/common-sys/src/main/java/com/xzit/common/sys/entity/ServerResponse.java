@@ -1,5 +1,6 @@
 package com.xzit.common.sys.entity;
 
+import com.xzit.common.sys.enums.ResponseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,11 +30,11 @@ public class ServerResponse <T> implements Serializable {
         this.data=data;
     }
     public static <T> ServerResponse<T> success(T data){
-        return new ServerResponse<>(200,"请求成功",true,data);
+        return new ServerResponse<>(ResponseCodeEnum.SUCCESS.getCode(),ResponseCodeEnum.SUCCESS.getDesc(),true,data);
 
     }
     public static <T> ServerResponse<T> success(){
-        return new ServerResponse<>(200,"请求成功",true,null);
+        return new ServerResponse<>(ResponseCodeEnum.SUCCESS.getCode(),ResponseCodeEnum.SUCCESS.getDesc(),true,null);
     }
     public static <T> ServerResponse<T> fail(Integer code,String msg){
         return new ServerResponse<>(code,msg,false,null);
