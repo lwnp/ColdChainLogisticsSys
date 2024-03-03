@@ -1,4 +1,23 @@
 spring:
+  mail:
+    username: 2300362038@qq.com
+    password: tocfhqbvszckeagi
+    host: smtp.qq.com
+    default-encoding: UTF-8
+    protocol: smtp
+    port: 465
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: 465
+          ssl:
+            enable: true
+          starttls:
+            enable: true
+            required: true
   application:
     name: message-service
   cloud:

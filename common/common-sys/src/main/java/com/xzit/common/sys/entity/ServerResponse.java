@@ -42,5 +42,8 @@ public class ServerResponse <T> implements Serializable {
     public static <T> ServerResponse<T> fail(Integer code){
         return new ServerResponse<>(code,"出错啦",false,null);
     }
+    public static <T> ServerResponse<T> fail(ResponseCodeEnum responseCodeEnum){
+        return new ServerResponse<>(responseCodeEnum.getCode(), responseCodeEnum.getDesc(), false,null);
+    }
 
 }

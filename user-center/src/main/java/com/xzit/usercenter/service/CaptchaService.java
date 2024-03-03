@@ -1,7 +1,8 @@
 package com.xzit.usercenter.service;
 
+import com.xzit.common.sys.model.vo.EmailVO;
+
 public interface CaptchaService {
-    String generateCaptcha(String email);
     Boolean checkCaptcha(String email,String code);
-    void sendCaptcha();
+    void sendCaptchaToExchange(EmailVO emailVO);
 }

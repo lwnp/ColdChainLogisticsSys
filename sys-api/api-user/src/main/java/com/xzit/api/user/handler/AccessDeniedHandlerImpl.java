@@ -20,6 +20,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         response.setContentType(ResponseConstant.CONTENT_TYPE_JSON);
         response.setCharacterEncoding(ResponseConstant.ENCODE);
-        response.getWriter().println(JSON.toJSONString(ServerResponse.fail(ResponseCodeEnum.UNAUTHORIZED_ERROR.getCode(),ResponseCodeEnum.UNAUTHORIZED_ERROR.getDesc())));
+        response.getWriter().println(JSON.toJSONString(ServerResponse.fail(ResponseCodeEnum.UNAUTHORIZED_ERROR)));
     }
 }

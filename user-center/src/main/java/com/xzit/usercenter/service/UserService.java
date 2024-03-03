@@ -9,4 +9,5 @@ public interface UserService {
     Boolean updateUserLoginTime(Long userId);
     Boolean hasSameUser(String username);
     Boolean register(UserVO user);
+
 }
