@@ -11,7 +11,6 @@ spring:
       binders:
         rabbit:
           type: rabbit
-          default-candidate: false
           environment:
             spring:
               rabbitmq:
@@ -21,12 +20,10 @@ spring:
                 password: admin
                 virtual-host: /
       bindings:
-        email:
+        email-out-0:
           binder: rabbit
-          destination: email
+          destination: email-destination
           content-type: application/json
-          producer:
-            auto-startup: true
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848

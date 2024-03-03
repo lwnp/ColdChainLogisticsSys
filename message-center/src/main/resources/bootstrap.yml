@@ -1,4 +1,10 @@
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/cold_chain_logistics_sys
   mail:
     username: 2300362038@qq.com
     password: tocfhqbvszckeagi
@@ -27,3 +33,23 @@ spring:
       config:
         file-extension: yaml
         server-addr: 127.0.0.1:8848
+    stream:
+      binders:
+        rabbit:
+          type: rabbit
+          default-candidate: false
+          environment:
+            spring:
+              rabbitmq:
+                host: 127.0.0.1
+                port: 5672
+                username: admin
+                password: admin
+                virtual-host: /
+      bindings:
+        email-in-0:
+          content-type: application/json
+          destination: email-destination
+          group: email-group
+          binder: rabbit
+      default-binder: rabbit

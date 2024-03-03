@@ -19,6 +19,5 @@ public class EmailVO {
     @Schema(name = "email",description = "邮箱",requiredMode = Schema.RequiredMode.REQUIRED,type = "string")
     String email;
     @Schema(name = "code",description = "验证码",requiredMode = Schema.RequiredMode.AUTO,type = "string")
-    @NotBlank(message = "验证码不能为空")
     String code;
 }

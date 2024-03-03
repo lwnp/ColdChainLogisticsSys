@@ -38,6 +38,7 @@ knife4j:
     discover:
       enabled: true
       version: openapi3
+      excluded-services: message-service
   cors: true
 logging:
   level:
