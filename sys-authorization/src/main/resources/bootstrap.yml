@@ -20,22 +20,6 @@ spring:
             jwk-set-uri: http://127.0.0.1:9999/oauth2/jwks
             user-info-uri: http://127.0.0.1:9999/userinfo
             user-name-attribute: sub
-  cloud:
-    loadbalancer:
-      nacos:
-        enabled: true
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
-      config:
-        server-addr: 127.0.0.1:8848
-        file-extension: yaml
-  datasource:
-    url: jdbc:mysql://localhost:3306/authorization
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-    username: root
-    password: 123456
 logging:
   level:
     org.springframework.security: trace

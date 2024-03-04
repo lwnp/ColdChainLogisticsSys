@@ -34,8 +34,9 @@ public class UserController {
     }
     @Operation(summary = "发送邮箱验证码")
     @PostMapping("/sendCaptcha")
-    void sendCaptcha(@RequestBody @Valid EmailVO emailVO){
+    ServerResponse<?> sendCaptcha(@RequestBody @Valid EmailVO emailVO){
         captchaService.sendCaptchaToExchange(emailVO);
+        return ServerResponse.success();
     }
 
 }

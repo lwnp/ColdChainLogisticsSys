@@ -17,6 +17,7 @@
             from t_resource re
                 left join t_role_resource rr on re.id=rr.resource_id
                 left join t_role ro on rr.role_id=ro.id
+            where re.is_anonymous=0;
     </select>
     
 

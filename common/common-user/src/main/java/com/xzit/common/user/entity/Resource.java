@@ -20,6 +20,8 @@ public class Resource {
     String url;
     @TableField("request_method")
     String requestMethod;
+    @TableField("is_anonymous")
+    Boolean isAnonymous;
     @TableField(fill = FieldFill.INSERT,value = "create_time")
     LocalDateTime createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")

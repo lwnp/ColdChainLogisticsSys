@@ -16,6 +16,7 @@ public class ResourceDTO {
     String name;
     String url;
     String requestMethod;
+    Boolean isAnonymous;
     LocalDateTime createTime;
     LocalDateTime updateTime;
 

@@ -5,3 +5,12 @@ spring:
     name: user-service
   main:
     allow-bean-definition-overriding: true
+  profiles:
+    active: prod
+upload:
+  minio:
+    url: http://47.115.208.205:9000/
+    endpoint: http://47.115.208.205:9000
+    accesskey: XOd2wJh13wU33FlrL3PJ
+    secretKey: 8VVdOyDaU8G4hNQ9GWUVrgizKf5CDiD4W3e3KIqd
+    bucketName: coldchainsys

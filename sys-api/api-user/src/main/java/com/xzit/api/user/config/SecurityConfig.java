@@ -59,6 +59,9 @@ public class SecurityConfig {
                             boolean isMatch = false;
                             String requestURI = object.getRequest().getRequestURI();
                             List<ResourceRoleDTO> resourceRoles = resourceFeignClient.listResourceRoles().getData();
+                            if(resourceRoles==null){
+                                return new AuthorizationDecision(true);
+                            }
                             for (ResourceRoleDTO resourceRoleDTO : resourceRoles) {
                                 if (antPathMatcher.match(requestURI, resourceRoleDTO.getUrl())) {
                                     isMatch = true;

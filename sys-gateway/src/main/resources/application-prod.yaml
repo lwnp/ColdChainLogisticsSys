@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    loadbalancer:
+      nacos:
+        enabled: true
+    nacos:
+      config:
+        server-addr: 47.115.208.205:8848
+        file-extension: yaml
+      discovery:
+        server-addr: 47.115.208.205:8848
+    sentinel:
+      eager: true
+      transport:
+        dashboard: 47.115.208.205:8858

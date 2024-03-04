@@ -16,6 +16,7 @@ import com.xzit.common.user.model.dto.UserDetailsDTO;
 import com.xzit.usercenter.service.CaptchaService;
 import com.xzit.usercenter.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    UserMapper userMapper;
-    RoleMapper roleMapper;
-    UserInfoMapper userInfoMapper;
-    CaptchaService captchaService;
+    private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
+    private final UserInfoMapper userInfoMapper;
+    private final CaptchaService captchaService;
     @Override
     public UserDetailsDTO getUserByUsername(String username) {
         AuthUser user=new LambdaQueryChainWrapper<>(userMapper).eq(AuthUser::getUsername,username).one();
