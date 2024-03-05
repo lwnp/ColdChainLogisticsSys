@@ -26,7 +26,10 @@ public class AccessTokenCustomizerConfig {
             if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())){
                 UserDetailsDTO userDetailsDTO= (UserDetailsDTO) context.getPrincipal().getPrincipal();
                 List<String> userRoles=roleFeignClient.listUserRoles(userDetailsDTO.getUsername()).getData();
-                context.getClaims().claims(claim -> claim.put("authorities", new HashSet<>(userRoles)));
+                context.getClaims().claims(claim -> {
+                    claim.put("authorities", new HashSet<>(userRoles));
+                    claim.put("userId",userDetailsDTO.getId());
+                });
             }
         };
 

@@ -6,7 +6,7 @@ spring:
           issuer-uri: http://127.0.0.1:9999
           jwk-set-uri: http://127.0.0.1:9999/oauth2/jwks
   profiles:
-    active: prod
+    active: dev
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:

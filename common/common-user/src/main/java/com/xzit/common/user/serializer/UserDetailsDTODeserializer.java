@@ -29,10 +29,7 @@ public class UserDetailsDTODeserializer extends StdDeserializer<UserDetailsDTO> 
         Long id = node.get("id").asLong();
         String username = node.get("username").asText();
         String password = node.get("password").asText();
-        String email = node.get("email").asText();
-        String phone = node.get("phone").asText();
-        String nickname = node.get("nickname").asText();
-        String avatar = node.get("avatar").asText();
+        Long userInfoId = node.get("userInfoId").asLong();
         Boolean isDisable = node.get("isDisable").asBoolean();
         List<String> roles = new ArrayList<>();
         JsonNode rolesNode = node.get("roles");
@@ -46,10 +43,7 @@ public class UserDetailsDTODeserializer extends StdDeserializer<UserDetailsDTO> 
         userDetailsDTO.setId(id);
         userDetailsDTO.setUsername(username);
         userDetailsDTO.setPassword(password);
-        userDetailsDTO.setEmail(email);
-        userDetailsDTO.setPhone(phone);
-        userDetailsDTO.setNickname(nickname);
-        userDetailsDTO.setAvatar(avatar);
+        userDetailsDTO.setUserInfoId(userInfoId);
         userDetailsDTO.setIsDisable(isDisable);
         userDetailsDTO.setRoles(roles);
 

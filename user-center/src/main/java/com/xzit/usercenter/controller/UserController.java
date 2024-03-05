@@ -1,10 +1,14 @@
 package com.xzit.usercenter.controller;
 
+import com.xzit.common.sys.constant.UserConstant;
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.sys.model.vo.EmailVO;
+import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.common.user.model.vo.UserVO;
 import com.xzit.usercenter.service.CaptchaService;
+import com.xzit.usercenter.service.FileUploadService;
+import com.xzit.usercenter.service.UserInfoService;
 import com.xzit.usercenter.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final CaptchaService captchaService;
+    private final FileUploadService fileUploadService;
+    private final UserInfoService userInfoService;
     @Operation(summary = "查询是否存在同名用户")
     @GetMapping("/hasSameUser")
     ServerResponse<Boolean> hasSameUser(@RequestParam String username){
@@ -37,6 +44,16 @@ public class UserController {
     ServerResponse<?> sendCaptcha(@RequestBody @Valid EmailVO emailVO){
         captchaService.sendCaptchaToExchange(emailVO);
         return ServerResponse.success();
+    }
+    @PostMapping("/fileUpload")
+    @Operation(summary = "上传头像")
+    ServerResponse<String> UploadFile(@RequestBody MultipartFile file){
+        return ServerResponse.success(fileUploadService.uploadFile(file, UserConstant.AVATAR_SEPARATOR));
+    }
+    @Operation(summary = "基于token获取用户信息")
+    @GetMapping("/loadUserInfoByContext")
+    ServerResponse<UserInfoDTO> loadUserInfoByContext(){
+        return ServerResponse.success(userInfoService.loadUserInfoByContext());
     }
 
 }

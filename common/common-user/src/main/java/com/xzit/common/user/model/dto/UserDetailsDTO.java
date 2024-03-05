@@ -26,10 +26,7 @@ public class UserDetailsDTO implements UserDetails {
     Long id;
     String username;
     String password;
-    String email;
-    String phone;
-    String nickname;
-    String avatar;
+    Long userInfoId;
     Boolean isDisable;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
