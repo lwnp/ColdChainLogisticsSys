@@ -5,11 +5,11 @@ spring:
         enabled: true
     nacos:
       config:
-        server-addr: 47.115.208.205:8848
+        server-addr: 120.55.161.138:8848
         file-extension: yaml
       discovery:
-        server-addr: 47.115.208.205:8848
+        server-addr: 120.55.161.138:8848
     sentinel:
       eager: true
       transport:
-        dashboard: 47.115.208.205:8858
+        dashboard: 120.55.161.138:8858

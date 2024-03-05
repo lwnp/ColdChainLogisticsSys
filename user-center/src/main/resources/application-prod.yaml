@@ -4,11 +4,11 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: 123456
-    url: jdbc:mysql://47.115.208.205:3306/cold_chain_logistics_sys
+    url: jdbc:mysql://120.55.161.138:3306/cold_chain_logistics_sys
   cloud:
     sentinel:
       transport:
-        dashboard: 47.115.208.205:8858
+        dashboard: 120.55.161.138:8858
       eager: true
     stream:
       default-binder: rabbit
@@ -18,7 +18,7 @@ spring:
           environment:
             spring:
               rabbitmq:
-                host: 47.115.208.205
+                host: 120.55.161.138
                 port: 5672
                 username: admin
                 password: admin
@@ -30,7 +30,7 @@ spring:
           content-type: application/json
     nacos:
       discovery:
-        server-addr: 47.115.208.205:8848
+        server-addr: 120.55.161.138:8848
       config:
-        server-addr: 47.115.208.205:8848
+        server-addr: 120.55.161.138:8848
         file-extension: yaml
