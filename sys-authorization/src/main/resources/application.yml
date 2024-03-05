@@ -1,10 +1,6 @@
 server:
   port: 9999
 spring:
-  application:
-    name: authorization_service
   main:
     allow-circular-references: true
     allow-bean-definition-overriding: true
-  profiles:
-    active: prod

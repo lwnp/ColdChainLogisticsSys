@@ -3,6 +3,4 @@ server:
 spring:
   application:
     name: gateway
-  profiles:
-    active: prod
 

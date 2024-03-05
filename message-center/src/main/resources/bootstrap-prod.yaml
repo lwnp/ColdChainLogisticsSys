@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: 123456
+    url: jdbc:mysql://120.55.161.138:3306/cold_chain_logistics_sys
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 120.55.161.138:8848
+      config:
+        file-extension: yaml
+        server-addr: 120.55.161.138:8848
+        shared-configs[0]:
+          data-id: sys-common-mail.yaml
+          refresh: true
+        shared-configs[1]:
+          data-id: sys-common-stream.yaml
+          refresh: true
+    stream:
+      bindings:
+        email-in-0:
+          content-type: application/json
+          destination: email-destination
+          group: email-group
+          binder: rabbit
+      default-binder: rabbit

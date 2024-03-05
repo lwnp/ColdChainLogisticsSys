@@ -7,9 +7,8 @@ spring:
       config:
         server-addr: 120.55.161.138:8848
         file-extension: yaml
+        shared-configs[0]:
+          data-id: sys-common-sentinel.yaml
+          refresh: true
       discovery:
         server-addr: 120.55.161.138:8848
-    sentinel:
-      eager: true
-      transport:
-        dashboard: 120.55.161.138:8858
