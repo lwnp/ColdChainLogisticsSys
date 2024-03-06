@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ResponseCodeEnum {
+    BIND_ERROR(400,"数据绑定错误"),
     SUCCESS(200,"操作成功"),
     FAIL(801,"操作失败"),
     DATABASE_ERROR(901,"数据库错误"),

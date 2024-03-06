@@ -5,6 +5,7 @@ import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.sys.model.vo.EmailVO;
 import com.xzit.common.user.model.dto.UserInfoDTO;
+import com.xzit.common.user.model.vo.UserInfoVO;
 import com.xzit.common.user.model.vo.UserVO;
 import com.xzit.usercenter.service.CaptchaService;
 import com.xzit.usercenter.service.FileUploadService;
@@ -54,6 +55,15 @@ public class UserController {
     @GetMapping("/loadUserInfoByContext")
     ServerResponse<UserInfoDTO> loadUserInfoByContext(){
         return ServerResponse.success(userInfoService.loadUserInfoByContext());
+    }
+    @PutMapping("/updateUserInfo/{userInfoId}")
+    @Operation(summary = "更新用户信息(不包括邮箱)")
+    ServerResponse<Boolean> updateUserInfo(@RequestBody @Valid UserInfoVO userInfoVO,@PathVariable("userInfoId") Long userInfoId){
+        if(userInfoService.updateUserInfo(userInfoVO,userInfoId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+
     }
 
 }

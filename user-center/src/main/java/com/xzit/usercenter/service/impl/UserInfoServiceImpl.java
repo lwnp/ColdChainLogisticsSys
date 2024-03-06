@@ -1,6 +1,8 @@
 package com.xzit.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.entity.AuthUser;
 import com.xzit.common.user.entity.UserInfo;
@@ -46,11 +48,24 @@ public class UserInfoServiceImpl implements UserInfoService {
         Long userId= (Long) map.get("userId");
         AuthUser authUser=userMapper.selectById(userId);
         if(Objects.equals(authUser.getUserInfoId(), userInfoId)){
+            if(userInfoVO.getNickname().isEmpty()){
+                userInfoVO.setNickname(null);
+            }
+            if (userInfoVO.getAvatar().isEmpty()){
+                userInfoVO.setAvatar(null);
+            }
+            if (userInfoVO.getPhone().isEmpty()){
+                userInfoVO.setPhone(null);
+            }
             UserInfo userInfo=BeanCopyUtil.copyObject(userInfoVO, UserInfo.class);
             userInfo.setId(userInfoId);
             return userInfoMapper.updateById(userInfo)==1;
         }
-
         return false;
+    }
+
+    @Override
+    public Page<UserInfoDTO> loadUserInfo(QueryVO queryVO) {
+        return null;
     }
 }

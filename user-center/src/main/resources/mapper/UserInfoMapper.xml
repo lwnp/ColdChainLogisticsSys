@@ -6,4 +6,7 @@
             INSERT INTO t_user_info (nickname,avatar,email,phone,create_time,update_time)
             VALUES (#{userInfo.nickname},#{userInfo.avatar},#{userInfo.email},#{userInfo.phone},#{userInfo.createTime},#{userInfo.updateTime})
     </insert>
+    <select id="getUserInfoByQuery" resultType="com.xzit.common.user.model.dto.UserInfoDTO">
+
+    </select>
 </mapper>
