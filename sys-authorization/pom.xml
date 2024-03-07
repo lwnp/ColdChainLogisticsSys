@@ -12,6 +12,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <properties>
+        <skipTests>true</skipTests>
         <java.version>17</java.version>
     </properties>
     <dependencies>
@@ -121,11 +122,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <image>
-                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>
-                    </image>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

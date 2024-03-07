@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: ./sys-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - mynetwork
+  authorization-service:
+    container_name: authorization-service
+    build:
+      context: ./sys-authorization
+      dockerfile: Dockerfile
+    ports:
+      - "9999:9999"
+    networks:
+      - mynetwork
+  message-service:
+    container_name: message-service
+    build:
+      context: ./message-center
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - mynetwork
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-center
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    networks:
+      - mynetwork
+networks:
+  mynetwork:

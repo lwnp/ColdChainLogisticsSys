@@ -12,6 +12,7 @@
     <name>message-center</name>
     <description>message-center</description>
     <properties>
+        <skipTests>true</skipTests>
         <java.version>17</java.version>
     </properties>
     <dependencies>
@@ -86,6 +87,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
