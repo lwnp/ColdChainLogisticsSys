@@ -81,4 +81,10 @@ public class UserServiceImpl implements UserService {
         int flag=userMapper.insert(authUser);
         return flag==1;
     }
+
+    @Override
+    public Boolean forbidden(Long userInfoId) {
+        return userMapper.forbiddenByUserInfoId(userInfoId)==1;
+    }
+
 }

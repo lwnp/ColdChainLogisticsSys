@@ -6,11 +6,12 @@ spring:
           issuer-uri: http://127.0.0.1:9999
           jwk-set-uri: http://127.0.0.1:9999/oauth2/jwks
   profiles:
-    active: dev
+    active: prod
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   level:
     org.springframework.security: trace

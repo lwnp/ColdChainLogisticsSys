@@ -1,7 +1,11 @@
 package com.xzit.usercenter.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.xzit.common.sys.constant.UserConstant;
+import com.xzit.common.sys.model.vo.EmailVO;
 import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.entity.AuthUser;
@@ -11,6 +15,7 @@ import com.xzit.common.user.model.vo.UserInfoVO;
 import com.xzit.usercenter.mapper.RoleMapper;
 import com.xzit.usercenter.mapper.UserInfoMapper;
 import com.xzit.usercenter.mapper.UserMapper;
+import com.xzit.usercenter.service.CaptchaService;
 import com.xzit.usercenter.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +33,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final UserInfoMapper userInfoMapper;
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
+    private final CaptchaService captchaService;
     @Override
     public UserInfoDTO loadUserInfoByContext() {
         Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -38,6 +44,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfoDTO userInfoDTO= BeanCopyUtil.copyObject(userInfo, UserInfoDTO.class);
         userInfoDTO.setRoles(roleMapper.listUserRolesName(authUser.getUsername()));
         userInfoDTO.setUsername(authUser.getUsername());
+        userInfoDTO.setIsDisable(authUser.getIsDisable());
         return userInfoDTO;
     }
 
@@ -65,7 +72,35 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Page<UserInfoDTO> loadUserInfo(QueryVO queryVO) {
-        return null;
+    public IPage<UserInfoDTO> loadUserInfo(QueryVO queryVO) {
+        Page<UserInfoDTO> userInfoDTOPage=new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return userInfoMapper.getUserInfoByQuery(userInfoDTOPage,queryVO);
+    }
+
+    @Override
+    public Boolean updateEmail(EmailVO emailVO,Long userInfoId) {
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        AuthUser authUser=userMapper.selectById(userId);
+        if(Objects.equals(authUser.getUserInfoId(), userInfoId)){
+            if(captchaService.checkCaptcha(emailVO.getEmail(), emailVO.getCode())) {
+                UserInfo userInfo= UserInfo.builder().email(emailVO.getEmail()).id(userInfoId).build();
+                return userInfoMapper.updateById(userInfo)==1;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean forbiddenAvatar(Long userInfoId) {
+        UserInfo userInfo=UserInfo.builder().id(userInfoId).avatar(UserConstant.DEFAULT_AVATAR_URL).build();
+        return userInfoMapper.updateById(userInfo)==1;
+    }
+
+    @Override
+    public Boolean forbiddenNickname(Long userInfoId) {
+        UserInfo userInfo=UserInfo.builder().id(userInfoId).nickname(UserConstant.DEFAULT_NICKNAME).build();
+        return userInfoMapper.updateById(userInfo)==1;
     }
 }

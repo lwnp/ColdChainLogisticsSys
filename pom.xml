@@ -35,6 +35,8 @@
 		<spring.security.cas.version>6.1.0</spring.security.cas.version>
 		<hutool.version>5.8.23</hutool.version>
 		<fastjson.version>2.0.47</fastjson.version>
+		<ip2region.version>1.7.2</ip2region.version>
+		<user.agent.version>1.20</user.agent.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -133,6 +135,16 @@
 				<groupId>com.alibaba.fastjson2</groupId>
 				<artifactId>fastjson2</artifactId>
 				<version>${fastjson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.lionsoul</groupId>
+				<artifactId>ip2region</artifactId>
+				<version>${ip2region.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>eu.bitwalker</groupId>
+				<artifactId>UserAgentUtils</artifactId>
+				<version>${user.agent.version}</version>
 			</dependency>
 
 

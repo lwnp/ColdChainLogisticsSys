@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.usercenter.mapper.UserInfoMapper">
-
+    <resultMap id="userInfoDTOResultMapper" type="com.xzit.common.user.model.dto.UserInfoDTO">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="isDisable" column="is_disable"/>
+        <result property="email" column="email"/>
+        <result property="avatar" column="avatar"/>
+        <result property="nickname" column="nickname"/>
+        <result property="phone" column="phone"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <collection property="roles" ofType="String">
+            <constructor>
+                <arg column="name"/>
+            </constructor>
+        </collection>
+    </resultMap>
     <insert id="insertUserInfo" parameterType="com.xzit.common.user.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
             INSERT INTO t_user_info (nickname,avatar,email,phone,create_time,update_time)
             VALUES (#{userInfo.nickname},#{userInfo.avatar},#{userInfo.email},#{userInfo.phone},#{userInfo.createTime},#{userInfo.updateTime})
     </insert>
-    <select id="getUserInfoByQuery" resultType="com.xzit.common.user.model.dto.UserInfoDTO">
-
+    <select id="getUserInfoByQuery" resultType="com.xzit.common.user.model.dto.UserInfoDTO" resultMap="userInfoDTOResultMapper" parameterType="com.xzit.common.sys.model.vo.QueryVO">
+            select ui.id,u.username,u.is_disable,ui.email,ui.avatar,ui.nickname,ui.phone,ui.create_time,ui.update_time,r.name
+            from t_user_info ui left join t_user u
+            on u.user_info_id=ui.id
+            left join t_role r
+            on r.id=u.role_id
+            <if test="!queryVO.query.isEmpty()">
+                where u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%')
+            </if>
     </select>
 </mapper>

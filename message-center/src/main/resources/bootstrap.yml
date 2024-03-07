@@ -2,5 +2,5 @@ spring:
   application:
     name: message-service
   profiles:
-    active: dev
+    active: prod
 

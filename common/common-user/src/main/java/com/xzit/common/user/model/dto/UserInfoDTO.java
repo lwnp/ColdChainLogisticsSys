@@ -16,6 +16,7 @@ import java.util.List;
 public class UserInfoDTO {
     Long id;
     String username;
+    Boolean isDisable;
     List<String> roles;
     String nickname;
     String avatar;

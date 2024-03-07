@@ -1,9 +1,13 @@
 package com.xzit.usercenter.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xzit.common.sys.annotation.AccessLimit;
 import com.xzit.common.sys.constant.UserConstant;
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.sys.model.vo.EmailVO;
+import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.common.user.model.vo.UserInfoVO;
 import com.xzit.common.user.model.vo.UserVO;
@@ -41,6 +45,7 @@ public class UserController {
         return ServerResponse.fail(ResponseCodeEnum.CAPTCHA_ERROR);
     }
     @Operation(summary = "发送邮箱验证码")
+    @AccessLimit(seconds = 60,maxCount = 1)
     @PostMapping("/sendCaptcha")
     ServerResponse<?> sendCaptcha(@RequestBody @Valid EmailVO emailVO){
         captchaService.sendCaptchaToExchange(emailVO);
@@ -64,6 +69,44 @@ public class UserController {
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);
 
+    }
+    @PostMapping("/getUserInfoByQuery")
+    @Operation(summary = "获取用户信息",description = "query为空则返回全部")
+    ServerResponse<IPage<UserInfoDTO>> getUserInfoByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(userInfoService.loadUserInfo(queryVO));
+    }
+    @PutMapping("/updateUserEmail/{userInfoId}")
+    @Operation(summary = "更新用户邮箱")
+    ServerResponse<Boolean> updateUserEmail(@RequestBody @Valid EmailVO emailVO,@PathVariable("userInfoId") Long userInfoId){
+        if(userInfoService.updateEmail(emailVO, userInfoId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+
+    }
+    @GetMapping("/forbiddenUser/{userInfoId}")
+    @Operation(summary = "封禁用户")
+    ServerResponse<Boolean> forbiddenUser(@PathVariable Long userInfoId){
+        if (userService.forbidden(userInfoId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @GetMapping("/forbiddenAvatar/{userInfoId}")
+    @Operation(summary = "对违规头像重置")
+    ServerResponse<Boolean> forbiddenAvatar(@PathVariable Long userInfoId){
+        if(userInfoService.forbiddenAvatar(userInfoId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @GetMapping("/forbiddenNickname/{userInfoId}")
+    @Operation(summary = "对违规昵称重置")
+    ServerResponse<Boolean> forbiddenNickname(@PathVariable Long userInfoId){
+        if(userInfoService.forbiddenNickname(userInfoId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
     }
 
 }

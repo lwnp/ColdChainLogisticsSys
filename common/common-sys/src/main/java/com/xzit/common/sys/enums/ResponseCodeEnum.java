@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ResponseCodeEnum {
+    FORBIDDEN(403,"请稍后再请求"),
     BIND_ERROR(400,"数据绑定错误"),
     SUCCESS(200,"操作成功"),
     FAIL(801,"操作失败"),
