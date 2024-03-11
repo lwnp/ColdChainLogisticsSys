@@ -9,3 +9,6 @@ spring:
         shared-configs[0]:
           data-id: sys-common-mysql.yaml
           refresh: true
+        shared-configs[1]:
+          data-id: sys-common-resource-security.yaml
+          refresh: true

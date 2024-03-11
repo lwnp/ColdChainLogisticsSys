@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod
+    active: dev
   cloud:
     gateway:
       globalcors:
@@ -31,7 +31,7 @@ knife4j:
     discover:
       enabled: true
       version: openapi3
-      excluded-services: message-service
+      excluded-services: message-service,hardware-service,log-service
   cors: true
 logging:
   level:

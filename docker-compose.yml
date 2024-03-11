@@ -18,6 +18,15 @@ services:
       - "9999:9999"
     networks:
       - mynetwork
+  hardware-service:
+    container_name: hardware-service
+    build:
+      context: ./hardware-center
+      dockerfile: Dockerfile
+    ports:
+      - "7999:7999"
+    networks:
+      - mynetwork
   message-service:
     container_name: message-service
     build:
@@ -34,6 +43,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8001:8001"
+    networks:
+      - mynetwork
+  log-service:
+    container_name: log-service
+    build:
+      context: ./log-center
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
     networks:
       - mynetwork
 networks:

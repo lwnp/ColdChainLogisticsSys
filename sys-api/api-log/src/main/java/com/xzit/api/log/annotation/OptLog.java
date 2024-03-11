@@ -8,4 +8,7 @@ import java.lang.annotation.*;
 public @interface OptLog {
 
     String optType() default "";
+    public final static String UPDATE="update";
+    public final static String INSERT="insert";
+    public final static String DELETE="delete";
 }

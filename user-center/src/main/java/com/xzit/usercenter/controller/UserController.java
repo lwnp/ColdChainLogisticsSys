@@ -2,6 +2,7 @@ package com.xzit.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xzit.api.log.annotation.OptLog;
 import com.xzit.common.sys.annotation.AccessLimit;
 import com.xzit.common.sys.constant.UserConstant;
 import com.xzit.common.sys.entity.ServerResponse;
@@ -39,6 +40,7 @@ public class UserController {
     }
     @Operation(summary = "注册用户")
     @PostMapping("/register")
+    @OptLog(optType = OptLog.INSERT)
     ServerResponse<?> register(@RequestBody @Valid UserVO userVO){
         if(userService.register(userVO)){
             return ServerResponse.success();
@@ -64,6 +66,7 @@ public class UserController {
     }
     @PutMapping("/updateUserInfo/{userInfoId}")
     @Operation(summary = "更新用户信息(不包括邮箱)")
+    @OptLog(optType = OptLog.UPDATE)
     ServerResponse<Boolean> updateUserInfo(@RequestBody @Valid UserInfoVO userInfoVO,@PathVariable("userInfoId") Long userInfoId){
         if(userInfoService.updateUserInfo(userInfoVO,userInfoId)){
             return ServerResponse.success();
@@ -77,6 +80,7 @@ public class UserController {
         return ServerResponse.success(userInfoService.loadUserInfo(queryVO));
     }
     @PutMapping("/updateUserEmail/{userInfoId}")
+    @OptLog(optType = OptLog.UPDATE)
     @Operation(summary = "更新用户邮箱")
     ServerResponse<Boolean> updateUserEmail(@RequestBody @Valid EmailVO emailVO,@PathVariable("userInfoId") Long userInfoId){
         if(userInfoService.updateEmail(emailVO, userInfoId)){
@@ -87,6 +91,7 @@ public class UserController {
     }
     @GetMapping("/forbiddenUser/{userInfoId}")
     @Operation(summary = "封禁用户")
+    @OptLog(optType = OptLog.UPDATE)
     ServerResponse<Boolean> forbiddenUser(@PathVariable Long userInfoId){
         if (userService.forbidden(userInfoId)){
             return ServerResponse.success();
@@ -95,6 +100,7 @@ public class UserController {
     }
     @GetMapping("/forbiddenAvatar/{userInfoId}")
     @Operation(summary = "对违规头像重置")
+    @OptLog(optType = OptLog.UPDATE)
     ServerResponse<Boolean> forbiddenAvatar(@PathVariable Long userInfoId){
         if(userInfoService.forbiddenAvatar(userInfoId)){
             return ServerResponse.success();
@@ -103,6 +109,7 @@ public class UserController {
     }
     @GetMapping("/forbiddenNickname/{userInfoId}")
     @Operation(summary = "对违规昵称重置")
+    @OptLog(optType = OptLog.UPDATE)
     ServerResponse<Boolean> forbiddenNickname(@PathVariable Long userInfoId){
         if(userInfoService.forbiddenNickname(userInfoId)){
             return ServerResponse.success();
