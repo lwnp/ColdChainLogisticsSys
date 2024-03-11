@@ -23,7 +23,7 @@ spring:
             user-info-uri: http://127.0.0.1:9999/userinfo
             user-name-attribute: sub
   profiles:
-    active: prod
+    active: dev
 logging:
   level:
     org.springframework.security: trace

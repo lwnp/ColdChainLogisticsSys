@@ -1,4 +1,4 @@
-package com.xzit.common.sys.annotation;
+package com.xzit.api.log.annotation;
 
 import java.lang.annotation.*;
 

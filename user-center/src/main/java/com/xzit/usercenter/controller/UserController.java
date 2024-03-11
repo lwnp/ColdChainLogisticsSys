@@ -17,6 +17,7 @@ import com.xzit.usercenter.service.UserInfoService;
 import com.xzit.usercenter.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "用户模块")
+@Tags(@Tag(name="用户模块"))
 public class UserController {
     private final UserService userService;
     private final CaptchaService captchaService;

@@ -87,16 +87,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.xzit</groupId>
-            <artifactId>common-user</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.xzit</groupId>
-            <artifactId>common-sys</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
             <version>${nacos.client.version}</version>

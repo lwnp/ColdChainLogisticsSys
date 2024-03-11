@@ -5,14 +5,15 @@ import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.usercenter.service.RoleService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoleFeignController implements RoleFeignClient {
-    RoleService roleService;
+    private final RoleService roleService;
 
     @Override
     public ServerResponse<String> getRoleNameById(Long id) {

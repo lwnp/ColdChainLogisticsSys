@@ -16,6 +16,7 @@
 		<module>common</module>
 		<module>hardware-center</module>
 		<module>message-center</module>
+		<module>log-center</module>
 	</modules>
 	<properties>
 		<skipTests>true</skipTests>

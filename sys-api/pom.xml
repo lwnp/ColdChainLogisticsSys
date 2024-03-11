@@ -9,6 +9,7 @@
     </parent>
     <modules>
         <module>api-user</module>
+        <module>api-log</module>
     </modules>
     <packaging>pom</packaging>
     <artifactId>sys-api</artifactId>

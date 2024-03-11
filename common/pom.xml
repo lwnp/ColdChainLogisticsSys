@@ -10,6 +10,8 @@
     <modules>
         <module>common-user</module>
         <module>common-sys</module>
+        <module>common-hardware</module>
+        <module>common-log</module>
     </modules>
     <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
