@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   cloud:
     gateway:
       globalcors:
@@ -24,6 +24,10 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix=1
+        - id: hardware-center
+          uri: lb:ws://hardware-service
+          predicates:
+            - Path=/hardware/**
 knife4j:
   gateway:
     enabled: true

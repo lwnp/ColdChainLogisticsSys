@@ -9,6 +9,7 @@ import com.xzit.common.sys.constant.AuthorizationConstant;
 import com.xzit.sysauthorization.oauth2custom.conver.PasswordAuthenticationConverter;
 import com.xzit.sysauthorization.oauth2custom.provider.PasswordAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -69,6 +70,8 @@ public class SecurityConfig {
     @Autowired
     @Lazy
     OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
+    @Value("${issuer}")
+    String issuer_uri;
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
@@ -166,7 +169,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder().issuer(AuthorizationConstant.AUTHORIZATION_ENDPOINT).build();
+        return AuthorizationServerSettings.builder().issuer(issuer_uri).build();
     }
     @Bean
     public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository) {

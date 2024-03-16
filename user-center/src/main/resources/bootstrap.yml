@@ -20,10 +20,7 @@ springdoc:
     - group: 'default'
       paths-to-match: '/**'
       packages-to-scan:
-        # 配置接口文档扫描包路径，每个服务的路径不同，下面是系统服务(youlai-system)的包路径
         - com.xzit.usercenter.controller
-
-# knife4j的增强配置，不需要增强可以不配
 knife4j:
   enable: false
   setting:

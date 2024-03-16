@@ -12,6 +12,7 @@
         <module>common-sys</module>
         <module>common-hardware</module>
         <module>common-log</module>
+        <module>common-logistics</module>
     </modules>
     <artifactId>common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
