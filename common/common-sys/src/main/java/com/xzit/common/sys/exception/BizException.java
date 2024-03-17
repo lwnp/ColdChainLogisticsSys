@@ -1,4 +1,4 @@
-package com.xzit.common.sys.Exception;
+package com.xzit.common.sys.exception;
 
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import lombok.AllArgsConstructor;

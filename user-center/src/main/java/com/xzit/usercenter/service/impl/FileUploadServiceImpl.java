@@ -1,6 +1,6 @@
 package com.xzit.usercenter.service.impl;
 
-import com.xzit.common.sys.Exception.BizException;
+import com.xzit.common.sys.exception.BizException;
 import com.xzit.common.sys.utils.FileUtil;
 import com.xzit.usercenter.config.properties.MinioProperties;
 import com.xzit.usercenter.service.FileUploadService;
