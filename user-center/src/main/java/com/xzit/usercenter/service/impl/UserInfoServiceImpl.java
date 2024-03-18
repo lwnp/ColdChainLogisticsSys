@@ -103,4 +103,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo=UserInfo.builder().id(userInfoId).nickname(UserConstant.DEFAULT_NICKNAME).build();
         return userInfoMapper.updateById(userInfo)==1;
     }
+
+    @Override
+    public void sendEmailByUsername(String username) {
+        String email=userInfoMapper.getEmailByUsername(username);
+        EmailVO emailVO=EmailVO.builder().email(email).build();
+        captchaService.sendCaptchaToExchange(emailVO);
+
+    }
+
+
 }

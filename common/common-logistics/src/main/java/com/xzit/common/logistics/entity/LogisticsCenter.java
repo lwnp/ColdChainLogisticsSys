@@ -24,7 +24,7 @@ public class LogisticsCenter {
     String location;
     String address;
     Long statusId;
-    String area;
+    Long areaId;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")

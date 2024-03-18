@@ -2,6 +2,7 @@ package com.xzit.usercenter.service;
 
 
 import com.xzit.common.user.model.dto.UserDetailsDTO;
+import com.xzit.common.user.model.vo.PasswordVO;
 import com.xzit.common.user.model.vo.UserVO;
 
 public interface UserService {
@@ -10,5 +11,6 @@ public interface UserService {
     Boolean hasSameUser(String username);
     Boolean register(UserVO user);
     Boolean forbidden(Long userInfoId);
+    Boolean resetPassword(PasswordVO passwordVO);
 
 }

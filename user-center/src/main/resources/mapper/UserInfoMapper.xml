@@ -31,4 +31,7 @@
                 where u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%')
             </if>
     </select>
+    <select id="getEmailByUsername" resultType="java.lang.String">
+        select ui.email from t_user_info ui left join t_user u on u.user_info_id=ui.id where u.username=#{username};
+    </select>
 </mapper>

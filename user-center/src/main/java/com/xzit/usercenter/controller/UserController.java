@@ -10,6 +10,7 @@ import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.sys.model.vo.EmailVO;
 import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.user.model.dto.UserInfoDTO;
+import com.xzit.common.user.model.vo.PasswordVO;
 import com.xzit.common.user.model.vo.UserInfoVO;
 import com.xzit.common.user.model.vo.UserVO;
 import com.xzit.usercenter.service.CaptchaService;
@@ -112,6 +113,25 @@ public class UserController {
     @OptLog(optType = OptLog.UPDATE)
     ServerResponse<Boolean> forbiddenNickname(@PathVariable Long userInfoId){
         if(userInfoService.forbiddenNickname(userInfoId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @GetMapping("/sendEmailByUsername/{username}")
+    @Operation(summary = "通过用户名发送重置验证码")
+    @AccessLimit(seconds = 60,maxCount = 1)
+    ServerResponse<Boolean> sendEmailByUsername(@PathVariable String username){
+        if (userService.hasSameUser(username)){
+            userInfoService.sendEmailByUsername(username);
+            return ServerResponse.success();
+
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @PostMapping("/resetPassword")
+    @OptLog(optType = OptLog.UPDATE)
+    ServerResponse<Boolean> resetPassword(@RequestBody @Valid PasswordVO passwordVO){
+        if (userService.resetPassword(passwordVO)){
             return ServerResponse.success();
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);

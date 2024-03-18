@@ -8,6 +8,7 @@ import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.entity.AuthUser;
 import com.xzit.common.user.entity.Role;
 import com.xzit.common.user.entity.UserInfo;
+import com.xzit.common.user.model.vo.PasswordVO;
 import com.xzit.common.user.model.vo.UserVO;
 import com.xzit.usercenter.mapper.RoleMapper;
 import com.xzit.usercenter.mapper.UserInfoMapper;
@@ -15,8 +16,8 @@ import com.xzit.usercenter.mapper.UserMapper;
 import com.xzit.common.user.model.dto.UserDetailsDTO;
 import com.xzit.usercenter.service.CaptchaService;
 import com.xzit.usercenter.service.UserService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +86,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean forbidden(Long userInfoId) {
         return userMapper.forbiddenByUserInfoId(userInfoId)==1;
+    }
+
+    @Override
+    public Boolean resetPassword(PasswordVO passwordVO) {
+        if (StringUtils.isAnyBlank(passwordVO.getUsername(),passwordVO.getPassword(),passwordVO.getCode())){
+            return false;
+        }
+        AuthUser user=new LambdaQueryChainWrapper<>(userMapper).eq(AuthUser::getUsername,passwordVO.getUsername()).one();
+        String email=userInfoMapper.getEmailByUsername(user.getUsername());
+        if(!captchaService.checkCaptcha(email, passwordVO.getCode())){
+            return false;
+        }
+        user.setPassword(new BCryptPasswordEncoder().encode(passwordVO.getPassword()));
+        return userMapper.updateById(user)==1;
     }
 
 }

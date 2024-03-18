@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("t_status")
-public class LogisticsStatus {
+@TableName("t_area")
+public class LogisticsArea {
     @TableId(type= IdType.AUTO)
     Long id;
     String name;

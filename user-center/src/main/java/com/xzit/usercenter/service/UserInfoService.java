@@ -13,5 +13,6 @@ public interface UserInfoService {
     Boolean updateEmail(EmailVO emailVO,Long userInfoId);
     Boolean forbiddenAvatar(Long userInfoId);
     Boolean forbiddenNickname(Long userInfoId);
+    void sendEmailByUsername(String username);
 
 }
