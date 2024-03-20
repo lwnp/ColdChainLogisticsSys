@@ -24,10 +24,12 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix=1
-        - id: hardware-center
-          uri: lb:ws://hardware-service
+        - id: logistics-center
+          uri: lb://logistics-service
           predicates:
-            - Path=/hardware/**
+            - Path=/logistics/**
+          filters:
+            - StripPrefix=1
 knife4j:
   gateway:
     enabled: true

@@ -17,6 +17,7 @@
 		<module>hardware-center</module>
 		<module>message-center</module>
 		<module>log-center</module>
+		<module>logistics-center</module>
 	</modules>
 	<properties>
 		<skipTests>true</skipTests>

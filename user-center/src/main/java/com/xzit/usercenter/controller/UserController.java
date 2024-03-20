@@ -128,7 +128,7 @@ public class UserController {
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);
     }
-    @PostMapping("/resetPassword")
+    @PutMapping("/resetPassword")
     @Operation(summary = "重置密码")
     @OptLog(optType = OptLog.UPDATE)
     ServerResponse<Boolean> resetPassword(@RequestBody @Valid PasswordVO passwordVO){

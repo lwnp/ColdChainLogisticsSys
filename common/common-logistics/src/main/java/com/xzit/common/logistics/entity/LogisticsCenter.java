@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class LogisticsCenter {
     @TableId(type=IdType.AUTO)
     Long id;
     String name;
-    String location;
+    Map<String,Double> location;
     String address;
     Long statusId;
     Long areaId;
