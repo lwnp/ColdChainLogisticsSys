@@ -65,11 +65,13 @@ public class OperationLogAspect {
                 operationLog.setRequestParam(JSON.toJSONString(joinPoint.getArgs()));
             }
         }
-        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Map<String,Object> map=jwt.getClaims();
-        Long userId= (Long) map.get("userId");
+        if(SecurityContextHolder.getContext()!=null){
+            Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Map<String,Object> map=jwt.getClaims();
+            Long userId= (Long) map.get("userId");
+            operationLog.setUserId(userId);
+        }
         operationLog.setResponseData(JSON.toJSONString(keys));
-        operationLog.setUserId(userId);
         String ipAddress = IpUtil.getIpAddress(request);
         operationLog.setIpAddress(ipAddress);
         operationLog.setIpSource(IpUtil.getIpSource(ipAddress));

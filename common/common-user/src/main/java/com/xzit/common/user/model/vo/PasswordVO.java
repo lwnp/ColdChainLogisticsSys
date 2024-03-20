@@ -19,7 +19,7 @@ public class PasswordVO {
     @Size(max = 16,message = "用户名必须小于16位")
     @Schema(name = "username", description = "用户名",requiredMode = Schema.RequiredMode.REQUIRED,type = "string")
     String username;
-    @Max(value = 16,message = "长度不能超过16")
+    @Size(max = 16,message = "长度不能超过16")
     @Schema(name = "password",description = "密码",requiredMode = Schema.RequiredMode.REQUIRED,type = "string")
     String password;
     @Schema(name = "code",description = "验证码",requiredMode = Schema.RequiredMode.REQUIRED,type = "string")

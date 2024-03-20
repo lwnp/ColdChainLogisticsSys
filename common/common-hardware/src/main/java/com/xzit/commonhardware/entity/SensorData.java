@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.xzit.commonhardware.serializer.SenorDataDeserializer;
+import com.xzit.commonhardware.deserializer.SensorDataDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,12 +17,13 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonDeserialize(using = SenorDataDeserializer.class)
+@JsonDeserialize(using = SensorDataDeserializer.class)
 public class SensorData {
-    Double speed;
-    Double temperature;
-    Map<String,Double> gasComposition;
-    String location;
+    Long id;
+    Long carId;
+    Double carbonDioxide;        //单位ppm
+    Double temperature;            //单位摄氏度
+    Map<String,Double> location;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     LocalDateTime timeStamp;
