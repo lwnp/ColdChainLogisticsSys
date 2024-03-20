@@ -112,5 +112,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     }
 
+    @Override
+    public IPage<UserInfoDTO> listAdminInfoByQuery(QueryVO queryVO) {
+        Page<UserInfoDTO> userInfoDTOPage=new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return userInfoMapper.getAdminInfoByQuery(userInfoDTOPage,queryVO);
+    }
+
 
 }

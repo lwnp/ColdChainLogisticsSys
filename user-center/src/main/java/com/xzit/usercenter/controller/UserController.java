@@ -155,5 +155,19 @@ public class UserController {
         }
         return ServerResponse.fail(ResponseCodeEnum.INVALID_ACCOUNT);
     }
+    @GetMapping("/resetUserAccount/{username}")
+    @OptLog(optType = OptLog.UPDATE)
+    @Operation(summary = "重置角色为普通用户")
+    ServerResponse<Boolean> resetUserAccount(@PathVariable String username){
+        if(userService.resetUserAccount(username)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.INVALID_ACCOUNT);
+    }
+    @PostMapping("/listAdminByQuery")
+    @Operation(summary = "分页查询管理员信息")
+    ServerResponse<IPage<UserInfoDTO>> listAdminByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(userInfoService.listAdminInfoByQuery(queryVO));
+    }
 
 }

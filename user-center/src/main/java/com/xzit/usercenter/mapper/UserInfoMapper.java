@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
     Long insertUserInfo(@Param("userInfo") UserInfo userInfo);
     IPage<UserInfoDTO> getUserInfoByQuery(Page<UserInfoDTO> userInfoDTOPage, @Param("queryVO") QueryVO queryVO);
+    IPage<UserInfoDTO> getAdminInfoByQuery(Page<UserInfoDTO> userInfoDTOPage, @Param("queryVO") QueryVO queryVO);
     String getEmailByUsername(@Param("username") String username);
 
 }

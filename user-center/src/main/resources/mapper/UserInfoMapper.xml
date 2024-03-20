@@ -27,11 +27,23 @@
             on u.user_info_id=ui.id
             left join t_role r
             on r.id=u.role_id
+            where u.role_id in (3,4)
             <if test="!queryVO.query.isEmpty()">
-                where u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%')
+                and (u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%'))
             </if>
     </select>
     <select id="getEmailByUsername" resultType="java.lang.String">
         select ui.email from t_user_info ui left join t_user u on u.user_info_id=ui.id where u.username=#{username};
+    </select>
+    <select id="getAdminInfoByQuery" resultType="com.xzit.common.user.model.dto.UserInfoDTO" resultMap="userInfoDTOResultMapper" parameterType="com.xzit.common.sys.model.vo.QueryVO">
+        select ui.id,u.username,u.is_disable,ui.email,ui.avatar,ui.nickname,ui.phone,ui.create_time,ui.update_time,r.name
+        from t_user_info ui left join t_user u
+        on u.user_info_id=ui.id
+        left join t_role r
+        on r.id=u.role_id
+        where u.role_id=2
+        <if test="!queryVO.query.isEmpty()">
+            and (u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%'))
+        </if>
     </select>
 </mapper>

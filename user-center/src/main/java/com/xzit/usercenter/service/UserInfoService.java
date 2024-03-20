@@ -14,5 +14,6 @@ public interface UserInfoService {
     Boolean forbiddenAvatar(Long userInfoId);
     Boolean forbiddenNickname(Long userInfoId);
     void sendEmailByUsername(String username);
+    IPage<UserInfoDTO> listAdminInfoByQuery(QueryVO queryVO);
 
 }
