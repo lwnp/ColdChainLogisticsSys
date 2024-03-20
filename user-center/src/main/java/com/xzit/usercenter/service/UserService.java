@@ -12,5 +12,8 @@ public interface UserService {
     Boolean register(UserVO user);
     Boolean forbidden(Long userInfoId);
     Boolean resetPassword(PasswordVO passwordVO);
+    Boolean addAdminAccount(String username);
+    Boolean addCourierAccount(String username);
+    Boolean resetUserAccount(String username);
 
 }

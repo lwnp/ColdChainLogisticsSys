@@ -9,14 +9,12 @@ import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.sys.model.vo.EmailVO;
 import com.xzit.common.sys.model.vo.QueryVO;
+import com.xzit.common.user.model.dto.ResourceDTO;
 import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.common.user.model.vo.PasswordVO;
 import com.xzit.common.user.model.vo.UserInfoVO;
 import com.xzit.common.user.model.vo.UserVO;
-import com.xzit.usercenter.service.CaptchaService;
-import com.xzit.usercenter.service.FileUploadService;
-import com.xzit.usercenter.service.UserInfoService;
-import com.xzit.usercenter.service.UserService;
+import com.xzit.usercenter.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
@@ -28,12 +26,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@Tags(@Tag(name="用户模块"))
+@Tags(@Tag(name="用户相关"))
 public class UserController {
     private final UserService userService;
     private final CaptchaService captchaService;
     private final FileUploadService fileUploadService;
     private final UserInfoService userInfoService;
+
     @Operation(summary = "查询是否存在同名用户")
     @GetMapping("/hasSameUser")
     ServerResponse<Boolean> hasSameUser(@RequestParam String username){
@@ -136,6 +135,25 @@ public class UserController {
             return ServerResponse.success();
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @GetMapping("/addAdminAccount/{username}")
+    @OptLog(optType = OptLog.UPDATE)
+    @Operation(summary = "添加管理员")
+    ServerResponse<Boolean> addAdminAccount(@PathVariable String username){
+        if(userService.addAdminAccount(username)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.INVALID_ACCOUNT);
+
+    }
+    @GetMapping("/addCourierAccount/{username}")
+    @OptLog(optType = OptLog.UPDATE)
+    @Operation(summary = "添加司机")
+    ServerResponse<Boolean> addCourierAccount(@PathVariable String username){
+        if(userService.addCourierAccount(username)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.INVALID_ACCOUNT);
     }
 
 }

@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.usercenter.mapper.ResourceMapper">
+    <resultMap id="resourceDTOMapper" type="com.xzit.common.user.model.dto.ResourceDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="isAnonymous" column="is_anonymous"/>
+        <result property="requestMethod" column="request_method"/>
+        <result property="url" column="url"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <collection property="roles" ofType="java.lang.String">
+            <constructor>
+                <arg column="role_name"/>
+            </constructor>
+        </collection>
+    </resultMap>
 
+    <select id="listResourceByQuery" resultMap="resourceDTOMapper" parameterType="com.xzit.common.sys.model.vo.QueryVO">
+        select *,ro.name as role_name from t_resource re left join t_role_resource rr on re.id=rr.resource_id left join t_role ro on rr.role_id=ro.id
+        <if test="!query.query.isEmpty()">
+            where re.name like concat('%',#{query.query},'%') or re.request_method like concat('%',#{query.query},'%') or re.url like concat('%',#{query.query},'%')
+        </if>
+    </select>
 </mapper>

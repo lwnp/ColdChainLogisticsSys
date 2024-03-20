@@ -54,5 +54,13 @@ services:
       - "8002:8002"
     networks:
       - mynetwork
+  logistics-service:
+    build:
+      context: ./logistics-center
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    networks:
+      - mynetwork
 networks:
   mynetwork:

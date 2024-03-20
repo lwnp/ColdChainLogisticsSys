@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ResponseCodeEnum {
+    INVALID_ACCOUNT(444,"账号不符合要求"),
     FORBIDDEN(403,"请稍后再请求"),
     BIND_ERROR(400,"数据绑定错误"),
     SUCCESS(200,"操作成功"),

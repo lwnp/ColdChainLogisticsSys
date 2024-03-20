@@ -18,13 +18,17 @@ import com.xzit.usercenter.service.CaptchaService;
 import com.xzit.usercenter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -100,6 +104,69 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(new BCryptPasswordEncoder().encode(passwordVO.getPassword()));
         return userMapper.updateById(user)==1;
+    }
+
+    @Override
+    public Boolean addAdminAccount(String username) {
+        AuthUser user= isValidUser(username);
+        if(user==null){
+            return false;
+        }
+        user.setRoleId(2L);
+        return userMapper.updateById(user)==1;
+    }
+
+    @Override
+    public Boolean addCourierAccount(String username) {
+        AuthUser user= isValidUser(username);
+        if(user==null){
+            return false;
+        }
+        user.setRoleId(3L);
+        return userMapper.updateById(user)==1;
+    }
+
+    @Override
+    public Boolean resetUserAccount(String username) {
+        AuthUser user=resetCheck(username);
+        if (user==null){
+            return false;
+        }
+        user.setRoleId(4L);
+        return userMapper.updateById(user)==1;
+    }
+    private AuthUser isValidUser(String username){
+        if (StringUtils.isAnyBlank(username)){
+            return null;
+        }
+        AuthUser user=new LambdaQueryChainWrapper<>(userMapper).eq(AuthUser::getUsername,username).one();
+        if (user==null||!user.getRoleId().equals(4L)||user.getIsDisable().equals(true)){
+            return null;
+        }
+        return user;
+    }
+    private AuthUser resetCheck(String username){
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        AuthUser authUser=userMapper.selectById(userId);
+        if (StringUtils.isAnyBlank(username)){
+            return null;
+        }
+        AuthUser user=new LambdaQueryChainWrapper<>(userMapper).eq(AuthUser::getUsername,username).one();
+        if (user==null||user.getIsDisable().equals(true)){
+            return null;
+        }
+        if(Objects.equals(authUser.getUsername(), username)){
+            return null;
+        }
+        if(authUser.getRoleId().equals(2L)){
+            if(user.getRoleId().equals(3L)||user.getRoleId().equals(4L)){
+                return user;
+            }
+            else return null;
+        }
+        return user;
     }
 
 }
