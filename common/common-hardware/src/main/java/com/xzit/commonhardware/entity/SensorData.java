@@ -17,7 +17,6 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonDeserialize(using = SensorDataDeserializer.class)
 public class SensorData {
     Long id;
     Long carId;

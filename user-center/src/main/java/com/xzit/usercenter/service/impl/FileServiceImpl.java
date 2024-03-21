@@ -3,21 +3,29 @@ package com.xzit.usercenter.service.impl;
 import com.xzit.common.sys.exception.BizException;
 import com.xzit.common.sys.utils.FileUtil;
 import com.xzit.usercenter.config.properties.MinioProperties;
-import com.xzit.usercenter.service.FileUploadService;
+import com.xzit.usercenter.service.FileService;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.StatObjectArgs;
+import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 @RequiredArgsConstructor
-public class FileUploadServiceImpl implements FileUploadService {
+public class FileServiceImpl implements FileService {
     private final MinioProperties minioProperties;
+    @Value("${upload.minio.url}")
+    private String path_prefix;
     private MinioClient getMinioClient() {
         return MinioClient.builder()
                 .endpoint(minioProperties.getEndpoint())
@@ -59,6 +67,18 @@ public class FileUploadServiceImpl implements FileUploadService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BizException("文件上传失败");
+        }
+    }
+
+    @Override
+    public void deleteFile(String path) {
+        try{
+            getMinioClient().removeObject(RemoveObjectArgs.builder()
+                            .bucket("coldchainsys")
+                            .object(path.replace(path_prefix,""))
+                    .build());
+        } catch (Exception e){
+            throw new BizException("文件删除失败");
         }
     }
 }

@@ -16,6 +16,7 @@ import com.xzit.usercenter.mapper.RoleMapper;
 import com.xzit.usercenter.mapper.UserInfoMapper;
 import com.xzit.usercenter.mapper.UserMapper;
 import com.xzit.usercenter.service.CaptchaService;
+import com.xzit.usercenter.service.FileService;
 import com.xzit.usercenter.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

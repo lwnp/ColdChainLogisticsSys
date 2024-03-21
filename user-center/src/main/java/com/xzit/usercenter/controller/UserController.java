@@ -1,7 +1,6 @@
 package com.xzit.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.api.log.annotation.OptLog;
 import com.xzit.common.sys.annotation.AccessLimit;
 import com.xzit.common.sys.constant.UserConstant;
@@ -9,7 +8,6 @@ import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.sys.model.vo.EmailVO;
 import com.xzit.common.sys.model.vo.QueryVO;
-import com.xzit.common.user.model.dto.ResourceDTO;
 import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.common.user.model.vo.PasswordVO;
 import com.xzit.common.user.model.vo.UserInfoVO;
@@ -20,7 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final UserService userService;
     private final CaptchaService captchaService;
-    private final FileUploadService fileUploadService;
+    private final FileService fileService;
     private final UserInfoService userInfoService;
 
     @Operation(summary = "查询是否存在同名用户")
@@ -57,7 +54,7 @@ public class UserController {
     @PostMapping("/fileUpload")
     @Operation(summary = "上传头像")
     ServerResponse<String> UploadFile(@RequestBody MultipartFile file){
-        return ServerResponse.success(fileUploadService.uploadFile(file, UserConstant.AVATAR_SEPARATOR));
+        return ServerResponse.success(fileService.uploadFile(file, UserConstant.AVATAR_SEPARATOR));
     }
     @Operation(summary = "基于token获取用户信息")
     @GetMapping("/loadUserInfoByContext")

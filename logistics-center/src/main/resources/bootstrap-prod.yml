@@ -16,17 +16,11 @@ spring:
           data-id: sys-common-mysql.yaml
           refresh: true
         shared-configs[1]:
-          data-id: sys-common-redis.yaml
-          refresh: true
-        shared-configs[2]:
-          data-id: sys-common-upload.yaml
-          refresh: true
-        shared-configs[3]:
           data-id: sys-common-sentinel.yaml
           refresh: true
-        shared-configs[4]:
+        shared-configs[2]:
           data-id: sys-common-stream.yaml
           refresh: true
-        shared-configs[5]:
+        shared-configs[3]:
           data-id: sys-common-resource-security.yaml
           refresh: true
