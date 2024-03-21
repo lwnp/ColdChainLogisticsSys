@@ -13,5 +13,6 @@ import java.util.List;
 
 @Mapper
 public interface ResourceMapper extends BaseMapper<Resource> {
-    IPage<ResourceDTO> listResourceByQuery(Page<ResourceDTO> page, @Param("query") QueryVO query);
+    List<ResourceDTO> listResourceByQuery(@Param("query") QueryVO query);
+    List<ResourceDTO> listAdminResourceByQuery(@Param("query") QueryVO query);
 }

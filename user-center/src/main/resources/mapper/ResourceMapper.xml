@@ -7,6 +7,7 @@
         <result property="isAnonymous" column="is_anonymous"/>
         <result property="requestMethod" column="request_method"/>
         <result property="url" column="url"/>
+        <result property="isBasic" column="is_basic"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <collection property="roles" ofType="java.lang.String">
@@ -17,9 +18,19 @@
     </resultMap>
 
     <select id="listResourceByQuery" resultMap="resourceDTOMapper" parameterType="com.xzit.common.sys.model.vo.QueryVO">
-        select *,ro.name as role_name from t_resource re left join t_role_resource rr on re.id=rr.resource_id left join t_role ro on rr.role_id=ro.id
+        select distinct re.*, ro.name as role_name from t_resource re
+        left join t_role_resource rr on re.id=rr.resource_id
+        left join t_role ro on rr.role_id=ro.id
         <if test="!query.query.isEmpty()">
             where re.name like concat('%',#{query.query},'%') or re.request_method like concat('%',#{query.query},'%') or re.url like concat('%',#{query.query},'%')
+        </if>
+    </select>
+
+    <select id="listAdminResourceByQuery" resultMap="resourceDTOMapper" parameterType="com.xzit.common.sys.model.vo.QueryVO">
+        select distinct re.*,ro.name as role_name from t_resource re left join t_role_resource rr on re.id=rr.resource_id left join t_role ro on rr.role_id=ro.id
+        where rr.role_id=2
+        <if test="!query.query.isEmpty()">
+            and (re.name like concat('%',#{query.query},'%') or re.request_method like concat('%',#{query.query},'%') or re.url like concat('%',#{query.query},'%'))
         </if>
     </select>
 </mapper>

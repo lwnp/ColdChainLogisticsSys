@@ -9,5 +9,8 @@ import java.util.List;
 
 public interface ResourceService {
     List<ResourceRoleDTO> listResourceRoles();
-    IPage<ResourceDTO> listResourceByQuery(QueryVO queryVO);
+    List<ResourceDTO> listResourceByQuery(QueryVO queryVO);
+    List<ResourceDTO> listAdminResource(QueryVO queryVO);
+    Boolean addAdminResource(Long resourceId);
+    Boolean dropAdminResource(Long resource);
 }
