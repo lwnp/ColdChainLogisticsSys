@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.logisticscenter.mapper.CenterMapper">
+    <resultMap id="centerResultMap" type="com.xzit.common.logistics.entity.Center">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="isDisable" column="is_disable"/>
+        <result property="areaId" column="area_id"/>
+        <result property="maxSpace" column="max_space"/>
+        <result property="freeSpace" column="free_space"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+    </resultMap>
+
+    <!-- 定义location字段的ResultMap -->
+    <resultMap id="locationResultMap" type="java.util.Map">
+        <!-- 使用constructor映射Map的键值对 -->
+        <constructor>
+            <idArg column="longitude" javaType="java.lang.String"/>
+            <arg column="latitude" javaType="java.lang.Double"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="centerDTOMapper" type="com.xzit.common.logistics.model.dto.CenterDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="isDisable" column="is_disable"/>
+        <result property="province" column="province"/>
+        <result property="maxSpace" column="max_space"/>
+        <result property="freeSpace" column="free_space"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="location" javaType="java.util.Map" resultMap="locationResultMap"/>
+    </resultMap>
+    <select id="getAllByQuery" parameterType="com.xzit.common.sys.model.vo.QueryVO" resultMap="centerDTOMapper">
+
+    </select>
+
+
+</mapper>
