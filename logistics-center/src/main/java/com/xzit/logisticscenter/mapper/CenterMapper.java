@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface CenterMapper extends BaseMapper<Center> {
-    IPage<CenterDTO> getAllByQuery(Page<CenterDTO> page,@Param("queryVO") QueryVO queryVO);
-
+    IPage<CenterDTO> getActiveCenterByQuery(Page<CenterDTO> page,@Param("queryVO") QueryVO queryVO);
+    IPage<CenterDTO> getDisableCenterByQuery(Page<CenterDTO> page,@Param("queryVO") QueryVO queryVO);
 }
+

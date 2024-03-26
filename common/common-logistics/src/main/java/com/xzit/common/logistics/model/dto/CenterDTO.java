@@ -17,7 +17,8 @@ public class CenterDTO {
     String name;
     String province;
     String address;
-    Map<String,Double> location;
+    Double longitude;
+    Double latitude;
     Boolean isDisable;
     Double maxSpace;
     Double freeSpace;

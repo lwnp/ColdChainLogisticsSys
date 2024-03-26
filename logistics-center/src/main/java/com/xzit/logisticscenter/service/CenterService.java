@@ -7,5 +7,9 @@ import com.xzit.common.sys.model.vo.QueryVO;
 
 public interface CenterService {
     Boolean addLogisticsCenter(CenterVO centerVO);
-    IPage<CenterDTO> getCenterByQuery(QueryVO queryVO);
+    IPage<CenterDTO> getActiveCenterByQuery(QueryVO queryVO);
+    Boolean disableCenter(Long id);
+    IPage<CenterDTO> getDisableCenterByQuery(QueryVO queryVO);
+    Boolean activeCenter(Long id);
+
 }

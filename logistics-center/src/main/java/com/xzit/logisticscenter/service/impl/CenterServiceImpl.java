@@ -1,6 +1,7 @@
 package com.xzit.logisticscenter.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.common.logistics.entity.Center;
 import com.xzit.common.logistics.model.dto.CenterDTO;
 import com.xzit.common.logistics.model.vo.CenterVO;
@@ -39,7 +40,29 @@ public class CenterServiceImpl implements CenterService {
     }
 
     @Override
-    public IPage<CenterDTO> getCenterByQuery(QueryVO queryVO) {
+    public IPage<CenterDTO> getActiveCenterByQuery(QueryVO queryVO) {
+        Page<CenterDTO> page=new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return centerMapper.getActiveCenterByQuery(page,queryVO);
+    }
+
+    @Override
+    public Boolean disableCenter(Long id) {
+        Center center=centerMapper.selectById(id);
+        if (center==null||center.getIsDisable()){
+            return false;
+        }
+        center.setIsDisable(true);
+        return centerMapper.updateById(center)==1;
+    }
+
+    @Override
+    public IPage<CenterDTO> getDisableCenterByQuery(QueryVO queryVO) {
+        Page<CenterDTO> page=new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return centerMapper.getDisableCenterByQuery(page,queryVO);
+    }
+
+    @Override
+    public Boolean activeCenter(Long id) {
         return null;
     }
 

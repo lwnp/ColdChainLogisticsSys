@@ -22,7 +22,8 @@ public class Station {
     @TableId(type= IdType.AUTO)
     Long id;
     String name;
-    Map<String,Double> location;
+    Double longitude;
+    Double latitude;
     String address;
     Boolean isDisable;
     Long areaId;

@@ -9,9 +9,10 @@
         <result property="areaId" column="area_id"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
 
         <!-- 使用resultMap嵌套定义location的子字段 -->
-        <association property="location" javaType="java.util.Map" resultMap="locationResultMap"/>
     </resultMap>
 
     <!-- 定义location字段的ResultMap -->
