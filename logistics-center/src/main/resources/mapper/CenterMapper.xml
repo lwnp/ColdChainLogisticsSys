@@ -30,13 +30,13 @@
     <select id="getActiveCenterByQuery" parameterType="com.xzit.common.sys.model.vo.QueryVO" resultMap="centerDTOMapper">
         select lc.*,ar.province from t_logistics_center lc left join t_area ar on lc.area_id=ar.id where lc.is_disable=0
         <if test="!queryVO.query.isEmpty()">
-            where lc.is_disable=0 and (lc.name like concat('%',#{queryVO.query},'%') or lc.address like concat('%',#{queryVO.query},'%') or ar.province like concat('%',#{queryVO.query},'%'))
+            and (lc.name like concat('%',#{queryVO.query},'%') or lc.address like concat('%',#{queryVO.query},'%') or ar.province like concat('%',#{queryVO.query},'%'))
         </if>
     </select>
     <select id="getDisableCenterByQuery" resultType="com.xzit.common.logistics.model.dto.CenterDTO" resultMap="centerDTOMapper">
         select lc.*,ar.province from t_logistics_center lc left join t_area ar on lc.area_id=ar.id where lc.is_disable=1
         <if test="!queryVO.query.isEmpty()">
-            where lc.is_disable=1 and (lc.name like concat('%',#{queryVO.query},'%') or lc.address like concat('%',#{queryVO.query},'%') or ar.province like concat('%',#{queryVO.query},'%'))
+             and (lc.name like concat('%',#{queryVO.query},'%') or lc.address like concat('%',#{queryVO.query},'%') or ar.province like concat('%',#{queryVO.query},'%'))
         </if>
     </select>
 

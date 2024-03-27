@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.logisticscenter.mapper.StationMapper">
-    <resultMap id="centerResultMap" type="com.xzit.common.logistics.entity.Station">
+    <resultMap id="stationResultMap" type="com.xzit.common.logistics.entity.Station">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="address" column="address"/>
@@ -11,17 +11,30 @@
         <result property="updateTime" column="update_time"/>
         <result property="longitude" column="longitude"/>
         <result property="latitude" column="latitude"/>
-
-        <!-- 使用resultMap嵌套定义location的子字段 -->
     </resultMap>
-
-    <!-- 定义location字段的ResultMap -->
-    <resultMap id="locationResultMap" type="java.util.Map">
-        <!-- 使用constructor映射Map的键值对 -->
-        <constructor>
-            <idArg column="longitude" javaType="java.lang.String"/>
-            <arg column="latitude" javaType="java.lang.Double"/>
-        </constructor>
+    <resultMap id="stationDTOMapper" type="com.xzit.common.logistics.model.dto.StationDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="isDisable" column="is_disable"/>
+        <result property="province" column="province"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
     </resultMap>
+    <select id="getActiveStationByQuery" resultType="com.xzit.common.logistics.model.dto.StationDTO" resultMap="stationDTOMapper">
+        select ls.*,ar.province from t_logistics_station ls left join t_area ar on ls.area_id=ar.id where ls.is_disable=0
+        <if test="!queryVO.query.isEmpty()">
+            and (ls.name like concat('%',#{queryVO.query},'%') or ls.address like concat('%',#{queryVO.query},'%') or ar.province like concat('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+    <select id="getDisableStationByQuery" resultType="com.xzit.common.logistics.model.dto.StationDTO" resultMap="stationDTOMapper">
+        select ls.*,ar.province from t_logistics_station ls left join t_area ar on ls.area_id=ar.id where ls.is_disable=1
+        <if test="!queryVO.query.isEmpty()">
+            and (ls.name like concat('%',#{queryVO.query},'%') or ls.address like concat('%',#{queryVO.query},'%') or ar.province like concat('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+
 
 </mapper>

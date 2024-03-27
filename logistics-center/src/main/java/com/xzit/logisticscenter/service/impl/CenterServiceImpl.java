@@ -63,6 +63,18 @@ public class CenterServiceImpl implements CenterService {
 
     @Override
     public Boolean activeCenter(Long id) {
+        Center center=centerMapper.selectById(id);
+        if(center==null||!center.getIsDisable()){
+            return false;
+        }
+        center.setIsDisable(false);
+        return centerMapper.updateById(center)==1;
+    }
+
+    @Override
+    public Boolean modifyCenter(CenterVO centerVO,Long centerId) {
+
+
         return null;
     }
 

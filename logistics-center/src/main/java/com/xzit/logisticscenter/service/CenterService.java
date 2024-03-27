@@ -11,5 +11,6 @@ public interface CenterService {
     Boolean disableCenter(Long id);
     IPage<CenterDTO> getDisableCenterByQuery(QueryVO queryVO);
     Boolean activeCenter(Long id);
+    Boolean modifyCenter(CenterVO centerVO,Long centerId);
 
 }

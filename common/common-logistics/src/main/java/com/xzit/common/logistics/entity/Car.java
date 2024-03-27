@@ -1,8 +1,6 @@
 package com.xzit.common.logistics.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -17,11 +15,18 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Car {
+@Builder
+@TableName("t_logistics_car")
+public class Car {
+    @TableId(type = IdType.AUTO)
     Long id;
     String number;
-    Double maxLoad;  //最大载重
-    Double maxSpace; //最大运载体积
+    Double maxLoad;
+    Double maxSpace;
+    Long typeId;
+    Long logisticId;
+    Boolean isInUse;
+    Boolean isDisable;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")

@@ -29,7 +29,7 @@
             on r.id=u.role_id
             where u.role_id in (3,4)
             <if test="!queryVO.query.isEmpty()">
-                and (u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%'))
+                and (u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%') or r.name like concat('%',#{queryVO.query},'%'))
             </if>
     </select>
     <select id="getEmailByUsername" resultType="java.lang.String">
