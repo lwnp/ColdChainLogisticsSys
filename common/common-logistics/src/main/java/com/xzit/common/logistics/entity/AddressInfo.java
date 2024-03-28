@@ -9,29 +9,28 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@TableName("t_logistics_courier")
-public class Courier {
-    @TableId(type= IdType.AUTO)
+@TableName("t_address_info")
+public class AddressInfo {
+    @TableId(type = IdType.AUTO)
     Long id;
+    Long areaId;
     Long userInfoId;
-    Long typeId;
-    Long logisticId;
-    Boolean isDisable;
-    Boolean isInUse;
+    String name;
+    String phone;
+    String address;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")
-    LocalDateTime createTime;
+    LocalDateTime  createTime;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "update_time")
-    LocalDateTime updateTime;
+    LocalDateTime  updateTime;
 }

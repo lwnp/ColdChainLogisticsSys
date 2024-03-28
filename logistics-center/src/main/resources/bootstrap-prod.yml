@@ -24,3 +24,6 @@ spring:
         shared-configs[3]:
           data-id: sys-common-resource-security.yaml
           refresh: true
+        shared-configs[4]:
+          data-id: sys-common-redis.yaml
+          refresh: true

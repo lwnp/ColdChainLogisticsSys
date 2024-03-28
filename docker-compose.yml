@@ -55,6 +55,7 @@ services:
     networks:
       - mynetwork
   logistics-service:
+    container_name: logistic-service
     build:
       context: ./logistics-center
       dockerfile: Dockerfile

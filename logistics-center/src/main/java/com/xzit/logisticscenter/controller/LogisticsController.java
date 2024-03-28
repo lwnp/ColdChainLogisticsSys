@@ -4,18 +4,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.logistics.entity.Area;
 import com.xzit.common.logistics.model.dto.CarDTO;
 import com.xzit.common.logistics.model.dto.CenterDTO;
+import com.xzit.common.logistics.model.dto.CourierDTO;
 import com.xzit.common.logistics.model.dto.StationDTO;
 import com.xzit.common.logistics.model.vo.CarVO;
 import com.xzit.common.logistics.model.vo.CenterVO;
+import com.xzit.common.logistics.model.vo.CourierVO;
 import com.xzit.common.logistics.model.vo.StationVO;
 import com.xzit.common.sys.annotation.AccessLimit;
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
 import com.xzit.common.sys.model.vo.QueryVO;
-import com.xzit.logisticscenter.service.AreaService;
-import com.xzit.logisticscenter.service.CarService;
-import com.xzit.logisticscenter.service.CenterService;
-import com.xzit.logisticscenter.service.StationService;
+import com.xzit.logisticscenter.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
@@ -33,6 +32,7 @@ public class LogisticsController {
     private final CenterService centerService;
     private final StationService stationService;
     private final CarService carService;
+    private final CourierService courierService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -156,6 +156,48 @@ public class LogisticsController {
     @Operation(summary = "启用车辆")
     ServerResponse<Boolean> activeCar(@PathVariable Long carId){
         if(carService.activeCar(carId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @PostMapping("/getActiveCourierByQuery")
+    @Operation(summary = "分页获取可用快递员")
+    ServerResponse<IPage<CourierDTO>> getActiveCourierByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(courierService.getActiveCourierByQuery(queryVO));
+    }
+    @PostMapping("/getDisableCourierByQuery")
+    @Operation(summary = "分页获取不可用快递员")
+    ServerResponse<IPage<CourierDTO>> getDisableCourierByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(courierService.getDisableCourierByQuery(queryVO));
+    }
+    @PutMapping("/addCourier")
+    @Operation(summary = "添加快递员")
+    ServerResponse<Boolean> addCourier(@RequestBody @Valid CourierVO courierVO){
+        if(courierService.addCourier(courierVO)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.BIND_ERROR);
+    }
+    @DeleteMapping("/disableCourier/{courierId}")
+    @Operation(summary = "禁用快递员")
+    ServerResponse<Boolean> disableCourier(@PathVariable Long courierId){
+        if(courierService.disableCourier(courierId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @PutMapping("/activeCourier/{courierId}")
+    @Operation(summary = "启用快递员")
+    ServerResponse<Boolean> activeCourier(@PathVariable Long courierId){
+        if(courierService.activeCourier(courierId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @PutMapping("/modifyCourier/{courierId}")
+    @Operation(summary = "修改快递员信息")
+    ServerResponse<Boolean> modifyCourier(@RequestBody @Valid CourierVO courierVO,@PathVariable Long courierId){
+        if(courierService.modifyCourier(courierVO,courierId)){
             return ServerResponse.success();
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);

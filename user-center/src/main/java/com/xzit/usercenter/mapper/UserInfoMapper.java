@@ -17,5 +17,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     IPage<UserInfoDTO> getUserInfoByQuery(Page<UserInfoDTO> userInfoDTOPage, @Param("queryVO") QueryVO queryVO);
     IPage<UserInfoDTO> getAdminInfoByQuery(Page<UserInfoDTO> userInfoDTOPage, @Param("queryVO") QueryVO queryVO);
     String getEmailByUsername(@Param("username") String username);
+    UserInfoDTO getUserInfoByUserId(@Param("userId") Long userId);
 
 }
