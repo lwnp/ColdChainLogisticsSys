@@ -2,14 +2,8 @@ package com.xzit.logisticscenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.logistics.entity.Area;
-import com.xzit.common.logistics.model.dto.CarDTO;
-import com.xzit.common.logistics.model.dto.CenterDTO;
-import com.xzit.common.logistics.model.dto.CourierDTO;
-import com.xzit.common.logistics.model.dto.StationDTO;
-import com.xzit.common.logistics.model.vo.CarVO;
-import com.xzit.common.logistics.model.vo.CenterVO;
-import com.xzit.common.logistics.model.vo.CourierVO;
-import com.xzit.common.logistics.model.vo.StationVO;
+import com.xzit.common.logistics.model.dto.*;
+import com.xzit.common.logistics.model.vo.*;
 import com.xzit.common.sys.annotation.AccessLimit;
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
@@ -33,6 +27,7 @@ public class LogisticsController {
     private final StationService stationService;
     private final CarService carService;
     private final CourierService courierService;
+    private final AddressInfoService addressInfoService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -202,6 +197,42 @@ public class LogisticsController {
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);
     }
+    @GetMapping("/addressInfo")
+    @Operation(summary = "获取个人地址簿")
+    ServerResponse<List<AddressInfoDTO>> getAddressInfoList(){
+        return ServerResponse.success(addressInfoService.getAddressInfoList());
+    }
+    @PutMapping("/addAddressInfo")
+    @Operation(summary = "添加个人地址")
+    ServerResponse<Boolean> addAddressInfo(@RequestBody @Valid AddressInfoVO addressInfoVO){
+        if(addressInfoService.addAddressInfo(addressInfoVO)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.BIND_ERROR);
+    }
+    @DeleteMapping("/deleteAddressInfo/{addressId}")
+    @Operation(summary = "删除个人地址")
+    ServerResponse<Boolean> deleteAddressInfo(@PathVariable Long addressId){
+        if(addressInfoService.deleteAddressInfo(addressId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @PutMapping("/modifyAddressInfo/{addressId}")
+    @Operation(summary = "修改个人地址")
+    ServerResponse<Boolean> modifyAddressInfo(@RequestBody @Valid AddressInfoVO addressInfoVO,@PathVariable Long addressId){
+        if(addressInfoService.modifyAddressInfo(addressInfoVO,addressId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
+    }
+    @PostMapping("/getAddressInfoByQuery")
+    @Operation(summary = "分页查询用户地址")
+    ServerResponse<IPage<AddressInfoDTO>> getAddressInfoByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(addressInfoService.getUserAddressInfoByQuery(queryVO));
+    }
+
+
 
 
 

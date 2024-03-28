@@ -119,5 +119,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoMapper.getAdminInfoByQuery(userInfoDTOPage,queryVO);
     }
 
+    @Override
+    public UserInfoDTO getUserInfoByUserId(Long userId) {
+        return userInfoMapper.getUserInfoByUserId(userId);
+    }
+
 
 }

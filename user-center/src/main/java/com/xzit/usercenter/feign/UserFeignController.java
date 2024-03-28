@@ -32,6 +32,6 @@ public class UserFeignController implements UserFeignClient {
 
     @Override
     public ServerResponse<UserInfoDTO> getUserInfo(Long userId) {
-        return null;
+        return ServerResponse.success(userInfoService.getUserInfoByUserId(userId));
     }
 }

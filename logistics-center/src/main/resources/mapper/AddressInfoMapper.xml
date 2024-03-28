@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.logisticscenter.mapper.AddressInfoMapper">
+    <resultMap id="addressInfoDTOMapper" type="com.xzit.common.logistics.model.dto.AddressInfoDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="province" column="province"/>
+        <result property="address" column="address"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
 
+    <select id="getAddressListByUserId" resultType="com.xzit.common.logistics.model.dto.AddressInfoDTO" resultMap="addressInfoDTOMapper">
+        select ai.*,a.province from t_address_info ai left join t_area a on a.id=ai.area_id where ai.user_info_id=#{userInfoId}
+    </select>
+    <select id="getAddressByQuery" resultType="com.xzit.common.logistics.model.dto.AddressInfoDTO" resultMap="addressInfoDTOMapper">
+        select ai.*,a.province from t_address_info ai left join t_area a on a.id=ai.area_id
+        <if test="!queryVO.query.isEmpty()">
+            where a.province like concat('%',#{queryVO.query},'%') or name like concat('%',#{queryVO.query},'%') or phone like concat('%',#{queryVO.query},'%')
+        </if>
+    </select>
 </mapper>

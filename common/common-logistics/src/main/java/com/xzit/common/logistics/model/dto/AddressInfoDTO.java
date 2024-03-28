@@ -17,7 +17,6 @@ public class AddressInfoDTO {
     String address;
     String name;
     String phone;
-    String username;
     LocalDateTime createTime;
     LocalDateTime updateTime;
 }

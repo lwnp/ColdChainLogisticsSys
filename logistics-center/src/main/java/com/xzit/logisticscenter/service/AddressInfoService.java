@@ -10,6 +10,7 @@ import java.util.List;
 public interface AddressInfoService {
     List<AddressInfoDTO> getAddressInfoList();
     IPage<AddressInfoDTO> getUserAddressInfoByQuery(QueryVO queryVO);
-    Boolean deleteAddressInfo(Long userInfoId, Long addressInfoId);
+    Boolean deleteAddressInfo(Long addressInfoId);
     Boolean modifyAddressInfo(AddressInfoVO addressInfoVO, Long addressInfoId);
+    Boolean addAddressInfo(AddressInfoVO addressInfoVO);
 }
