@@ -18,6 +18,7 @@
 		<module>message-center</module>
 		<module>log-center</module>
 		<module>logistics-center</module>
+		<module>order-center</module>
 	</modules>
 	<properties>
 		<skipTests>true</skipTests>

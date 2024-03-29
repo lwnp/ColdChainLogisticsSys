@@ -18,6 +18,7 @@ public class AutoFillHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("createTime",LocalDateTime.now(),metaObject);
         this.setFieldValByName("updateTime",LocalDateTime.now(),metaObject);
+        this.setFieldValByName("timeStamp",LocalDateTime.now(),metaObject);
 
     }
 

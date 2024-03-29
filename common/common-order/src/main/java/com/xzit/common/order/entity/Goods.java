@@ -1,4 +1,4 @@
-package com.xzit.common.logistics.entity;
+package com.xzit.common.order.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -20,18 +20,24 @@ import java.time.LocalDateTime;
 public class Goods {
     @TableId(type = IdType.AUTO)
     Long id;
-    Long user_info_id;
+    Long userInfoId;
     String name;
     String description;
     String image;
     Double weight;
     Double space;
+    Double maxTemperature;
+    Double minTemperature;
+    Double maxDioxide;
+    Double minDioxide;
+    Double maxHumidity;
+    Double minHumidity;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")
-    LocalDateTime  create_time;
+    LocalDateTime create_time;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")
-    LocalDateTime  update_time;
+    LocalDateTime update_time;
 }

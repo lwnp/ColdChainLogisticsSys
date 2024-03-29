@@ -13,21 +13,21 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("t_logistics_flow")
-public class LogisticFlow {
+@Data
+@Builder
+@TableName("t_arrangement")
+public class Arrangement {
     @TableId(type = IdType.AUTO)
     Long id;
     Long orderId;
-    String description;
-    Double weight;
-    List<String> images;
+    Long statusId;
+    Long carId;
+    Long courierId;
+    Long stepId;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "timeStamp")
     LocalDateTime timeStamp;
-
 }

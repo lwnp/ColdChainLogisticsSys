@@ -30,6 +30,12 @@ spring:
             - Path=/logistics/**
           filters:
             - StripPrefix=1
+        - id: order-center
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1
 knife4j:
   gateway:
     enabled: true

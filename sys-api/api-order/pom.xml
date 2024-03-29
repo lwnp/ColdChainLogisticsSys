@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.xzit</groupId>
-         <artifactId>common</artifactId>
+        <artifactId>sys-api</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>common-order</artifactId>
+    <artifactId>api-order</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>common-order</name>
-    <description>common-order</description>
+    <name>api-order</name>
+    <description>api-order</description>
     <properties>
         <skipTests>true</skipTests>
         <java.version>17</java.version>
@@ -25,22 +25,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
     </dependencies>
 

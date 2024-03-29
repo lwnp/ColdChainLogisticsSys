@@ -8,4 +8,5 @@ import java.util.Map;
 public interface LogisticService {
     Map<String,Double> address2Location(String address);
 
+
 }

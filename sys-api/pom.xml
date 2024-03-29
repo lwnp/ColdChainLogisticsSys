@@ -11,6 +11,7 @@
         <module>api-user</module>
         <module>api-log</module>
         <module>api-logistics</module>
+        <module>api-order</module>
     </modules>
     <packaging>pom</packaging>
     <artifactId>sys-api</artifactId>
