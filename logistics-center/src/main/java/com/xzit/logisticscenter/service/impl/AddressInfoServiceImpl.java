@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.api.user.feign.UserFeignClient;
+import com.xzit.common.logistics.constant.AreaConstant;
 import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.AddressInfo;
 import com.xzit.common.logistics.model.dto.AddressInfoDTO;
@@ -68,6 +69,16 @@ public class AddressInfoServiceImpl implements AddressInfoService {
 
     @Override
     public Boolean addAddressInfo(AddressInfoVO addressInfoVO) {
+        if(addressInfoVO.getAreaId()==null||addressInfoVO.getAreaId()<=0||addressInfoVO.getAreaId()> AreaConstant.TOTAL_PROVINCE){
+            return false;
+        }
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        UserInfoDTO userInfoDTO=userFeignClient.getUserInfo(userId).getData();
+        if(addressInfoVO.getUserInfoId()==null||!Objects.equals(userInfoDTO.getId(),addressInfoVO.getUserInfoId())){
+            return false;
+        }
         if(addressInfoMapper.getAddressCountByUserInfoId(addressInfoVO.getUserInfoId())> LogisticConstant.MAX_ADDRESS) {
             return false;
         }

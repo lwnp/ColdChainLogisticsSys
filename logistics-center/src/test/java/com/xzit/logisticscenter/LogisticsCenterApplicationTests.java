@@ -1,13 +1,21 @@
 package com.xzit.logisticscenter;
 
+import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.Area;
+import com.xzit.common.logistics.model.vo.LocationResultVO;
 import com.xzit.logisticscenter.mapper.AreaMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class LogisticsCenterApplicationTests {
@@ -16,44 +24,21 @@ class LogisticsCenterApplicationTests {
 
     @Test
     void contextLoads() {
-        List<Area> areaList = new ArrayList<>();
-        areaList.add(new Area(null, "北京市"));
-        areaList.add(new Area(null, "天津市"));
-        areaList.add(new Area(null, "上海市"));
-        areaList.add(new Area(null, "重庆市"));
-        areaList.add(new Area(null, "河北省"));
-        areaList.add(new Area(null, "山西省"));
-        areaList.add(new Area(null, "辽宁省"));
-        areaList.add(new Area(null, "吉林省"));
-        areaList.add(new Area(null, "黑龙江省"));
-        areaList.add(new Area(null, "江苏省"));
-        areaList.add(new Area(null, "浙江省"));
-        areaList.add(new Area(null, "安徽省"));
-        areaList.add(new Area(null, "福建省"));
-        areaList.add(new Area(null, "江西省"));
-        areaList.add(new Area(null, "山东省"));
-        areaList.add(new Area(null, "河南省"));
-        areaList.add(new Area(null, "湖北省"));
-        areaList.add(new Area(null, "湖南省"));
-        areaList.add(new Area(null, "广东省"));
-        areaList.add(new Area(null, "海南省"));
-        areaList.add(new Area(null, "四川省"));
-        areaList.add(new Area(null, "贵州省"));
-        areaList.add(new Area(null, "云南省"));
-        areaList.add(new Area(null, "陕西省"));
-        areaList.add(new Area(null, "甘肃省"));
-        areaList.add(new Area(null, "青海省"));
-        areaList.add(new Area(null, "台湾省"));
-        areaList.add(new Area(null, "内蒙古自治区"));
-        areaList.add(new Area(null, "广西壮族自治区"));
-        areaList.add(new Area(null, "西藏自治区"));
-        areaList.add(new Area(null, "宁夏回族自治区"));
-        areaList.add(new Area(null, "新疆维吾尔自治区"));
-        areaList.add(new Area(null, "香港特别行政区"));
-        areaList.add(new Area(null, "澳门特别行政区"));
-        for (Area area:areaList){
-            areaMapper.insert(area);
-        }
+        String address="江苏省徐州市徐州工程学院";
+        WebClient webClient= WebClient.create();
+        Mono<ResponseEntity<LocationResultVO>> result=webClient.get()
+                .uri(LogisticConstant.ADDRESS_TO_LOCATION_API,address,LogisticConstant.APP_KEY)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .toEntity(LocationResultVO.class);
+
+        ResponseEntity<LocationResultVO> responseEntity = result.block(); // 阻塞等待结果
+        assertNotNull(responseEntity, "Response entity should not be null");
+        assertNotNull(responseEntity.getBody(), "Response body should not be null");
+
+        // 这里可以打印responseEntity等你想要的操作
+        System.out.println(responseEntity.getBody().getResult());
+
     }
 
 }
