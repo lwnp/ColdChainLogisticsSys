@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.logisticscenter.mapper.LogisticMapper">
+    <resultMap id="availableLogisticDTOMapper" type="com.xzit.common.logistics.model.dto.AvailableLogisticDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="typeId" column="type_id"/>
+        <result property="address" column="address"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <collection property="carList" ofType="com.xzit.common.logistics.model.dto.CarDTO">
+            <id property="id" column="car_id"/>
+            <result property="name" column="name"/>
+            <result property="belong" column="belong"/>
+            <result property="number" column="number"/>
+            <result property="isInUse" column="car_is_in_use"/>
+            <result property="isDisable" column="car_is_disable"/>
+            <result property="createTime" column="car_create_time"/>
+            <result property="updateTime" column="car_update_time"/>
+            <result property="maxLoad" column="max_load"/>
+            <result property="maxSpace" column="max_space"/>
+        </collection>
+
+        <collection property="courierList" ofType="com.xzit.common.logistics.model.dto.CourierDTO">
+            <id property="id" column="courier_id"/>
+            <result property="name" column="name"/>
+            <result property="belong" column="belong"/>
+            <result property="isDisable" column="courier_is_disable"/>
+            <result property="isInUse" column="courier_is_in_use"/>
+            <result property="username" column="username"/>
+            <result property="createTime" column="courier_create_time"/>
+            <result property="updateTime" column="courier_update_time"/>
+        </collection>
+    </resultMap>
+    <select id="getAvailableLogisticList" resultType="com.xzit.common.logistics.model.dto.AvailableLogisticDTO" resultMap="availableLogisticDTOMapper">
+        <if test="typeId==1">
+            select sc.*,
+            tp.id as type_id,
+            lc.id as car_id,
+            tp.name as belong,
+            lc.number,
+            lc.is_in_use as car_is_in_use,
+            lc.is_disable as car_is_disable,
+            lc.create_time as car_create_time,
+            lc.update_time as car_update_time,
+            lc.max_load,
+            lc.max_space,
+            co.id as courier_id,
+            co.is_disable as courier_is_disable,
+            co.is_in_use as courier_is_in_use,
+            co.create_time as courier_create_time,
+            co.update_time as courier_update_time,
+            GetUsernameByUserInfoId(co.user_info_id) as username
+            from t_logistics_center sc
+                left join t_logistics_courier co on co.logistic_id=sc.id
+                left join t_logistics_car lc on sc.id=lc.logistic_id
+                left join t_logistics_type tp on lc.type_id=tp.id and co.type_id=tp.id
+            where tp.id=1 and sc.is_disable=0 and lc.is_in_use=0 and lc.is_disable=0 and co.is_disable=0 and co.is_in_use=0 and sc.area_id=#{areaId}
+        </if>
+        <if test="typeId==2">
+            select sc.*,
+            tp.id as type_id,
+            lc.id as car_id,
+            tp.name as belong,
+            lc.number,
+            lc.is_in_use as car_is_in_use,
+            lc.is_disable as car_is_disable,
+            lc.create_time as car_create_time,
+            lc.update_time as car_update_time,
+            lc.max_load,
+            lc.max_space,
+            co.id as courier_id,
+            co.is_disable as courier_is_disable,
+            co.is_in_use as courier_is_in_use,
+            co.create_time as courier_create_time,
+            co.update_time as courier_update_time,
+            GetUsernameByUserInfoId(co.user_info_id) as username
+            from t_logistics_station sc
+            left join t_logistics_courier co on co.logistic_id=sc.id
+            left join t_logistics_car lc on sc.id=lc.logistic_id
+            left join t_logistics_type tp on lc.type_id=tp.id and co.type_id=tp.id
+            where tp.id=2 and sc.is_disable=0 and lc.is_in_use=0 and lc.is_disable=0 and co.is_disable=0 and co.is_in_use=0 and sc.area_id=#{areaId}
+        </if>
+    </select>
+
+</mapper>

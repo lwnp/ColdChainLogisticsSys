@@ -2,25 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.logisticscenter.mapper.CourierMapper">
     <resultMap id="courierDTOMapper" type="com.xzit.common.logistics.model.dto.CourierDTO">
-        <id property="id" column="id"/>
+        <id property="id" column="courier_id"/>
         <result property="name" column="name"/>
         <result property="belong" column="belong"/>
-        <result property="isDisable" column="is_disable"/>
-        <result property="isInUse" column="is_in_use"/>
+        <result property="isDisable" column="courier_is_disable"/>
+        <result property="isInUse" column="courier_is_in_use"/>
         <result property="username" column="username"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="courier_create_time"/>
+        <result property="updateTime" column="courier_update_time"/>
     </resultMap>
     <select id="getActiveCourierByQuery" resultType="com.xzit.common.logistics.model.dto.CourierDTO" resultMap="courierDTOMapper">
-        select lc.*,get_name_by_id(lc.type_id,lc.logistic_id) as name,GetUsernameByUserInfoId(lc.user_info_id) as username
-        from t_logistics_courier lc left join t_logistics_type lt on lc.type_id=lt.id where lc.is_disable=0
+        select lc.id as courier_id,
+               tp.name as belong,
+               lc.is_disable as courier_is_disable,
+               lc.is_in_use as courier_is_in_use,
+               lc.create_time as courier_create_time,
+               lc.update_time as courier_update_time,
+               get_name_by_id(lc.type_id,lc.logistic_id) as name,
+               GetUsernameByUserInfoId(lc.user_info_id) as username
+        from t_logistics_courier lc left join t_logistics_type tp on lc.type_id=tp.id where lc.is_disable=0
         <if test="!queryVO.query.isEmpty()">
             and (username like concat('%',#{queryVO.query},'%') or name like concat('%',#{queryVO.query},'%') or belong like concat('%',#{queryVO.query},'%'))
         </if>
     </select>
     <select id="getDisableCourierByQuery" resultType="com.xzit.common.logistics.model.dto.CourierDTO" resultMap="courierDTOMapper">
-        select lc.*,get_name_by_id(lc.type_id,lc.logistic_id) as name,GetUsernameByUserInfoId(lc.user_info_id) as username
-        from t_logistics_courier lc left join t_logistics_type lt on lc.type_id=lt.id where lc.is_disable=1
+        select lc.id as courier_id,
+        tp.name as belong,
+        lc.is_disable as courier_is_disable,
+        lc.is_in_use as courier_is_in_use,
+        lc.create_time as courier_create_time,
+        lc.update_time as courier_update_time,
+        get_name_by_id(lc.type_id,lc.logistic_id) as name,
+        GetUsernameByUserInfoId(lc.user_info_id) as username
+        from t_logistics_courier lc left join t_logistics_type tp on lc.type_id=tp.id where lc.is_disable=1
         <if test="!queryVO.query.isEmpty()">
             and (username like concat('%',#{queryVO.query},'%') or name like concat('%',#{queryVO.query},'%') or belong like concat('%',#{queryVO.query},'%'))
         </if>

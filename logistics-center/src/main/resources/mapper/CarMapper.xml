@@ -2,26 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.logisticscenter.mapper.CarMapper">
     <resultMap id="carDTOMapper" type="com.xzit.common.logistics.model.dto.CarDTO">
-        <id property="id" column="id"/>
+        <id property="id" column="car_id"/>
         <result property="name" column="name"/>
         <result property="belong" column="belong"/>
         <result property="number" column="number"/>
-        <result property="isInUse" column="is_in_use"/>
-        <result property="isDisable" column="is_disable"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
+        <result property="isInUse" column="car_is_in_use"/>
+        <result property="isDisable" column="car_is_disable"/>
+        <result property="createTime" column="car_create_time"/>
+        <result property="updateTime" column="car_update_time"/>
         <result property="maxLoad" column="max_load"/>
         <result property="maxSpace" column="max_space"/>
     </resultMap>
     <select id="getActiveCarByQuery" resultType="com.xzit.common.logistics.model.dto.CarDTO" resultMap="carDTOMapper">
-        SELECT lc.id,
+        SELECT lc.id as car_id,
                get_name_by_id(lc.type_id, lc.logistic_id) AS name,
                tp.name as belong,
                lc.number,
-               lc.is_in_use,
-               lc.is_disable,
-               lc.create_time,
-               lc.update_time,
+               lc.is_in_use as car_is_in_use,
+               lc.is_disable as car_is_disable,
+               lc.create_time as car_create_time,
+               lc.update_time as car_update_time,
                lc.max_load,
                lc.max_space
         FROM t_logistics_car lc,t_logistics_type tp where lc.type_id=tp.id and lc.is_disable=0
@@ -30,14 +30,14 @@
         </if>
     </select>
     <select id="getDisableCarByQuery" resultType="com.xzit.common.logistics.model.dto.CarDTO" resultMap="carDTOMapper">
-        SELECT lc.id,
+        SELECT lc.id as car_id,
         get_name_by_id(lc.type_id, lc.logistic_id) AS name,
         tp.name as belong,
         lc.number,
-        lc.is_in_use,
-        lc.is_disable,
-        lc.create_time,
-        lc.update_time,
+        lc.is_in_use as car_is_in_use,
+        lc.is_disable as car_is_disable,
+        lc.create_time as car_create_time,
+        lc.update_time as car_update_time,
         lc.max_load,
         lc.max_space
         FROM t_logistics_car lc,t_logistics_type tp where lc.type_id=tp.id and lc.is_disable=1

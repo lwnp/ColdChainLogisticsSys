@@ -1,8 +1,6 @@
 package com.xzit.common.logistics.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -20,6 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @TableName("t_logistics_goods")
 public class Goods {
+    @TableId(type = IdType.AUTO)
     Long id;
     Long user_info_id;
     String name;

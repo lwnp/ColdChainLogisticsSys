@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.Center;
 import com.xzit.common.logistics.entity.Station;
+import com.xzit.common.logistics.model.dto.AvailableLogisticDTO;
 import com.xzit.common.logistics.model.vo.LocationResultVO;
 import com.xzit.common.logistics.model.vo.LocationVO;
 import com.xzit.common.sys.exception.BizException;
 import com.xzit.logisticscenter.mapper.CenterMapper;
+import com.xzit.logisticscenter.mapper.LogisticMapper;
 import com.xzit.logisticscenter.mapper.StationMapper;
 import com.xzit.logisticscenter.service.LogisticService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LogisticServiceImpl implements LogisticService {
     private final WebClient webClient;
-    private final CenterMapper centerMapper;
-    private final StationMapper stationMapper;
+    private final LogisticMapper logisticMapper;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -45,6 +46,10 @@ public class LogisticServiceImpl implements LogisticService {
         location.put("latitude",locationVO.getLat());
         location.put("longitude",locationVO.getLng());
         return location;
+    }
+    private List<AvailableLogisticDTO> getAvailableLogistic(Long areaId, Long typeId) {
+        return logisticMapper.getAvailableLogisticList(areaId,typeId);
+
     }
 
 }

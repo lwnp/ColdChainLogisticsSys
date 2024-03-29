@@ -1,5 +1,8 @@
 package com.xzit.logisticscenter.service;
 
+import com.xzit.common.logistics.model.dto.AvailableLogisticDTO;
+
+import java.util.List;
 import java.util.Map;
 
 public interface LogisticService {

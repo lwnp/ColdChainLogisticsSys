@@ -1,8 +1,6 @@
 package com.xzit.common.logistics.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -21,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @TableName("t_logistics_flow")
 public class LogisticFlow {
+    @TableId(type = IdType.AUTO)
     Long id;
     Long orderId;
     String description;

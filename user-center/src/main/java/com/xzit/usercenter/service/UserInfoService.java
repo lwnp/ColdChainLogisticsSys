@@ -16,5 +16,6 @@ public interface UserInfoService {
     void sendEmailByUsername(String username);
     IPage<UserInfoDTO> listAdminInfoByQuery(QueryVO queryVO);
     UserInfoDTO getUserInfoByUserId(Long userId);
+    Boolean isValidCourier(Long userInfoId);
 
 }

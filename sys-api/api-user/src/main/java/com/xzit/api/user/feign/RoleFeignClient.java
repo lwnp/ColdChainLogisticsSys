@@ -14,4 +14,6 @@ public interface RoleFeignClient {
     ServerResponse<String> getRoleNameById(Long id);
     @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/user/listUserRoles")
     ServerResponse<List<String>> listUserRoles(@RequestParam("username") String username);
+    @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/user/isValidCourier")
+    ServerResponse<Boolean> isValidCourier(@RequestParam("userInfoId") Long userInfoId);
 }

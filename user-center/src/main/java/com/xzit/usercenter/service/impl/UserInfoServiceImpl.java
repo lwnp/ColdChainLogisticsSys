@@ -124,5 +124,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         return userInfoMapper.getUserInfoByUserId(userId);
     }
 
+    @Override
+    public Boolean isValidCourier(Long userInfoId) {
+        AuthUser user=new LambdaQueryChainWrapper<>(userMapper).eq(AuthUser::getUserInfoId,userInfoId).one();
+        return user != null && user.getRoleId() == 3;
+    }
+
 
 }

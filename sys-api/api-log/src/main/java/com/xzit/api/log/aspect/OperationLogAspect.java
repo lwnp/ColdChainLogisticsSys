@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -65,7 +67,7 @@ public class OperationLogAspect {
                 operationLog.setRequestParam(JSON.toJSONString(joinPoint.getArgs()));
             }
         }
-        if(SecurityContextHolder.getContext()!=null){
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof OAuth2AuthenticationToken){
             Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Map<String,Object> map=jwt.getClaims();
             Long userId= (Long) map.get("userId");

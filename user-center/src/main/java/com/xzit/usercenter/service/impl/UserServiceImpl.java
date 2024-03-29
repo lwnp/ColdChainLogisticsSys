@@ -3,6 +3,7 @@ package com.xzit.usercenter.service.impl;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.xzit.api.logistics.feign.CourierFeignClient;
 import com.xzit.common.sys.constant.UserConstant;
 import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.entity.AuthUser;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final RoleMapper roleMapper;
     private final UserInfoMapper userInfoMapper;
     private final CaptchaService captchaService;
+    private final CourierFeignClient courierFeignClient;
     @Override
     public UserDetailsDTO getUserByUsername(String username) {
         AuthUser user=new LambdaQueryChainWrapper<>(userMapper).eq(AuthUser::getUsername,username).one();
@@ -129,7 +131,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean resetUserAccount(String username) {
         AuthUser user=resetCheck(username);
-        if (user==null){
+        if (user==null||courierFeignClient.isBindCourier(user.getUserInfoId()).getData()){
             return false;
         }
         user.setRoleId(4L);

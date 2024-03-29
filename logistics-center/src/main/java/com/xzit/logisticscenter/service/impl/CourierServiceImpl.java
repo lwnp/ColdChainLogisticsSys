@@ -3,6 +3,7 @@ package com.xzit.logisticscenter.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xzit.api.user.feign.RoleFeignClient;
 import com.xzit.common.logistics.entity.Center;
 import com.xzit.common.logistics.entity.Courier;
 import com.xzit.common.logistics.entity.Station;
@@ -25,8 +26,17 @@ public class CourierServiceImpl implements CourierService {
     private final CourierMapper courierMapper;
     private final CenterMapper centerMapper;
     private final StationMapper stationMapper;
+    private final RoleFeignClient roleFeignClient;
     @Override
     public Boolean addCourier(CourierVO courierVO) {
+        QueryWrapper<Courier> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("user_info_id",courierVO.getUserInfoId());
+        if(courierMapper.exists(queryWrapper)){
+            return false;
+        }
+        if(!roleFeignClient.isValidCourier(courierVO.getUserInfoId()).getData()){
+            return false;
+        }
         if(isNotExistLogisticId(courierVO)){
             return false;
         }
@@ -75,6 +85,13 @@ public class CourierServiceImpl implements CourierService {
         }
         return courierMapper.updateById(courier)==1;
 
+    }
+
+    @Override
+    public Boolean isBindCourier(Long userInfoId) {
+        QueryWrapper<Courier> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("user_info_id",userInfoId);
+        return courierMapper.exists(queryWrapper);
     }
 
     private boolean isNotExistLogisticId(CourierVO courierVO){
