@@ -134,6 +134,15 @@
             <artifactId>api-logistics</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzit</groupId>
+            <artifactId>api-order</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
     </dependencies>
 

@@ -26,6 +26,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.xzit</groupId>
+            <artifactId>common-order</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -9,35 +9,31 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@TableName("t_goods")
-public class Goods {
+@NoArgsConstructor
+@TableName("t_fee_states")
+public class FeeStates {
     @TableId(type = IdType.AUTO)
     Long id;
-    Long userInfoId;
-    String name;
-    String description;
-    String image;
-    Double weight;
-    Double space;
-    Double maxTemperature;
-    Double minTemperature;
-    Double maxDioxide;
-    Double minDioxide;
-    Double maxHumidity;
-    Double minHumidity;
+    Long feeTypeId;//费用类型id
+    @TableField("start_value")
+    Double limit;    //该阶梯的入门值
+    BigDecimal price; //该种类型该阶梯价格
+    Double oilRate; //燃油费率
+    Long state;     //表示第几阶梯
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")
-    LocalDateTime create_time;
+    LocalDateTime createTime;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")
-    LocalDateTime update_time;
+    LocalDateTime updateTime;
 }

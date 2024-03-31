@@ -42,6 +42,7 @@
 		<ip2region.version>1.7.2</ip2region.version>
 		<user.agent.version>1.20</user.agent.version>
 		<pagehelper.version>2.1.0</pagehelper.version>
+		<alipay.sdk.version>4.38.61.ALL</alipay.sdk.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -155,6 +156,11 @@
 				<groupId>com.github.pagehelper</groupId>
 				<artifactId>pagehelper-spring-boot-starter</artifactId>
 				<version>${pagehelper.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alipay.sdk</groupId>
+				<artifactId>alipay-sdk-java</artifactId>
+				<version>${alipay.sdk.version}</version>
 			</dependency>
 
 

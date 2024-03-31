@@ -10,34 +10,33 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@TableName("t_goods")
-public class Goods {
+@TableName("t_order")
+public class Order {
     @TableId(type = IdType.AUTO)
     Long id;
     Long userInfoId;
-    String name;
-    String description;
-    String image;
-    Double weight;
-    Double space;
-    Double maxTemperature;
-    Double minTemperature;
-    Double maxDioxide;
-    Double minDioxide;
-    Double maxHumidity;
-    Double minHumidity;
+    String orderNum;
+    Long goodsId;
+    Boolean isPay;
+    BigDecimal price;
+    Long senderAddressId;
+    Long receiveAddressId;
+    Boolean isCheck;
+    Boolean isActive;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")
-    LocalDateTime create_time;
+    LocalDateTime createTime;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")
-    LocalDateTime update_time;
+    LocalDateTime updateTime;
 }
