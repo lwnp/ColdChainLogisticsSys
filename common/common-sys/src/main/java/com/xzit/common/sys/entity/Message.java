@@ -1,4 +1,4 @@
-package com.xzit.common.logistics.entity;
+package com.xzit.common.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,33 +9,27 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Bean;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
-@TableName("t_arrangement")
-public class Arrangement implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+@TableName("t_message")
+public class Message {
     @TableId(type = IdType.AUTO)
     Long id;
-    Long orderId;
-    Long statusId;
-    Long carId;
-    Long courierId;
-    Long stepId;
+    Boolean isRead;
+    Long typeId;
+    String content;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")
-    LocalDateTime createTime;
+    LocalDateTime  createTime;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")
-    LocalDateTime updateTime;
+    LocalDateTime  updateTime;
 }

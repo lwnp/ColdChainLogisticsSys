@@ -9,5 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface LogisticMapper{
-    List<AvailableLogisticDTO> getAvailableLogisticList(@Param("areaId") Long areaId,@Param("typeId") Long typeId);
+    List<AvailableLogisticDTO> getAvailableStation(@Param("areaId") Long areaId);
+    List<AvailableLogisticDTO> getAvailableCenter(@Param("areaId") Long areaId,@Param("space")Double space);
 }
