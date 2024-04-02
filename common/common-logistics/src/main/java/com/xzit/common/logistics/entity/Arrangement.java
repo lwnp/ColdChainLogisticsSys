@@ -30,6 +30,7 @@ public class Arrangement implements Serializable {
     Long carId;
     Long courierId;
     Long stepId;
+    Long toId;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")

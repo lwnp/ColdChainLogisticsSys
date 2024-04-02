@@ -2,6 +2,7 @@ package com.xzit.logisticscenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.logistics.entity.Area;
+import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.*;
 import com.xzit.common.sys.annotation.AccessLimit;
@@ -28,6 +29,7 @@ public class LogisticsController {
     private final CarService carService;
     private final CourierService courierService;
     private final AddressInfoService addressInfoService;
+    private final LogisticService logisticService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -230,6 +232,18 @@ public class LogisticsController {
     @Operation(summary = "分页查询用户地址")
     ServerResponse<IPage<AddressInfoDTO>> getAddressInfoByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(addressInfoService.getUserAddressInfoByQuery(queryVO));
+    }
+    @GetMapping("/test/{fromAreaId}/{toAreaId}/{fromAddress}/{toAddress}/{goodsWeight}/{goodsSpace}")
+    ServerResponse<List<Arrangement>> getArrangement(@PathVariable Long fromAreaId,@PathVariable Long toAreaId,@PathVariable String fromAddress,@PathVariable String toAddress,@PathVariable Double goodsWeight,@PathVariable Double goodsSpace){
+        return ServerResponse.success(logisticService.test(fromAreaId, toAreaId, fromAddress, toAddress, goodsWeight, goodsSpace));
+    }
+    @GetMapping("/available/{areaId}")
+    ServerResponse<List<AvailableLogisticDTO>> getAvailable(@PathVariable Long areaId){
+        return ServerResponse.success(logisticService.getAvailableLogistic(areaId));
+    }
+    @GetMapping("/logistic/{areaId}/{space}")
+    ServerResponse<List<AvailableLogisticDTO>> getLogistic(@PathVariable Long areaId,@PathVariable Double space){
+        return ServerResponse.success(logisticService.getAvailableLogistic(areaId,space));
     }
 
 

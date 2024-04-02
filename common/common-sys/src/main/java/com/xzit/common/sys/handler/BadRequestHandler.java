@@ -2,6 +2,7 @@ package com.xzit.common.sys.handler;
 
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.enums.ResponseCodeEnum;
+import com.xzit.common.sys.exception.BizException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,11 @@ public class BadRequestHandler {
         }
         logger.error("Validation Error: {}", errors);
         return ServerResponse.fail(ResponseCodeEnum.BIND_ERROR,errors);
+    }
+    @ExceptionHandler(BizException.class)
+    public ServerResponse<?> bizException(BizException exception){
+        logger.error("Biz Error: {}", exception.getMessage());
+        return ServerResponse.fail(ResponseCodeEnum.FAIL,exception.getMessage());
     }
 
 }

@@ -39,10 +39,8 @@ public class UserController {
     @PostMapping("/register")
     @OptLog(optType = OptLog.INSERT)
     ServerResponse<?> register(@RequestBody @Valid UserVO userVO){
-        if(userService.register(userVO)){
-            return ServerResponse.success();
-        }
-        return ServerResponse.fail(ResponseCodeEnum.CAPTCHA_ERROR);
+        userService.register(userVO);
+        return ServerResponse.success(ResponseCodeEnum.SUCCESS);
     }
     @Operation(summary = "发送邮箱验证码")
     @AccessLimit(seconds = 60,maxCount = 1)

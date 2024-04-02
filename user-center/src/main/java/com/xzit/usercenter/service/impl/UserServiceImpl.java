@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.xzit.api.logistics.feign.CourierFeignClient;
 import com.xzit.common.sys.constant.UserConstant;
+import com.xzit.common.sys.exception.BizException;
 import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.entity.AuthUser;
 import com.xzit.common.user.entity.Role;
@@ -23,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -67,26 +69,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean register(UserVO user) {
+    @Transactional(rollbackFor = Exception.class)
+    public void register(UserVO user) {
         if (!captchaService.checkCaptcha(user.getEmail(),user.getCode())){
-            return false;
+            throw new BizException("验证码错误");
         }
         UserInfo userInfo=UserInfo.builder()
                 .email(user.getEmail())
                 .nickname(UserConstant.DEFAULT_NICKNAME)
                 .avatar(UserConstant.DEFAULT_AVATAR_URL)
                 .build();
-        if(userInfoMapper.insertUserInfo(userInfo)!=1){
-            return false;
-        }
+        userInfoMapper.insert(userInfo);
         AuthUser authUser= AuthUser.builder()
                 .userInfoId(userInfo.getId())
                 .username(user.getUsername())
                 .password(new BCryptPasswordEncoder().encode(user.getPassword()))
                 .roleId(UserConstant.DEFAULT_ROLE_NUM)
                 .build();
-        int flag=userMapper.insert(authUser);
-        return flag==1;
+        userMapper.insert(authUser);
     }
 
     @Override

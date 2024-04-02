@@ -9,7 +9,7 @@ public interface UserService {
     UserDetailsDTO getUserByUsername(String username);
     Boolean updateUserLoginTime(Long userId);
     Boolean hasSameUser(String username);
-    Boolean register(UserVO user);
+    void register(UserVO user);
     Boolean forbidden(Long userInfoId);
     Boolean resetPassword(PasswordVO passwordVO);
     Boolean addAdminAccount(String username);
