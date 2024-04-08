@@ -233,21 +233,6 @@ public class LogisticsController {
     ServerResponse<IPage<AddressInfoDTO>> getAddressInfoByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(addressInfoService.getUserAddressInfoByQuery(queryVO));
     }
-    @GetMapping("/test/{fromAreaId}/{toAreaId}/{fromAddress}/{toAddress}/{goodsWeight}/{goodsSpace}")
-    ServerResponse<List<Arrangement>> getArrangement(@PathVariable Long fromAreaId,@PathVariable Long toAreaId,@PathVariable String fromAddress,@PathVariable String toAddress,@PathVariable Double goodsWeight,@PathVariable Double goodsSpace){
-        return ServerResponse.success(logisticService.test(fromAreaId, toAreaId, fromAddress, toAddress, goodsWeight, goodsSpace));
-    }
-    @GetMapping("/available/{areaId}")
-    ServerResponse<List<AvailableLogisticDTO>> getAvailable(@PathVariable Long areaId){
-        return ServerResponse.success(logisticService.getAvailableLogistic(areaId));
-    }
-    @GetMapping("/logistic/{areaId}/{space}")
-    ServerResponse<List<AvailableLogisticDTO>> getLogistic(@PathVariable Long areaId,@PathVariable Double space){
-        return ServerResponse.success(logisticService.getAvailableLogistic(areaId,space));
-    }
-
-
-
 
 
 

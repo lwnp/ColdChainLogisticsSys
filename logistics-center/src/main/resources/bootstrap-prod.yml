@@ -2,9 +2,9 @@ spring:
   cloud:
     stream:
       bindings:
-        alter-out-0:
+        notice-out-0:
           binder: rabbit
-          destination: alter-destination
+          destination: notice-destination
           content-type: application/json
     nacos:
       discovery:

@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 
@@ -18,18 +17,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @TableName("t_message")
-public class Message {
+public class Notice {
     @TableId(type = IdType.AUTO)
     Long id;
+    Long userInfoId;
     Boolean isRead;
-    Long typeId;
+    Boolean isAdminMessage;
+    String title;
     String content;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")
     LocalDateTime  createTime;
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")
-    LocalDateTime  updateTime;
 }

@@ -29,7 +29,6 @@ public class Order {
     BigDecimal price;
     Long senderAddressId;
     Long receiveAddressId;
-    Boolean isCheck;
     Boolean isActive;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

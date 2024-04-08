@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@TableName("t_goods")
+@TableName("t_order_goods")
 public class Goods {
     @TableId(type = IdType.AUTO)
     Long id;
@@ -24,6 +24,7 @@ public class Goods {
     String name;
     String description;
     String image;
+    Long statusId;
     Double weight;
     Double space;
     Double maxTemperature;

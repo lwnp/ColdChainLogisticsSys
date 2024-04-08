@@ -67,20 +67,7 @@ public class LogisticServiceImpl implements LogisticService {
         return false;
     }
 
-    @Override
-    public List<Arrangement> test(Long fromAreaId, Long toAreaId, String fromAddress, String toAddress, Double goodsWeight, Double goodsSpace) {
-        return getArrangement(fromAreaId, toAreaId, fromAddress, toAddress, goodsWeight, goodsSpace);
-    }
 
-    @Override
-    public List<AvailableLogisticDTO> getAvailableLogistic(Long areaId) {
-        return getAvailableStation(areaId);
-    }
-
-    @Override
-    public List<AvailableLogisticDTO> getAvailableLogistic(Long areaId, Double space) {
-        return getAvailableCenter(areaId, space);
-    }
 
     private List<AvailableLogisticDTO> getAvailableStation(Long areaId) {
         return logisticMapper.getAvailableStation(areaId);
@@ -119,6 +106,12 @@ public class LogisticServiceImpl implements LogisticService {
         if (carList.isEmpty() || courierList.isEmpty()) {
             return null;
         }
+        double totalLoad=0;
+        double totalSpace=0;
+        for (CarDTO car : carList) {
+            totalLoad+=car.getMaxLoad();
+            totalSpace+=car.getMaxSpace();
+        }
 
         // 遍历车辆列表，找到合适的车辆
         for (CarDTO car : carList) {
@@ -127,7 +120,7 @@ public class LogisticServiceImpl implements LogisticService {
             }
 
             // 如果当前车辆未被使用并且能够容纳货物
-            if (car.getMaxLoad() >= remainingWeight && car.getMaxSpace() >= remainingSpace) {
+            if (totalLoad >= remainingWeight && totalSpace >= remainingSpace) {
                 // 随机选择一个司机
                 CourierDTO courier = getRandomCourier(courierList,selectedCourierIds);
                 // 如果没有可用的司机，则返回null
@@ -204,139 +197,83 @@ public class LogisticServiceImpl implements LogisticService {
         Map<String, Double> toLocation = address2Location(toAddress);
         List<AvailableLogisticDTO> fromStations = getAvailableStation(fromAreaId);
         List<AvailableLogisticDTO> fromCenters = getAvailableCenter(fromAreaId, goodsSpace);
+        List<AvailableLogisticDTO> toStations = getAvailableStation(toAreaId);
+        List<AvailableLogisticDTO> toCenters = getAvailableCenter(toAreaId, goodsSpace);
         List<Arrangement> result = new ArrayList<>();
-
+        List<Arrangement> temp=new ArrayList<>();
+        List<Arrangement> toArrangement=new ArrayList<>();
+        AvailableLogisticDTO center=null,station=null;
         if (fromStations.isEmpty() || fromCenters.isEmpty()) {
             return null;
         }
-
-        boolean sameArea = Objects.equals(fromAreaId, toAreaId);
-        if (sameArea) {
-            while (!fromCenters.isEmpty()){
-                List<AvailableLogisticDTO> tempRemovedCenters = new ArrayList<>();
-                result = handleSameAreaLogic(fromLocation, toLocation, fromStations, fromCenters, goodsWeight, goodsSpace, tempRemovedCenters);
-                if (result == null) {
-                    fromCenters.removeAll(tempRemovedCenters);
-                }
-                else break;
+        List<ResultPairDTO> fromResultPairDTOList = getSortedResultPairDTOList(fromLocation, fromStations, fromCenters);
+        List<ResultPairDTO> toResultPairDTOList = getSortedResultPairDTOList(toLocation, toStations, toCenters);
+        for (ResultPairDTO fromResultPairDTO : fromResultPairDTOList) {
+            List<Arrangement> station2Center=new ArrayList<>();
+            List<Arrangement> user2Station=selectVehicles(fromResultPairDTO.getStation().getCarList(),fromResultPairDTO.getStation().getCourierList(),goodsWeight,goodsSpace,1L,null);
+            if(user2Station==null){
+                continue;
             }
-        } else {
-            List<Arrangement> tempArr=new ArrayList<>();
-            List<AvailableLogisticDTO> toCenters = getAvailableCenter(toAreaId, goodsSpace);
-            List<AvailableLogisticDTO> toStations = getAvailableStation(toAreaId);
-            List<ResultPairDTO> toStationCenterPairList = getSortedResultPairDTOList(toLocation, toStations, toCenters);
-            List<ResultPairDTO> fromStationCenterPairList = getSortedResultPairDTOList(fromLocation, fromStations, fromCenters);
-            for(ResultPairDTO resultPairDTO:fromStationCenterPairList){
-                List<Arrangement> station2User=selectVehicles(resultPairDTO.getStation().getCarList(),resultPairDTO.getStation().getCourierList(),goodsWeight,goodsSpace,1L,null);
-                if (station2User==null){
-                    continue;
-                }
-                result.addAll(station2User);
-                for(Arrangement arrangement:station2User){
-                    Arrangement copy= SerializationUtils.clone(arrangement);
-                    copy.setStepId(2L);
-                    copy.setToId(resultPairDTO.getStation().getId());
-                    result.add(copy);
-                }
-                for(Arrangement arrangement:station2User){
-                    Arrangement copy= SerializationUtils.clone(arrangement);
-                    copy.setStepId(3L);
-                    copy.setToId(resultPairDTO.getCenter().getId());
-                    tempArr.add(copy);
-                }
-                List<Arrangement> center2center=selectVehicles(resultPairDTO.getCenter().getCarList(),resultPairDTO.getCenter().getCourierList(),goodsWeight,goodsSpace,4L,tempArr);
-                if(center2center==null){
-                    continue;
-                }
-                result.addAll(tempArr);
-                tempArr.clear();
-                tempArr.addAll(center2center);
+            result.addAll(user2Station);
+            for(Arrangement arrangement:user2Station){
+                Arrangement arr=SerializationUtils.clone(arrangement);
+                arr.setStepId(3L);
+                station2Center.add(arr);
             }
+            List<Arrangement> center2Center=selectVehicles(fromResultPairDTO.getCenter().getCarList(),fromResultPairDTO.getCenter().getCourierList(),goodsWeight,goodsSpace,4L,station2Center);
+            if(center2Center==null){
+                continue;
+            }
+            for(Arrangement arrangement:user2Station){
+                    Arrangement arr=SerializationUtils.clone(arrangement);
+                    arr.setStepId(2L);
+                    arr.setToId(fromResultPairDTO.getStation().getId());
+                    result.add(arr);
+            }
+            result.addAll(station2Center);
+            temp.addAll(center2Center);
+            center=fromResultPairDTO.getCenter();
+            station=fromResultPairDTO.getStation();
+            break;
+        }
             if(result.isEmpty()){
-                return null;
-            }
-            else {
-                for(ResultPairDTO resultPairDTO:toStationCenterPairList){
-                    List<Arrangement> center2station=selectVehicles(resultPairDTO.getCenter().getCarList(),resultPairDTO.getCenter().getCourierList(),goodsWeight,goodsSpace,5L,tempArr);
-                    if(center2station==null){
+            return null;
+        }else {
+                for(ResultPairDTO toResultPairDTO:toResultPairDTOList){
+                   if(toResultPairDTO.getStation().equals(station)){
+                       continue;
+                   }
+                    List<Arrangement> center2Station=selectVehicles(toResultPairDTO.getCenter().getCarList(),toResultPairDTO.getCenter().getCourierList(),goodsWeight,goodsSpace,5L,temp);
+                    if(center2Station==null){
                         continue;
                     }
-                    result.addAll(tempArr);
-                   List<Arrangement> station2user=selectVehicles(resultPairDTO.getStation().getCarList(),resultPairDTO.getStation().getCourierList(),goodsWeight,goodsSpace,6L,center2station);
-                   if(station2user==null){
+                    result.addAll(temp);
+                    List<Arrangement> station2User=selectVehicles(toResultPairDTO.getStation().getCarList(),toResultPairDTO.getStation().getCourierList(),goodsWeight,goodsSpace,6L,center2Station);
+                    if(station2User==null){
                         continue;
-                   }
-                    result.addAll(center2station);
-                    result.addAll(station2user);
+                    }
+                    toArrangement.addAll(center2Station);
+                    toArrangement.addAll(station2User);
+                    if(toResultPairDTO.getCenter().equals(center)){
+                        result = result.stream()
+                                .filter(arrangement -> arrangement.getStepId() != 4L)
+                                .collect(Collectors.toList());
+                        break;
+                    }
                     break;
+
                 }
-            }
 
 
         }
-
-        if (result == null || result.isEmpty()) {
+        if(toArrangement.isEmpty()){
             return null;
         }
+        result.addAll(toArrangement);
+
         return result;
     }
 
-    private List<Arrangement> handleSameAreaLogic(Map<String, Double> fromLocation, Map<String, Double> toLocation, List<AvailableLogisticDTO> fromStations, List<AvailableLogisticDTO> fromCenters, Double goodsWeight, Double goodsSpace, List<AvailableLogisticDTO> removedCenters) {
-        List<Arrangement> result = new ArrayList<>();
-        AvailableLogisticDTO temp = null;
-        List<Arrangement> tempArr = new ArrayList<>();
-        List<ResultPairDTO> station2Center = getSortedResultPairDTOList(fromLocation, fromStations, fromCenters);
 
-        for (ResultPairDTO resultPairDTO : station2Center) {
-            AvailableLogisticDTO center = resultPairDTO.getCenter();
-            AvailableLogisticDTO station = resultPairDTO.getStation();
-            List<Arrangement> fromStationArrange = selectVehicles(station.getCarList(), station.getCourierList(), goodsWeight, goodsSpace, 1L, null);
-            if (fromStationArrange == null) {
-                continue;
-            }
-            result.addAll(fromStationArrange);
-            for (Arrangement arrangement : fromStationArrange) {
-                Arrangement copy = SerializationUtils.clone(arrangement);
-                copy.setStepId(2L);
-                copy.setToId(station.getId());
-                result.add(copy);
-            }
-            for (Arrangement arrangement : fromStationArrange) {
-                Arrangement copy = SerializationUtils.clone(arrangement);
-                copy.setStepId(3L);
-                copy.setToId(center.getId());
-                tempArr.add(copy);
-            }
-            temp = center;
-            break;
-        }
-
-        if (result.isEmpty()) {
-            return null;
-        }
-
-        List<ResultPairDTO> center2Station = getSortedResultPairDTOList(toLocation, fromStations, fromCenters);
-        for (ResultPairDTO resultPairDTO : center2Station) {
-            if (!resultPairDTO.getCenter().equals(temp)) {
-                continue;
-            }
-            List<Arrangement> center2StationArrange = selectVehicles(resultPairDTO.getCenter().getCarList(), resultPairDTO.getCenter().getCourierList(), goodsWeight, goodsSpace, 5L, tempArr);
-            if (center2StationArrange == null) {
-                removedCenters.add(resultPairDTO.getCenter());
-                continue;
-            }
-            result.addAll(tempArr);
-            List<Arrangement> station2User = selectVehicles(resultPairDTO.getStation().getCarList(), resultPairDTO.getStation().getCourierList(), goodsWeight, goodsSpace, 6L, center2StationArrange);
-            if (station2User == null) {
-                removedCenters.add(resultPairDTO.getCenter());
-                continue;
-            }
-            result.addAll(center2StationArrange);
-            result.addAll(station2User);
-            break;
-        }
-
-        return result;
-    }
 }
 

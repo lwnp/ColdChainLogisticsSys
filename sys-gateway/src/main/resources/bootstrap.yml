@@ -36,6 +36,12 @@ spring:
             - Path=/order/**
           filters:
             - StripPrefix=1
+        - id: message-center
+          uri: lb://message-service
+          predicates:
+            - Path=/message/**
+          filters:
+            - StripPrefix=1
 knife4j:
   gateway:
     enabled: true
@@ -43,7 +49,7 @@ knife4j:
     discover:
       enabled: true
       version: openapi3
-      excluded-services: message-service,hardware-service,log-service
+      excluded-services: hardware-service,log-service
   cors: true
 logging:
   level:

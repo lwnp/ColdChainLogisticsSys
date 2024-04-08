@@ -6,6 +6,7 @@ import com.xzit.common.sys.constant.MQConstant;
 import com.xzit.common.sys.model.dto.EmailDTO;
 import com.xzit.common.sys.model.vo.EmailVO;
 import com.xzit.usercenter.service.CaptchaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -17,12 +18,10 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class CaptchaServiceImpl implements CaptchaService {
-    @Autowired
-    @Qualifier("myRedis")
-    RedisTemplate<String,Object> redisTemplate;
-    @Autowired
-    StreamBridge streamBridge;
+    private final RedisTemplate<String,Object> redisTemplate;
+    private final StreamBridge streamBridge;
     private String generateCaptcha(String email) {
         String code= RandomUtil.randomString(5);
         redisTemplate.opsForValue().getAndDelete(email);

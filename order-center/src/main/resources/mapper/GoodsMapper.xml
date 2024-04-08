@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.ordercenter.mapper.GoodsMapper">
+    <resultMap id="goodsDTOMapper" type="com.xzit.common.order.model.dto.GoodsDTO">
+        <id property="id" column="id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="username" column="username"/>
+        <result property="goodsName" column="name"/>
+        <result property="checkStatusName" column="check_status_name"/>
+        <result property="description" column="description"/>
+        <result property="image" column="image"/>
+        <result property="weight" column="weight"/>
+        <result property="space" column="space"/>
+        <result property="maxTemperature" column="max_temperature"/>
+        <result property="minTemperature" column="min_temperature"/>
+        <result property="maxDioxide" column="max_dioxide"/>
+        <result property="minDioxide" column="min_dioxide"/>
+        <result property="maxHumidity" column="max_humidity"/>
+        <result property="minHumidity" column="min_humidity"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <select id="getUserGoodsByQuery" resultType="com.xzit.common.order.model.dto.GoodsDTO" resultMap="goodsDTOMapper">
+        select og.* ,
+        u.username as username,
+        gs.name as check_status_name
+        from t_order_goods og
+        left join t_user u on og.user_info_id=u.user_info_id
+        left join t_goods_status gs on og.status_id=gs.id
+        where u.user_info_id=#{userInfoId}
+        <if test="!queryVO.query.isEmpty()">
+            and (og.name like concat('%',#{queryVO.query},'%') or og.description like concat('%',#{queryVO.query},'%'))
+        </if>
+
+    </select>
+    <select id="getAllGoodsByQuery" resultType="com.xzit.common.order.model.dto.GoodsDTO" resultMap="goodsDTOMapper">
+        select og.* ,
+        u.username as username,
+        gs.name as check_status_name
+        from t_order_goods og
+        left join t_user u on og.user_info_id=u.user_info_id
+        left join t_goods_status gs on og.status_id=gs.id
+        <if test="!queryVO.query.isEmpty()">
+            where og.name like concat('%',#{queryVO.query},'%') or og.description like concat('%',#{queryVO.query},'%')
+        </if>
+    </select>
+    <select id="getUncheckedGoodsByQuery" resultType="com.xzit.common.order.model.dto.GoodsDTO" resultMap="goodsDTOMapper">
+        select og.* ,
+        u.username as username,
+        gs.name as check_status_name
+        from t_order_goods og
+        left join t_user u on og.user_info_id=u.user_info_id
+        left join t_goods_status gs on og.status_id=gs.id
+        where og.status_id=1
+        <if test="!queryVO.query.isEmpty()">
+            and (og.name like concat('%',#{queryVO.query},'%') or og.description like concat('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+</mapper>

@@ -15,11 +15,19 @@ spring:
         shared-configs[2]:
           data-id: sys-common-mysql.yaml
           refresh: true
+        shared-configs[3]:
+          data-id: sys-common-resource-security.yaml
+          refresh: true
     stream:
       bindings:
         email-in-0:
           content-type: application/json
           destination: email-destination
           group: email-group
+          binder: rabbit
+        notice-in-0:
+          content-type: application/json
+          destination: notice-destination
+          group: notice-group
           binder: rabbit
       default-binder: rabbit
