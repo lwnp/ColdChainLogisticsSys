@@ -30,7 +30,7 @@ spring:
                 password: admin
                 virtual-host: /
       bindings:
-        notice-out-1:
+        notice-out-0:
           binder: rabbit
           destination: notice-destination
           content-type: application/json

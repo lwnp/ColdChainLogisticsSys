@@ -1,6 +1,7 @@
 package com.xzit.ordercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.api.user.feign.UserFeignClient;
 import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.model.dto.GoodsDTO;
@@ -32,31 +33,55 @@ public class GoodsServiceImpl implements GoodsService {
     private final StreamBridge streamBridge;
     private final GoodsMapper goodsMapper;
     private final UserFeignClient userFeignClient;
+
     @Override
     public void addGoods(GoodsVO goodsVO) {
-        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Map<String,Object> map=jwt.getClaims();
-        Long userId= (Long) map.get("userId");
-        UserInfoDTO userInfoDTO=userFeignClient.getUserInfo(userId).getData();
-        if(goodsVO.getMaxTemperature()<goodsVO.getMinTemperature()){
+        if (goodsVO.getMaxTemperature() == null || goodsVO.getMinTemperature() == null ||
+                goodsVO.getMaxHumidity() == null || goodsVO.getMinHumidity() == null ||
+                goodsVO.getMaxDioxide() == null || goodsVO.getMinDioxide() == null ||
+                goodsVO.getMaxMethane() == null || goodsVO.getMinMethane() == null ||
+                goodsVO.getMaxEthylene() == null || goodsVO.getMinEthylene() == null ||
+                goodsVO.getMaxOxide() == null || goodsVO.getMinOxide() == null) {
+            throw new BizException("All temperature, humidity, dioxide, methane, ethylene, and oxide values must be provided.");
+        }
+
+        if (goodsVO.getMaxTemperature() < goodsVO.getMinTemperature()) {
             throw new BizException("maxTemperature must be greater than minTemperature");
         }
-        if(goodsVO.getMaxHumidity()<goodsVO.getMinHumidity()){
+        if (goodsVO.getMaxHumidity() < goodsVO.getMinHumidity()) {
             throw new BizException("maxHumidity must be greater than minHumidity");
         }
-        if(goodsVO.getMaxDioxide()<goodsVO.getMaxDioxide()){
+        if (goodsVO.getMaxDioxide() < goodsVO.getMinDioxide()) {
             throw new BizException("maxDioxide must be greater than minDioxide");
         }
-        Goods goods= BeanCopyUtil.copyObject(goodsVO,Goods.class);
+        if (goodsVO.getMaxMethane() < goodsVO.getMinMethane()) {
+            throw new BizException("maxMethane must be greater than minMethane");
+        }
+        if (goodsVO.getMaxEthylene() < goodsVO.getMinEthylene()) {
+            throw new BizException("maxEthylene must be greater than minEthylene");
+        }
+        if (goodsVO.getMaxOxide() < goodsVO.getMinOxide()) {
+            throw new BizException("maxOxide must be greater than minOxide");
+        }
+
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map = jwt.getClaims();
+        Long userId = (Long) map.get("userId");
+        UserInfoDTO userInfoDTO = userFeignClient.getUserInfo(userId).getData();
+
+        Goods goods = BeanCopyUtil.copyObject(goodsVO, Goods.class);
         goodsMapper.insert(goods);
-        Notice notice=Notice.builder()
+
+        Notice notice = Notice.builder()
                 .title(MQConstant.CHECK_TITLE)
+                .content(MQConstant.CHECK_CONTENT)
                 .userInfoId(userInfoDTO.getId())
                 .isAdminMessage(true)
                 .build();
-        Message<Notice> checkNotice= MessageBuilder.withPayload(notice).build();
-        streamBridge.send(MQConstant.NOTICE_EXCHANGE,checkNotice);
+        Message<Notice> checkNotice = MessageBuilder.withPayload(notice).build();
+        streamBridge.send(MQConstant.NOTICE_EXCHANGE, checkNotice);
     }
+
 
     @Override
     public void modifyGoods(GoodsVO goodsVO, Long goodsId) {
@@ -79,16 +104,60 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public IPage<GoodsDTO> getUserGoodsByQuery(QueryVO queryVO) {
-        return null;
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        UserInfoDTO userInfoDTO=userFeignClient.getUserInfo(userId).getData();
+        Page<GoodsDTO> page=new Page<>(queryVO.getPageNum(),queryVO.getPageSize());
+        return goodsMapper.getUserGoodsByQuery(page,queryVO,userInfoDTO.getId());
     }
 
     @Override
     public IPage<GoodsDTO> getAllGoodsByQuery(QueryVO queryVO) {
-        return null;
+        Page<GoodsDTO> page=new Page<>(queryVO.getPageNum(),queryVO.getPageSize());
+        return goodsMapper.getAllGoodsByQuery(page,queryVO);
+
     }
 
     @Override
     public IPage<GoodsDTO> getUncheckedGoodsByQuery(QueryVO queryVO) {
-        return null;
+        Page<GoodsDTO> page=new Page<>(queryVO.getPageNum(),queryVO.getPageSize());
+        return goodsMapper.getUncheckedGoodsByQuery(page,queryVO);
+    }
+
+    @Override
+    public void approveGoods(Long goodsId) {
+        Goods goods=goodsMapper.selectById(goodsId);
+        if (goods==null){
+            throw new BizException("goods not exist");
+        }
+        goods.setStatusId(2L);
+        goodsMapper.updateById(goods);
+        Notice notice=Notice.builder()
+                .title(MQConstant.CHECK_RESULT_SUCCESS)
+                .content(MQConstant.CHECK_RESULT_SUCCESS_CONTENT)
+                .userInfoId(goods.getUserInfoId())
+                .isAdminMessage(false)
+                .build();
+        Message<Notice> checkNotice= MessageBuilder.withPayload(notice).build();
+        streamBridge.send(MQConstant.NOTICE_EXCHANGE,checkNotice);
+    }
+
+    @Override
+    public void rejectGoods(Long goodsId) {
+        Goods goods=goodsMapper.selectById(goodsId);
+        if (goods==null){
+            throw new BizException("goods not exist");
+        }
+        goods.setStatusId(3L);
+        goodsMapper.updateById(goods);
+        Notice notice=Notice.builder()
+                .title(MQConstant.CHECK_RESULT_FAIL)
+                .content(MQConstant.CHECK_RESULT_FAIL_CONTENT)
+                .userInfoId(goods.getUserInfoId())
+                .isAdminMessage(false)
+                .build();
+        Message<Notice> checkNotice= MessageBuilder.withPayload(notice).build();
+        streamBridge.send(MQConstant.NOTICE_EXCHANGE,checkNotice);
     }
 }

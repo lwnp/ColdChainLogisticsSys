@@ -26,6 +26,12 @@ public class GoodsDTO {
     Double minDioxide;
     Double maxHumidity;
     Double minHumidity;
+    Double maxOxide;
+    Double minOxide;
+    Double maxMethane;
+    Double minMethane;
+    Double maxEthylene;
+    Double minEthylene;
     LocalDateTime createTime;
     LocalDateTime updateTime;
 

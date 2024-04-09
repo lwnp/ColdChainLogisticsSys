@@ -17,6 +17,12 @@
         <result property="minDioxide" column="min_dioxide"/>
         <result property="maxHumidity" column="max_humidity"/>
         <result property="minHumidity" column="min_humidity"/>
+        <result property="maxEthylene" column="max_ethylene"/>
+        <result property="minEthylene" column="min_ethylene"/>
+        <result property="maxMethane" column="max_methane"/>
+        <result property="minMethane" column="min_methane"/>
+        <result property="maxOxide" column="max_oxide"/>
+        <result property="minOxide" column="min_oxide"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
 

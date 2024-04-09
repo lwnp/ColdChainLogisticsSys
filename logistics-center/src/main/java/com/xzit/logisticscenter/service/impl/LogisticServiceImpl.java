@@ -4,10 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.entity.Courier;
-import com.xzit.common.logistics.model.dto.AvailableLogisticDTO;
-import com.xzit.common.logistics.model.dto.CarDTO;
-import com.xzit.common.logistics.model.dto.CourierDTO;
-import com.xzit.common.logistics.model.dto.ResultPairDTO;
+import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.AddressInfoVO;
 import com.xzit.common.logistics.model.vo.LocationResultVO;
 import com.xzit.common.logistics.model.vo.LocationVO;
@@ -15,6 +12,7 @@ import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.sys.exception.BizException;
 import com.xzit.logisticscenter.mapper.ArrangementMapper;
 import com.xzit.logisticscenter.mapper.CourierMapper;
+import com.xzit.logisticscenter.mapper.FeeStatesMapper;
 import com.xzit.logisticscenter.mapper.LogisticMapper;
 import com.xzit.logisticscenter.service.LogisticService;
 import io.swagger.v3.core.util.Json;
@@ -36,6 +34,7 @@ public class LogisticServiceImpl implements LogisticService {
     private final LogisticMapper logisticMapper;
     private final ArrangementMapper arrangementMapper;
     private final CourierMapper courierMapper;
+    private final FeeStatesMapper feeStatesMapper;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -67,6 +66,10 @@ public class LogisticServiceImpl implements LogisticService {
         return false;
     }
 
+    @Override
+    public List<FeeStatesDTO> getFeeStates() {
+        return feeStatesMapper.getFeeStates();
+    }
 
 
     private List<AvailableLogisticDTO> getAvailableStation(Long areaId) {

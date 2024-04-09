@@ -1,4 +1,4 @@
-package com.xzit.messagecenter.utils;
+package com.xzit.usercenter.utils;
 
 import com.xzit.common.sys.constant.EmailConstant;
 import com.xzit.common.sys.model.dto.EmailDTO;

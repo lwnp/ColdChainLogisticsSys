@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.messagecenter.mapper.NoticeMapper">
+    <resultMap id="noticeDTOMapper" type="com.xzit.common.sys.model.dto.NoticeDTO">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="isRead" column="is_read"/>
+        <result property="createTime" column="create_time"/>
+
+    </resultMap>
+    <select id="getUserMessageByQuery" resultType="com.xzit.common.sys.model.dto.NoticeDTO" resultMap="noticeDTOMapper">
+        select msg.*,
+        u.username
+        from t_message msg
+        left join t_user u on u.user_info_id=msg.user_info_id where u.user_info_id=#{userInfoId} and msg.is_admin_message=0
+        <if test="!queryVO.query.isEmpty()">
+            and (msg.title like concat('%',#{queryVO.query},'%') or msg.content like concat('%',#{queryVO.query},'%'))
+        </if>
+
+    </select>
+    <select id="getUnreadMessageByQuery" resultType="com.xzit.common.sys.model.dto.NoticeDTO" resultMap="noticeDTOMapper">
+        select msg.*,
+        u.username
+        from t_message msg
+        left join t_user u on u.user_info_id=msg.user_info_id where msg.is_read=0 and u.user_info_id=#{userInfoId} and msg.is_admin_message=0
+        <if test="!queryVO.query.isEmpty()">
+            and (msg.title like concat('%',#{queryVO.query},'%') or msg.content like concat('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+    <select id="getAllAdminMessageByQuery" resultType="com.xzit.common.sys.model.dto.NoticeDTO" resultMap="noticeDTOMapper">
+        select msg.*,
+        u.username
+        from t_message msg
+        left join t_user u on u.user_info_id=msg.user_info_id where msg.is_admin_message=1
+        <if test="!queryVO.query.isEmpty()">
+            and (msg.title like concat('%',#{queryVO.query},'%') or msg.content like concat('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+    <select id="getUnreadAdminMessageByQuery" resultType="com.xzit.common.sys.model.dto.NoticeDTO" resultMap="noticeDTOMapper">
+        select msg.*,
+        u.username
+        from t_message msg
+        left join t_user u on u.user_info_id=msg.user_info_id where msg.is_admin_message=1 and msg.is_read=0
+        <if test="!queryVO.query.isEmpty()">
+            and (msg.title like concat('%',#{queryVO.query},'%') or msg.content like concat('%',#{queryVO.query},'%'))
+        </if>
+    </select>
 
 </mapper>

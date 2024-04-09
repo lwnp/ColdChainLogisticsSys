@@ -34,12 +34,20 @@ spring:
           binder: rabbit
           destination: email-destination
           content-type: application/json
+        email-in-0:
+          content-type: application/json
+          destination: email-destination
+          group: email-group
+          binder: rabbit
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
       config:
         server-addr: 127.0.0.1:8848
         file-extension: yaml
+        shared-configs[0]:
+          data-id: sys-common-mail.yaml
+          refresh: true
 upload:
   minio:
     url: http://127.0.0.1:9000/coldchainsys

@@ -3,6 +3,7 @@ package com.xzit.logisticscenter.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.logistics.entity.Area;
 import com.xzit.common.logistics.entity.Arrangement;
+import com.xzit.common.logistics.entity.FeeStates;
 import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.*;
 import com.xzit.common.sys.annotation.AccessLimit;
@@ -233,8 +234,11 @@ public class LogisticsController {
     ServerResponse<IPage<AddressInfoDTO>> getAddressInfoByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(addressInfoService.getUserAddressInfoByQuery(queryVO));
     }
-
-
+    @GetMapping("/feeCalculateRules")
+    @Operation(summary = "获取费用计算规则")
+    ServerResponse<List<FeeStatesDTO>> getFeeStates(){
+        return ServerResponse.success(logisticService.getFeeStates());
+    }
 
 
 }

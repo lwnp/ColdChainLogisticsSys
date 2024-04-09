@@ -1,6 +1,6 @@
 package com.xzit.common.order.utils;
 
-import com.xzit.common.order.entity.FeeStates;
+import com.xzit.common.logistics.entity.FeeStates;
 
 import java.math.BigDecimal;
 import java.util.List;

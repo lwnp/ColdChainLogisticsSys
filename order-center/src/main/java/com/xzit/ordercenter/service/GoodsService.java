@@ -11,4 +11,6 @@ public interface GoodsService {
     IPage<GoodsDTO> getUserGoodsByQuery(QueryVO queryVO);
     IPage<GoodsDTO> getAllGoodsByQuery(QueryVO queryVO);
     IPage<GoodsDTO> getUncheckedGoodsByQuery(QueryVO queryVO);
+    void approveGoods(Long goodsId);
+    void rejectGoods(Long goodsId);
 }

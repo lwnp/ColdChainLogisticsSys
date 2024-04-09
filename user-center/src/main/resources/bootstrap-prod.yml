@@ -30,3 +30,6 @@ spring:
         shared-configs[5]:
           data-id: sys-common-resource-security.yaml
           refresh: true
+        shared-configs[6]:
+          data-id: sys-common-mail.yaml
+          refresh: true

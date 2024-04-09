@@ -27,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class AccessLimitInterceptor implements HandlerInterceptor {
     @Autowired
-    @Qualifier("myRedis")
     RedisTemplate<String,Object> redisTemplate;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

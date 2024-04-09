@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.logisticscenter.mapper.FeeStatesMapper">
+    <resultMap id="feeStatesDTOMapper" type="com.xzit.common.logistics.model.dto.FeeStatesDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="startValue" column="start_value"/>
+        <result property="price" column="price"/>
+        <result property="oilRate" column="oil_rate"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="getFeeStates" resultType="com.xzit.common.logistics.model.dto.FeeStatesDTO" resultMap="feeStatesDTOMapper">
+        select fs.*,
+        ft.name
+        from t_fee_states fs
+        left join t_fee_type ft on fs.fee_type_id=ft.id
+    </select>
+
+</mapper>

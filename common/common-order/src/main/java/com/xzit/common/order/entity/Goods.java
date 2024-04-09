@@ -33,12 +33,18 @@ public class Goods {
     Double minDioxide;
     Double maxHumidity;
     Double minHumidity;
+    Double maxOxide;
+    Double minOxide;
+    Double maxMethane;
+    Double minMethane;
+    Double maxEthylene;
+    Double minEthylene;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")
-    LocalDateTime create_time;
+    LocalDateTime createTime;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_time")
-    LocalDateTime update_time;
+    LocalDateTime updateTime;
 }

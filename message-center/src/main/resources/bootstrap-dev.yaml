@@ -18,9 +18,6 @@ spring:
       config:
         file-extension: yaml
         server-addr: 127.0.0.1:8848
-        shared-configs[0]:
-          data-id: sys-common-mail.yaml
-          refresh: true
     stream:
       binders:
         rabbit:
@@ -35,11 +32,6 @@ spring:
                 password: admin
                 virtual-host: /
       bindings:
-        email-in-0:
-          content-type: application/json
-          destination: email-destination
-          group: email-group
-          binder: rabbit
         notice-in-0:
           content-type: application/json
           destination: notice-destination

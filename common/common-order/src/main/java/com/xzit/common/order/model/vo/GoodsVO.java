@@ -24,16 +24,28 @@ public class GoodsVO {
     Double weight;
     @Schema(name = "space", description = "货物空间",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double space;
-    @Schema(name = "temperature", description = "货物最高温度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    @Schema(name = "maxTemperature", description = "货物最高温度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double maxTemperature;
-    @Schema(name = "temperature", description = "货物最低温度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    @Schema(name = "minTemperature", description = "货物最低温度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double minTemperature;
-    @Schema(name = "dioxide", description = "货物最高二氧化碳",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    @Schema(name = "maxDioxide", description = "货物最高二氧化碳",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double maxDioxide;
-    @Schema(name = "dioxide", description = "货物最低二氧化碳",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    @Schema(name = "minDioxide", description = "货物最低二氧化碳",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double minDioxide;
-    @Schema(name = "humidity", description = "货物最高湿度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    @Schema(name = "maxHumidity", description = "货物最高湿度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double maxHumidity;
-    @Schema(name = "humidity", description = "货物最低湿度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    @Schema(name = "minHumidity", description = "货物最低湿度",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double minHumidity;
+    @Schema(name = "maxOxide", description = "货物最高一氧化碳",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    Double maxOxide;
+    @Schema(name = "minOxide", description = "货物最低一氧化碳",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    Double minOxide;
+    @Schema(name = "maxMethane", description = "货物最高甲烷",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    Double maxMethane;
+    @Schema(name = "minMethane", description = "货物最低甲烷",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    Double minMethane;
+    @Schema(name = "maxEthylene", description = "货物最高乙烯",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    Double maxEthylene;
+    @Schema(name = "minEthylene", description = "货物最低乙烯",type = "double",requiredMode = Schema.RequiredMode.AUTO)
+    Double minEthylene;
 }

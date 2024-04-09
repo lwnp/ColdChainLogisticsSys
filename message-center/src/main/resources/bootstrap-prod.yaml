@@ -7,15 +7,12 @@ spring:
         file-extension: yaml
         server-addr: 120.55.161.138:8848
         shared-configs[0]:
-          data-id: sys-common-mail.yaml
-          refresh: true
-        shared-configs[1]:
           data-id: sys-common-stream.yaml
           refresh: true
-        shared-configs[2]:
+        shared-configs[1]:
           data-id: sys-common-mysql.yaml
           refresh: true
-        shared-configs[3]:
+        shared-configs[2]:
           data-id: sys-common-resource-security.yaml
           refresh: true
     stream:
