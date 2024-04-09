@@ -34,7 +34,6 @@ public class LogisticServiceImpl implements LogisticService {
     private final LogisticMapper logisticMapper;
     private final ArrangementMapper arrangementMapper;
     private final CourierMapper courierMapper;
-    private final FeeStatesMapper feeStatesMapper;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -66,10 +65,6 @@ public class LogisticServiceImpl implements LogisticService {
         return false;
     }
 
-    @Override
-    public List<FeeStatesDTO> getFeeStates() {
-        return feeStatesMapper.getFeeStates();
-    }
 
 
     private List<AvailableLogisticDTO> getAvailableStation(Long areaId) {

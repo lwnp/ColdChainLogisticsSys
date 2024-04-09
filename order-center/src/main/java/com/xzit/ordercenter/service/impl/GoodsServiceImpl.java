@@ -160,4 +160,20 @@ public class GoodsServiceImpl implements GoodsService {
         Message<Notice> checkNotice= MessageBuilder.withPayload(notice).build();
         streamBridge.send(MQConstant.NOTICE_EXCHANGE,checkNotice);
     }
+
+    @Override
+    public void deleteGoods(Long goodsId) {
+        Goods goods=goodsMapper.selectById(goodsId);
+        if (goods==null){
+            throw new BizException("goods not exist");
+        }
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        UserInfoDTO userInfoDTO=userFeignClient.getUserInfo(userId).getData();
+        if(!Objects.equals(userInfoDTO.getId(), goods.getUserInfoId())){
+            throw new BizException("you can't delete other's goods");
+        }
+        goodsMapper.deleteById(goodsId);
+    }
 }

@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        notice-out-0:
+          binder: rabbit
+          destination: notice-destination
+          content-type: application/json
+    nacos:
+      discovery:
+        server-addr: 120.55.161.138:8848
+      config:
+        server-addr: 120.55.161.138:8848
+        file-extension: yaml
+        shared-configs[0]:
+          data-id: sys-common-mysql.yaml
+          refresh: true
+        shared-configs[1]:
+          data-id: sys-common-resource-security.yaml
+          refresh: true
+alipay:
+  notify: http://www.marshmello.tech/notify
+  redirect: http://www.marshmello.tech/redirect

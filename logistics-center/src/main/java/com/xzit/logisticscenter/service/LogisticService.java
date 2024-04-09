@@ -15,5 +15,5 @@ import java.util.Map;
 public interface LogisticService {
     Map<String,Double> address2Location(String address);
     Boolean arrangeLogistic(AddressInfoVO from, AddressInfoVO to, GoodsVO goodsVO, Long orderId);
-    List<FeeStatesDTO> getFeeStates();
+
 }

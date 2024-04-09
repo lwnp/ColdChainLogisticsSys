@@ -57,5 +57,11 @@ public class OrderController {
         goodsService.rejectGoods(goodsId);
         return ServerResponse.success();
     }
+    @DeleteMapping("/deleteGoods/{goodsId}")
+    @Operation(summary = "用户删除货物")
+    ServerResponse<?> deleteGoods(@PathVariable Long goodsId){
+        goodsService.deleteGoods(goodsId);
+        return ServerResponse.success();
+    }
 
 }

@@ -6,6 +6,11 @@ spring:
           binder: rabbit
           destination: email-destination
           content-type: application/json
+        email-in-0:
+          content-type: application/json
+          destination: email-destination
+          group: email-group
+          binder: rabbit
     nacos:
       discovery:
         server-addr: 120.55.161.138:8848

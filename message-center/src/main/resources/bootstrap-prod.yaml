@@ -17,11 +17,6 @@ spring:
           refresh: true
     stream:
       bindings:
-        email-in-0:
-          content-type: application/json
-          destination: email-destination
-          group: email-group
-          binder: rabbit
         notice-in-0:
           content-type: application/json
           destination: notice-destination

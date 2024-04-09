@@ -37,9 +37,9 @@ class UserCenterApplicationTests {
     }
     @Test
     void roleTest(){
-        Long[] ids=new Long[]{4L, 5L, 6L, 8L};
+        Long[] ids=new Long[]{46L,47L,48L,49L,55L,56L,57L,62L,63L,66L,68L};
         for (Long id:ids){
-            RoleResource roleResource=new RoleResource(null,2L,id);
+            RoleResource roleResource=new RoleResource(null,4L,id);
             resourceRoleMapper.insert(roleResource);
         }
     }

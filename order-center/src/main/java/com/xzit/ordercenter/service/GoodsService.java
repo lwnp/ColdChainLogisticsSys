@@ -13,4 +13,5 @@ public interface GoodsService {
     IPage<GoodsDTO> getUncheckedGoodsByQuery(QueryVO queryVO);
     void approveGoods(Long goodsId);
     void rejectGoods(Long goodsId);
+    void deleteGoods(Long goodsId);
 }

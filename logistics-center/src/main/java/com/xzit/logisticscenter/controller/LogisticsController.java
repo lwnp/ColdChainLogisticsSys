@@ -30,7 +30,7 @@ public class LogisticsController {
     private final CarService carService;
     private final CourierService courierService;
     private final AddressInfoService addressInfoService;
-    private final LogisticService logisticService;
+    private final FeeStatesService feeStatesService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -221,7 +221,7 @@ public class LogisticsController {
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);
     }
-    @PutMapping("/modifyAddressInfo/{addressId}")
+    @PatchMapping("/modifyAddressInfo/{addressId}")
     @Operation(summary = "修改个人地址")
     ServerResponse<Boolean> modifyAddressInfo(@RequestBody @Valid AddressInfoVO addressInfoVO,@PathVariable Long addressId){
         if(addressInfoService.modifyAddressInfo(addressInfoVO,addressId)){
@@ -237,7 +237,27 @@ public class LogisticsController {
     @GetMapping("/feeCalculateRules")
     @Operation(summary = "获取费用计算规则")
     ServerResponse<List<FeeStatesDTO>> getFeeStates(){
-        return ServerResponse.success(logisticService.getFeeStates());
+        return ServerResponse.success(feeStatesService.getFeeStates());
+    }
+    @PatchMapping("/modifyFeeStates")
+    @Operation(summary = "修改费用计算规则")
+    ServerResponse<?> modifyFeeStates(@RequestBody @Valid FeeStatesVO feeStatesVO){
+        feeStatesService.modifyFeeStates(feeStatesVO);
+        return ServerResponse.success();
+    }
+    @PutMapping("/addFeeStates")
+    @Operation(summary = "添加费用计算规则")
+    ServerResponse<?> addFeeStates(@RequestBody @Valid FeeStatesVO feeStatesVO){
+        feeStatesService.addFeeStates(feeStatesVO);
+        return ServerResponse.success();
+    }
+    @PatchMapping("/modifyCenter/{centerId}")
+    @Operation(summary = "修改中心")
+    ServerResponse<?> modifyCenter(@RequestBody @Valid CenterVO centerVO,@PathVariable Long centerId){
+        if(centerService.modifyCenter(centerVO,centerId)){
+            return ServerResponse.success();
+        }
+        return ServerResponse.fail(ResponseCodeEnum.FAIL);
     }
 
 

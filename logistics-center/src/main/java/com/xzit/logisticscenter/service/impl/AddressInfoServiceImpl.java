@@ -10,6 +10,7 @@ import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.AddressInfo;
 import com.xzit.common.logistics.model.dto.AddressInfoDTO;
 import com.xzit.common.logistics.model.vo.AddressInfoVO;
+import com.xzit.common.sys.exception.BizException;
 import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.model.dto.UserInfoDTO;
@@ -77,10 +78,10 @@ public class AddressInfoServiceImpl implements AddressInfoService {
         Long userId= (Long) map.get("userId");
         UserInfoDTO userInfoDTO=userFeignClient.getUserInfo(userId).getData();
         if(addressInfoVO.getUserInfoId()==null||!Objects.equals(userInfoDTO.getId(),addressInfoVO.getUserInfoId())){
-            return false;
+            throw new BizException("用户信息不匹配");
         }
         if(addressInfoMapper.getAddressCountByUserInfoId(addressInfoVO.getUserInfoId())> LogisticConstant.MAX_ADDRESS) {
-            return false;
+            throw new BizException("地址数已达到最大容量限制");
         }
         AddressInfo addressInfo=BeanCopyUtil.copyObject(addressInfoVO,AddressInfo.class);
         return addressInfoMapper.insert(addressInfo)==1;

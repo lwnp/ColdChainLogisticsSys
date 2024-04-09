@@ -1,5 +1,17 @@
 spring:
   cloud:
+    stream:
+      bindings:
+        iot-out-0:
+          content-type: application/json
+          destination: iot-destination
+          group: iot-group
+          binder: rabbit
+        iot-in-0:
+          content-type: application/json
+          destination: iot-destination
+          group: iot-group
+          binder: rabbit
     nacos:
       discovery:
         server-addr: 120.55.161.138:8848
@@ -9,3 +21,11 @@ spring:
         shared-configs[0]:
           data-id: sys-common-resource-security.yaml
           refresh: true
+        shared-configs[1]:
+          data-id: sys-common-mysql.yaml
+          refresh: true
+        shared-configs[2]:
+          data-id: sys-common-stream.yaml
+          refresh: true
+mqtt:
+  url: tcp://120.55.161.138:6656
