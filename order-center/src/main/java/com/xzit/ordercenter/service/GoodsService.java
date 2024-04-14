@@ -1,6 +1,7 @@
 package com.xzit.ordercenter.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.model.dto.GoodsDTO;
 import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.sys.model.vo.QueryVO;
@@ -14,4 +15,5 @@ public interface GoodsService {
     void approveGoods(Long goodsId);
     void rejectGoods(Long goodsId);
     void deleteGoods(Long goodsId);
+    Goods getGoodsById(Long goodsId);
 }

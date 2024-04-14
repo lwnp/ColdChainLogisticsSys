@@ -42,6 +42,11 @@
             <artifactId>common-sys</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.xzit</groupId>
+            <artifactId>common-order</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 

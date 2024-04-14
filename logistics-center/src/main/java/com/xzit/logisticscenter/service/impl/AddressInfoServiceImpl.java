@@ -88,6 +88,16 @@ public class AddressInfoServiceImpl implements AddressInfoService {
 
     }
 
+    @Override
+    public AddressInfoDTO getAddressInfoDTOById(Long addressInfoId) {
+        return addressInfoMapper.getAddressById(addressInfoId);
+    }
+
+    @Override
+    public AddressInfo getAddressInfoById(Long addressInfoId) {
+        return addressInfoMapper.selectById(addressInfoId);
+    }
+
     private AddressInfo isValid(AddressInfoVO addressInfoVO,Long addressInfoId){
         AddressInfo addressInfo=addressInfoMapper.selectById(addressInfoId);
         if(addressInfo==null){

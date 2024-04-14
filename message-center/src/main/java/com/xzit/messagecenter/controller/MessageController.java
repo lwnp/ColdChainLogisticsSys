@@ -10,7 +10,9 @@ import com.xzit.messagecenter.service.NoticeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,22 +22,22 @@ public class MessageController {
     private final NoticeService noticeService;
     @PostMapping("/getUserNoticeByQuery")
     @Operation(summary = "分页获取用户自己消息")
-    ServerResponse<IPage<NoticeDTO>> getUserNoticeByQuery(QueryVO queryVO){
+    ServerResponse<IPage<NoticeDTO>> getUserNoticeByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(noticeService.getUserNoticeByQuery(queryVO));
     }
     @PostMapping("/getUserUnreadNoticeByQuery")
     @Operation(summary = "分页获取用户未读消息")
-    ServerResponse<IPage<NoticeDTO>> getUserUnreadNoticeByQuery(QueryVO queryVO){
+    ServerResponse<IPage<NoticeDTO>> getUserUnreadNoticeByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(noticeService.getUserUnReadNoticeByQuery(queryVO));
     }
     @PostMapping("/getAdminNoticeByQuery")
     @Operation(summary = "分页获取管理员消息")
-    ServerResponse<IPage<NoticeDTO>> getAdminNoticeByQuery(QueryVO queryVO){
+    ServerResponse<IPage<NoticeDTO>> getAdminNoticeByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(noticeService.getAdminNoticeByQuery(queryVO));
     }
     @PostMapping("/getAdminUnreadNoticeByQuery")
     @Operation(summary = "分页获取管理员未读消息")
-    ServerResponse<IPage<NoticeDTO>> getAdminUnreadNoticeByQuery(QueryVO queryVO){
+    ServerResponse<IPage<NoticeDTO>> getAdminUnreadNoticeByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(noticeService.getAdminUnReadNoticeByQuery(queryVO));
     }
     @DeleteMapping("/deleteUserNotice/{noticeId}")

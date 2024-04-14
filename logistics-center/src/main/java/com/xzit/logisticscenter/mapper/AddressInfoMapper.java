@@ -17,4 +17,5 @@ public interface AddressInfoMapper extends BaseMapper<AddressInfo> {
     IPage<AddressInfoDTO> getAddressByQuery(IPage<AddressInfoDTO> page, @Param("queryVO")QueryVO queryVO);
     @Select("select count(*) from t_address_info where user_info_id = #{userInfoId}")
     Integer getAddressCountByUserInfoId(@Param("userInfoId")Long userInfoId);
+    AddressInfoDTO getAddressById(@Param("addressId")Long addressId);
 }

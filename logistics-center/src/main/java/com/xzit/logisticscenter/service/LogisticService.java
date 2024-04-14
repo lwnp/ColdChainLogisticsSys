@@ -2,6 +2,7 @@ package com.xzit.logisticscenter.service;
 
 import com.xzit.common.logistics.entity.AddressInfo;
 import com.xzit.common.logistics.entity.Arrangement;
+import com.xzit.common.logistics.model.dto.ArrangeDistanceDTO;
 import com.xzit.common.logistics.model.dto.AvailableLogisticDTO;
 import com.xzit.common.logistics.model.dto.FeeStatesDTO;
 import com.xzit.common.logistics.model.vo.AddressInfoVO;
@@ -14,6 +15,6 @@ import java.util.Map;
 
 public interface LogisticService {
     Map<String,Double> address2Location(String address);
-    Boolean arrangeLogistic(AddressInfoVO from, AddressInfoVO to, GoodsVO goodsVO, Long orderId);
+    ArrangeDistanceDTO  getArrangeDistance(Long from,Long to,Long goods);
 
 }

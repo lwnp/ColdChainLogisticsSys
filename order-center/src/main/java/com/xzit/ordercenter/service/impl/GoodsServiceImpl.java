@@ -74,7 +74,7 @@ public class GoodsServiceImpl implements GoodsService {
 
         Notice notice = Notice.builder()
                 .title(MQConstant.CHECK_TITLE)
-                .content(MQConstant.CHECK_CONTENT)
+                .content(userInfoDTO.getUsername()+MQConstant.CHECK_CONTENT)
                 .userInfoId(userInfoDTO.getId())
                 .isAdminMessage(true)
                 .build();
@@ -175,5 +175,10 @@ public class GoodsServiceImpl implements GoodsService {
             throw new BizException("you can't delete other's goods");
         }
         goodsMapper.deleteById(goodsId);
+    }
+
+    @Override
+    public Goods getGoodsById(Long goodsId) {
+        return goodsMapper.selectById(goodsId);
     }
 }

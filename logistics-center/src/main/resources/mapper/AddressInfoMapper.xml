@@ -20,4 +20,7 @@
             where a.province like concat('%',#{queryVO.query},'%') or name like concat('%',#{queryVO.query},'%') or phone like concat('%',#{queryVO.query},'%')
         </if>
     </select>
+    <select id="getAddressById" resultType="com.xzit.common.logistics.model.dto.AddressInfoDTO" resultMap="addressInfoDTOMapper">
+        select ai.*,a.province from t_address_info ai left join t_area a on a.id=ai.area_id where ai.id=#{addressId}
+    </select>
 </mapper>

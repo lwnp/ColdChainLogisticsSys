@@ -1,19 +1,19 @@
 package com.xzit.logisticscenter.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.xzit.api.order.feign.GoodsFeignClient;
 import com.xzit.common.logistics.constant.LogisticConstant;
+import com.xzit.common.logistics.entity.AddressInfo;
 import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.entity.Courier;
 import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.AddressInfoVO;
 import com.xzit.common.logistics.model.vo.LocationResultVO;
 import com.xzit.common.logistics.model.vo.LocationVO;
+import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.sys.exception.BizException;
-import com.xzit.logisticscenter.mapper.ArrangementMapper;
-import com.xzit.logisticscenter.mapper.CourierMapper;
-import com.xzit.logisticscenter.mapper.FeeStatesMapper;
-import com.xzit.logisticscenter.mapper.LogisticMapper;
+import com.xzit.logisticscenter.mapper.*;
 import com.xzit.logisticscenter.service.LogisticService;
 import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,8 @@ public class LogisticServiceImpl implements LogisticService {
     private final LogisticMapper logisticMapper;
     private final ArrangementMapper arrangementMapper;
     private final CourierMapper courierMapper;
+    private final AddressInfoMapper addressInfoMapper;
+    private final GoodsFeignClient goodsFeignClient;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -55,16 +57,22 @@ public class LogisticServiceImpl implements LogisticService {
     }
 
     @Override
-    public Boolean arrangeLogistic(AddressInfoVO from, AddressInfoVO to, GoodsVO goodsVO, Long orderId) {
-        List<Arrangement> arrangementList = getArrangement(from.getAreaId(), to.getAreaId(), from.getAddress(), to.getAddress(), goodsVO.getWeight(), goodsVO.getSpace());
-        if (arrangementList != null) {
-            arrangementList.forEach(arrangement -> arrangement.setOrderId(orderId));
-            arrangementMapper.batchInsert(arrangementList);
-            return true;
-        }
-        return false;
+    public ArrangeDistanceDTO getArrangeDistance(Long from, Long to, Long goods) {
+        AddressInfo fromAddress=addressInfoMapper.selectById(from);
+        AddressInfo toAddress=addressInfoMapper.selectById(to);
+        Goods userGoods=goodsFeignClient.getGoodsById(goods).getData();
+        List<Arrangement> arrangements = getArrangement(fromAddress, toAddress, userGoods);
+       if (arrangements==null){
+           return null;
+       }
+       Map<String,Double> fromLocation=address2Location(fromAddress.getAddress());
+       Map<String,Double> toLocation=address2Location(toAddress.getAddress());
+       Double distance=getDistance(fromLocation,toLocation);
+       ArrangeDistanceDTO  arrangeDistanceDTO=new ArrangeDistanceDTO();
+        arrangeDistanceDTO.setDistance(distance);
+        arrangeDistanceDTO.setArrangementList(arrangements);
+        return arrangeDistanceDTO;
     }
-
 
 
     private List<AvailableLogisticDTO> getAvailableStation(Long areaId) {
@@ -189,8 +197,13 @@ public class LogisticServiceImpl implements LogisticService {
         resultPairDTOList.sort(Comparator.comparingDouble(ResultPairDTO::getDistance));
         return resultPairDTOList;
     }
-
-    private List<Arrangement> getArrangement(Long fromAreaId, Long toAreaId, String fromAddress, String toAddress, Double goodsWeight, Double goodsSpace) {
+    public List<Arrangement> getArrangement(AddressInfo from, AddressInfo to, Goods goods) {
+        Long fromAreaId = from.getAreaId();
+        Long toAreaId = to.getAreaId();
+        String fromAddress = from.getAddress();
+        String toAddress = to.getAddress();
+        Double goodsWeight = goods.getWeight();
+        Double goodsSpace = goods.getSpace();
         Map<String, Double> fromLocation = address2Location(fromAddress);
         Map<String, Double> toLocation = address2Location(toAddress);
         List<AvailableLogisticDTO> fromStations = getAvailableStation(fromAreaId);
