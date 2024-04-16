@@ -40,3 +40,10 @@ spring:
       config:
         server-addr: 127.0.0.1:8848
         file-extension: yaml
+upload:
+  minio:
+    url: http://127.0.0.1:9000/coldchainsys
+    endpoint: http://127.0.0.1:9000
+    accesskey: kYt6cPBTdZQBrVLKw11S
+    secretKey: MHgsnwsd39zfm4oM3Lr0zzZ8RHApB2drAupDVw3T
+    bucketName: coldchainsys

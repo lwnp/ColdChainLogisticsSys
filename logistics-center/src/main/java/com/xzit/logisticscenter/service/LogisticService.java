@@ -5,6 +5,7 @@ import com.xzit.common.logistics.entity.AddressInfo;
 import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.AddressInfoVO;
+import com.xzit.common.logistics.model.vo.LogisticFlowVO;
 import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.entity.Order;
 import com.xzit.common.order.model.vo.GoodsVO;
@@ -23,4 +24,5 @@ public interface LogisticService {
     IPage<ArrangementDTO> getArrangementByQuery(QueryVO queryVO);
     ArrangementDTO getCourierArrangement();
     AddressInfoDTO courierGetUserAddress(String orderNum);
+    void pickUpConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
 }

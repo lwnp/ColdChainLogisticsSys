@@ -13,6 +13,7 @@ import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.AddressInfoVO;
 import com.xzit.common.logistics.model.vo.LocationResultVO;
 import com.xzit.common.logistics.model.vo.LocationVO;
+import com.xzit.common.logistics.model.vo.LogisticFlowVO;
 import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.entity.Order;
 import com.xzit.common.order.model.vo.GoodsVO;
@@ -21,6 +22,7 @@ import com.xzit.common.sys.constant.MQConstant;
 import com.xzit.common.sys.entity.Notice;
 import com.xzit.common.sys.exception.BizException;
 import com.xzit.common.sys.model.vo.QueryVO;
+import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.logisticscenter.mapper.*;
 import com.xzit.logisticscenter.service.FeeStatesService;
@@ -58,6 +60,7 @@ public class LogisticServiceImpl implements LogisticService {
     private final CarMapper carMapper;
     private final UserFeignClient userFeignClient;
     private final StreamBridge streamBridge;
+    private final LogisticFlowMapper logisticFlowMapper;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -195,6 +198,28 @@ public class LogisticServiceImpl implements LogisticService {
         else {
             throw new BizException("除了收件和配送，无需获取用户地址");
         }
+    }
+
+    @Override
+    public void pickUpConfirm(String orderNum, LogisticFlowVO logisticFlowVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        Courier courier=courierMapper.selectOne(new QueryWrapper<Courier>().eq("user_info_id",userInfoDTO.getId()));
+        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("courier_id",courier.getId())));
+        if(arrangement==null){
+            throw new BizException("非法订单号");
+        }
+        if(arrangement.getStepId()!=1L){
+            throw new BizException("步骤错误");
+        }
+        if(arrangement.getStatusId()!=1L){
+            throw new BizException("状态错误");
+        }
+
+        arrangement.setStatusId(2L);
+        arrangementMapper.updateById(arrangement);
+        LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
+        logisticFlow.setDescription(String.format(LogisticConstant.PICK_UP, userInfoDTO.getUsername()));
+        logisticFlowMapper.insert(logisticFlow);
     }
 
 

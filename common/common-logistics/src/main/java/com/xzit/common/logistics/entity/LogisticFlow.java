@@ -21,13 +21,13 @@ import java.util.List;
 public class LogisticFlow {
     @TableId(type = IdType.AUTO)
     Long id;
-    Long orderId;
+    String orderNum;
     String description;
     Double weight;
     List<String> images;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @TableField(fill = FieldFill.INSERT,value = "timeStamp")
+    @TableField(fill = FieldFill.INSERT,value = "time_stamp")
     LocalDateTime timeStamp;
 
 }

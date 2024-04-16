@@ -1,4 +1,4 @@
-package com.xzit.usercenter.config.properties;
+package com.xzit.common.file.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

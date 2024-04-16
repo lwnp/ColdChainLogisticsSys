@@ -3,7 +3,6 @@ package com.xzit.usercenter.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.xzit.common.sys.constant.UserConstant;
 import com.xzit.common.sys.model.vo.EmailVO;
 import com.xzit.common.sys.model.vo.QueryVO;
@@ -16,15 +15,12 @@ import com.xzit.usercenter.mapper.RoleMapper;
 import com.xzit.usercenter.mapper.UserInfoMapper;
 import com.xzit.usercenter.mapper.UserMapper;
 import com.xzit.usercenter.service.CaptchaService;
-import com.xzit.usercenter.service.FileService;
 import com.xzit.usercenter.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 

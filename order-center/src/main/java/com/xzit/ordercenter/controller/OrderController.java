@@ -2,6 +2,8 @@ package com.xzit.ordercenter.controller;
 
 import com.alipay.api.AlipayApiException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzit.common.file.config.service.FileService;
+import com.xzit.common.order.constant.OrderConstant;
 import com.xzit.common.order.model.dto.GoodsDTO;
 import com.xzit.common.order.model.dto.OrderDTO;
 import com.xzit.common.order.model.vo.GoodsVO;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final GoodsService goodsService;
     private final OrderService orderService;
+    private final FileService fileService;
     @PutMapping("/addGoods")
     @Operation(summary = "添加货物")
     ServerResponse<?> addGoods(@RequestBody @Valid GoodsVO goodsVO){
@@ -87,6 +91,11 @@ public class OrderController {
     @Operation(summary = "获取未支付订单")
     ServerResponse<OrderDTO> getUnpaidOrder(){
         return ServerResponse.success(orderService.getUnpaidOrder());
+    }
+    @PostMapping("/uploadGoodsImage")
+    @Operation(summary = "上传货物图片")
+    ServerResponse<String> uploadGoodsImage(@RequestBody MultipartFile file){
+        return ServerResponse.success(fileService.uploadFile(file, OrderConstant.ORDER_SEPARATOR));
     }
 
 }

@@ -1,6 +1,8 @@
 package com.xzit.logisticscenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzit.common.file.config.service.FileService;
+import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.Area;
 import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.entity.FeeStates;
@@ -17,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class LogisticsController {
     private final AddressInfoService addressInfoService;
     private final FeeStatesService feeStatesService;
     private final LogisticService logisticService;
+    private final FileService fileService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -281,5 +285,17 @@ public class LogisticsController {
     ServerResponse<AddressInfoDTO> getUserAddress(@PathVariable String orderNum){
         return ServerResponse.success(logisticService.courierGetUserAddress(orderNum));
     }
+    @PutMapping("/pickUpConfirm/{orderNum}")
+    @Operation(summary = "确认揽件")
+    ServerResponse<?> pickUpConfirm(@PathVariable String orderNum,@RequestBody @Valid LogisticFlowVO logisticFlowVO){
+        logisticService.pickUpConfirm(orderNum,logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/logisticImageUpload")
+    @Operation(summary = "物流图片上传")
+    ServerResponse<String> logisticImageUpload(@RequestBody MultipartFile file){
+        return ServerResponse.success(fileService.uploadFile(file, LogisticConstant.IMAGE_SEPARATOR));
+    }
+
 
 }
