@@ -276,5 +276,10 @@ public class LogisticsController {
         logisticService.startShipping(orderNum);
         return ServerResponse.success();
     }
+    @GetMapping("/getUserAddress/{orderNum}")
+    @Operation(summary = "司机获取用户地址")
+    ServerResponse<AddressInfoDTO> getUserAddress(@PathVariable String orderNum){
+        return ServerResponse.success(logisticService.courierGetUserAddress(orderNum));
+    }
 
 }

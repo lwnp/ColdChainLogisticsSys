@@ -176,6 +176,27 @@ public class LogisticServiceImpl implements LogisticService {
         return arrangementMapper.getArrangementByUserInfoId(userInfoDTO.getId());
     }
 
+    @Override
+    public AddressInfoDTO courierGetUserAddress(String orderNum) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        Courier courier=courierMapper.selectOne(new QueryWrapper<Courier>().eq("user_info_id",userInfoDTO.getId()));
+        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("courier_id",courier.getId())));
+        if(arrangement==null){
+            throw new BizException("获取用户地址信息失败");
+        }
+        if(arrangement.getStepId()==1L){
+            Order order=orderFeignClient.getOrderByOrderNum(orderNum).getData();
+            return addressInfoMapper.getAddressById(order.getSenderAddressId());
+        }
+        if (arrangement.getStepId()==6L){
+            Order order=orderFeignClient.getOrderByOrderNum(orderNum).getData();
+            return addressInfoMapper.getAddressById(order.getReceiveAddressId());
+        }
+        else {
+            throw new BizException("除了收件和配送，无需获取用户地址");
+        }
+    }
+
 
     private List<AvailableLogisticDTO> getAvailableStation(Long areaId) {
         return logisticMapper.getAvailableStation(areaId);
