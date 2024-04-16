@@ -10,6 +10,7 @@ import com.xzit.logisticscenter.service.LogisticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -19,6 +20,11 @@ public class ArrangementFeignController implements ArrangementFeignClient {
     @Override
     public ServerResponse<ArrangeDistanceDTO> getArrangementList(Long fromAddress, Long toAddress, Long goods) {
         return ServerResponse.success(logisticService.getArrangeDistance(fromAddress,toAddress,goods));
+    }
+
+    @Override
+    public ServerResponse<BigDecimal> arrangeOrder(String orderNum) {
+        return ServerResponse.success(logisticService.arrangeOrder(orderNum));
     }
 
 

@@ -2,18 +2,20 @@ package com.xzit.logisticscenter.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.xzit.api.order.feign.GoodsFeignClient;
+import com.xzit.api.order.feign.OrderFeignClient;
 import com.xzit.common.logistics.constant.LogisticConstant;
-import com.xzit.common.logistics.entity.AddressInfo;
-import com.xzit.common.logistics.entity.Arrangement;
-import com.xzit.common.logistics.entity.Courier;
+import com.xzit.common.logistics.entity.*;
 import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.AddressInfoVO;
 import com.xzit.common.logistics.model.vo.LocationResultVO;
 import com.xzit.common.logistics.model.vo.LocationVO;
 import com.xzit.common.order.entity.Goods;
+import com.xzit.common.order.entity.Order;
 import com.xzit.common.order.model.vo.GoodsVO;
+import com.xzit.common.order.utils.FeeCalculator;
 import com.xzit.common.sys.exception.BizException;
 import com.xzit.logisticscenter.mapper.*;
+import com.xzit.logisticscenter.service.FeeStatesService;
 import com.xzit.logisticscenter.service.LogisticService;
 import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +23,11 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,6 +40,10 @@ public class LogisticServiceImpl implements LogisticService {
     private final CourierMapper courierMapper;
     private final AddressInfoMapper addressInfoMapper;
     private final GoodsFeignClient goodsFeignClient;
+    private final OrderFeignClient orderFeignClient;
+    private final FeeStatesMapper feeStatesMapper;
+    private final CenterMapper centerMapper;
+    private final CarMapper carMapper;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -69,9 +77,36 @@ public class LogisticServiceImpl implements LogisticService {
        Map<String,Double> toLocation=address2Location(toAddress.getAddress());
        Double distance=getDistance(fromLocation,toLocation);
        ArrangeDistanceDTO  arrangeDistanceDTO=new ArrangeDistanceDTO();
-        arrangeDistanceDTO.setDistance(distance);
+        arrangeDistanceDTO.setDistance(distance*2);
         arrangeDistanceDTO.setArrangementList(arrangements);
         return arrangeDistanceDTO;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public BigDecimal arrangeOrder(String orderNum) {
+        Order order=orderFeignClient.getOrderByOrderNum(orderNum).getData();
+        AddressInfo fromAddress=addressInfoMapper.selectById(order.getSenderAddressId());
+        if(fromAddress==null|| !Objects.equals(fromAddress.getUserInfoId(), order.getUserInfoId())){
+            throw new BizException("发货地址不存在或信息不匹配");
+        }
+        AddressInfo toAddress=addressInfoMapper.selectById(order.getReceiveAddressId());
+        if(toAddress==null|| !Objects.equals(toAddress.getUserInfoId(), order.getUserInfoId())){
+            throw new BizException("收货地址不存在或信息不匹配");
+        }
+        ArrangeDistanceDTO arrangeDistanceDTO=getArrangeDistance(fromAddress.getId(),toAddress.getId(),order.getGoodsId());
+        if (arrangeDistanceDTO==null){
+            throw new BizException("没有合适的配送方案");
+        }
+        List<Arrangement> arrangementList=arrangeDistanceDTO.getArrangementList();
+        lockArrange(arrangementList);
+        arrangementList.forEach(arrangement -> {
+            arrangement.setOrderNum(orderNum);
+            arrangementMapper.insert(arrangement);
+        });
+        List<FeeStates> feeStatesList=feeStatesMapper.getAllFeeList();
+        Goods goods=goodsFeignClient.getGoodsById(order.getGoodsId()).getData();
+        return FeeCalculator.calculateShippingCost(arrangeDistanceDTO.getDistance().intValue()+1,goods.getWeight().intValue()+1,goods.getSpace().intValue()+1,feeStatesList);
     }
 
 
@@ -283,6 +318,24 @@ public class LogisticServiceImpl implements LogisticService {
         result.addAll(toArrangement);
 
         return result;
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void lockArrange(List<Arrangement> arrangementList){
+        arrangementList.forEach(arrangement -> {
+            if(arrangement.getStepId()==3L||arrangement.getStepId()==4L){
+                Goods goods=goodsFeignClient.getGoodsByOrderNum(arrangement.getOrderNum()).getData();
+                Double space=goods.getSpace();
+                Center center=centerMapper.selectById(arrangement.getToId());
+                center.setFreeSpace(center.getFreeSpace()-space);
+                centerMapper.updateById(center);
+            }
+            Car car=carMapper.selectById(arrangement.getCarId());
+            car.setIsInUse(true);
+            carMapper.updateById(car);
+            Courier courier=courierMapper.selectById(arrangement.getCourierId());
+            courier.setIsInUse(true);
+            courierMapper.updateById(courier);
+        });
     }
 
 

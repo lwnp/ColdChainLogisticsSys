@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @FeignClient(value = "logistics-service",contextId = "arrangement")
 public interface ArrangementFeignClient {
     @PostMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/logistics/getArrangeDistanceDTO")
     ServerResponse<ArrangeDistanceDTO>  getArrangementList(@RequestParam(value = "fromAddressInfoId") Long fromAddressInfoId, @RequestParam(value = "toAddressInfoId") Long toAddressInfoId, @RequestParam(value = "goodsId") Long goodsId);
+    @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/logistics/arrangeOrder")
+    ServerResponse<BigDecimal> arrangeOrder(@RequestParam(value = "orderNum")String orderNum);
 }

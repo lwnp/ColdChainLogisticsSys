@@ -11,4 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface GoodsFeignClient {
     @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/order/getGoodsById")
     ServerResponse<Goods> getGoodsById(@RequestParam("id") Long id);
+    @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/order/getGoodsByOrderNum")
+    ServerResponse<Goods> getGoodsByOrderNum(@RequestParam("orderNum") String orderNum);
 }

@@ -181,4 +181,9 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods getGoodsById(Long goodsId) {
         return goodsMapper.selectById(goodsId);
     }
+
+    @Override
+    public Goods getGoodsByOrderNum(String orderNum) {
+        return goodsMapper.getGoodsByOrderNum(orderNum);
+    }
 }

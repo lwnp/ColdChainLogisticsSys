@@ -14,4 +14,5 @@ public class AlipayDTO {
     String subject;
     String total_amount;
     String product_code;
+    String time_expire;
 }

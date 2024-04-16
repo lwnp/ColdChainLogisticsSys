@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,7 +21,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("t_order")
-public class Order {
+public class Order implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO)
     Long id;
     Long userInfoId;

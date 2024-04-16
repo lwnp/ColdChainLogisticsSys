@@ -11,4 +11,5 @@ public interface AlipayConstant {
     String SERVER_HOST="openchannel-sandbox.dl.alipaydev.com";
     String PAYMENT_SUBJECT="运费";
     String PRODUCT_CODE="FAST_INSTANT_TRADE_PAY";
+    String TIME_OUT="1m";
 }

@@ -63,4 +63,7 @@
             and (og.name like concat('%',#{queryVO.query},'%') or og.description like concat('%',#{queryVO.query},'%'))
         </if>
     </select>
+    <select id="getGoodsByOrderNum" resultType="com.xzit.common.order.entity.Goods">
+        select og.* from t_order_goods og left join t_order o on og.id=o.goods_id where o.order_num=#{orderNum}
+    </select>
 </mapper>

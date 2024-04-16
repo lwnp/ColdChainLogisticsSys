@@ -41,5 +41,5 @@ spring:
         server-addr: 127.0.0.1:8848
         file-extension: yaml
 alipay:
-  notify: http://www.marshmello.tech/notify
+  notify: http://www.marshmello.tech/notify/
   redirect: http://www.marshmello.tech/redirect

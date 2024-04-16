@@ -25,7 +25,7 @@ public class Arrangement implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO)
     Long id;
-    Long orderId;
+    String orderNum;
     Long statusId;
     Long carId;
     Long courierId;

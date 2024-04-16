@@ -4,9 +4,9 @@
     <insert id="batchInsert" parameterType="java.util.List">
         <foreach collection="list" item="item" separator=";">
             INSERT INTO t_arrangement
-            (order_id, status_id, car_id, courier_id, step_id, create_time, update_time)
+            (order_num, status_id, car_id, courier_id, step_id, create_time, update_time)
             VALUES
-            (#{item.orderId}, #{item.statusId}, #{item.carId}, #{item.courierId}, #{item.stepId}, #{item.createTime}, #{item.updateTime})
+            (#{item.orderNum}, #{item.statusId}, #{item.carId}, #{item.courierId}, #{item.stepId}, #{item.createTime}, #{item.updateTime})
         </foreach>
     </insert>
 </mapper>

@@ -11,11 +11,26 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <resultMap id="feeStatesMapper" type="com.xzit.common.logistics.entity.FeeStates">
+        <id property="id" column="id"/>
+        <result property="feeTypeId" column="fee_type_id"/>
+        <result property="limit" column="start_value"/>
+        <result property="price" column="price"/>
+        <result property="state" column="state"/>
+        <result property="oilRate" column="oil_rate"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+
+    </resultMap>
     <select id="getFeeStates" resultType="com.xzit.common.logistics.model.dto.FeeStatesDTO" resultMap="feeStatesDTOMapper">
         select fs.*,
         ft.name
         from t_fee_states fs
         left join t_fee_type ft on fs.fee_type_id=ft.id
     </select>
+    <select id="getAllFeeList" resultType="com.xzit.common.logistics.entity.FeeStates" resultMap="feeStatesMapper">
+        select fs.* from t_fee_states fs
+    </select>
+
 
 </mapper>

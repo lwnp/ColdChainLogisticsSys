@@ -7,6 +7,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.msg.AlipayMsgClient;
 import com.alipay.api.msg.MsgHandler;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.xzit.common.order.constant.AlipayConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +18,10 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class AlipayConfiguration {
     private final MsgHandler msgHandler;
-    @Value("${alipay.notify}")
-    private String notifyUrl;
     @Value("${alipay.redirect}")
     private String redirectUrl;
+    @Value("${alipay.notify}")
+    private String notifyUrl;
     @Bean
     public AlipayClient alipayClient() throws AlipayApiException {
         AlipayConfig  config = new AlipayConfig();
@@ -44,9 +45,13 @@ public class AlipayConfiguration {
     @Bean
     public AlipayTradePagePayRequest alipayTradePagePayRequest(){
         AlipayTradePagePayRequest request=new AlipayTradePagePayRequest();
-        request.setNotifyUrl(notifyUrl);
         request.setReturnUrl(redirectUrl);
+        request.setNotifyUrl(notifyUrl);
         return request;
+    }
+    @Bean
+    public AlipayTradeQueryRequest alipayTradeQueryRequest(){
+        return new AlipayTradeQueryRequest();
     }
 
 }

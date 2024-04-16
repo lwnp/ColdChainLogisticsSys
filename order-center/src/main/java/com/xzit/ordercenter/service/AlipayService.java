@@ -5,5 +5,6 @@ import com.xzit.common.order.entity.Order;
 
 public interface AlipayService {
     String generatePaymentUrl(Order order) throws AlipayApiException;
+    Boolean isPaid(String orderNum);
 
 }

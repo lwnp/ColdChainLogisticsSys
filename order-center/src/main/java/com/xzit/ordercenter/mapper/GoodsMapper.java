@@ -14,4 +14,5 @@ public interface GoodsMapper extends BaseMapper<Goods> {
     IPage<GoodsDTO> getUserGoodsByQuery(IPage<GoodsDTO> page,@Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
     IPage<GoodsDTO> getAllGoodsByQuery(IPage<GoodsDTO> page,@Param("queryVO") QueryVO queryVO);
     IPage<GoodsDTO> getUncheckedGoodsByQuery(IPage<GoodsDTO> page,@Param("queryVO") QueryVO queryVO);
+    Goods getGoodsByOrderNum(@Param("orderNum") String orderNum);
 }

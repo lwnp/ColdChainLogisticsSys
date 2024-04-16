@@ -15,4 +15,9 @@ public class GoodsFeignController implements GoodsFeignClient {
     public ServerResponse<Goods> getGoodsById(Long id) {
         return ServerResponse.success(goodsService.getGoodsById(id));
     }
+
+    @Override
+    public ServerResponse<Goods> getGoodsByOrderNum(String orderNum) {
+        return ServerResponse.success(goodsService.getGoodsByOrderNum(orderNum));
+    }
 }

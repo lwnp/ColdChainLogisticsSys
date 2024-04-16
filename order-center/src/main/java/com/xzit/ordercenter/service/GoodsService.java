@@ -16,4 +16,5 @@ public interface GoodsService {
     void rejectGoods(Long goodsId);
     void deleteGoods(Long goodsId);
     Goods getGoodsById(Long goodsId);
+    Goods getGoodsByOrderNum(String orderNum);
 }

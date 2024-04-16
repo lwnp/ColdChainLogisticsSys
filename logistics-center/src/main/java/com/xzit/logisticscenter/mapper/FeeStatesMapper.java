@@ -10,5 +10,6 @@ import java.util.List;
 @Mapper
 public interface FeeStatesMapper extends BaseMapper<FeeStates> {
     List<FeeStatesDTO> getFeeStates();
+    List<FeeStates> getAllFeeList();
 
 }

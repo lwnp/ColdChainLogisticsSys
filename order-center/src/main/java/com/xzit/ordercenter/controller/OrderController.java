@@ -1,11 +1,14 @@
 package com.xzit.ordercenter.controller;
 
+import com.alipay.api.AlipayApiException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.order.model.dto.GoodsDTO;
 import com.xzit.common.order.model.vo.GoodsVO;
+import com.xzit.common.order.model.vo.OrderVO;
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.ordercenter.service.GoodsService;
+import com.xzit.ordercenter.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tags({@Tag(name = "订单模块接口")})
 public class OrderController {
     private final GoodsService goodsService;
+    private final OrderService orderService;
     @PutMapping("/addGoods")
     @Operation(summary = "添加货物")
     ServerResponse<?> addGoods(@RequestBody @Valid GoodsVO goodsVO){
@@ -62,6 +66,11 @@ public class OrderController {
     ServerResponse<?> deleteGoods(@PathVariable Long goodsId){
         goodsService.deleteGoods(goodsId);
         return ServerResponse.success();
+    }
+    @PostMapping("/generateAlipayUrl")
+    @Operation(summary = "下单生成支付宝支付链接")
+    ServerResponse<String> generateAlipayUrl(@RequestBody @Valid OrderVO orderVO) {
+        return ServerResponse.success(orderService.generateAlipayUrl(orderVO));
     }
 
 }
