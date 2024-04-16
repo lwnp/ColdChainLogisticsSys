@@ -31,6 +31,7 @@ public class LogisticsController {
     private final CourierService courierService;
     private final AddressInfoService addressInfoService;
     private final FeeStatesService feeStatesService;
+    private final LogisticService logisticService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -259,6 +260,21 @@ public class LogisticsController {
         }
         return ServerResponse.fail(ResponseCodeEnum.FAIL);
     }
-
+    @PostMapping("/getArrangementByQuery")
+    @Operation(summary = "管理员分页查询物流任务")
+    ServerResponse<IPage<ArrangementDTO>> getArrangementByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(logisticService.getArrangementByQuery(queryVO));
+    }
+    @GetMapping("/getCourierArrangement")
+    @Operation(summary = "获取快递员自己任务")
+    ServerResponse<ArrangementDTO> getCourierArrangement(){
+        return ServerResponse.success(logisticService.getCourierArrangement());
+    }
+    @GetMapping("/startShipping/{orderNum}")
+    @Operation(summary = "开始物流")
+    ServerResponse<?> startShipping(@PathVariable String orderNum){
+        logisticService.startShipping(orderNum);
+        return ServerResponse.success();
+    }
 
 }

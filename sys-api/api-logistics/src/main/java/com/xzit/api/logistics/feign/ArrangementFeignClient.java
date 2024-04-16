@@ -21,4 +21,6 @@ public interface ArrangementFeignClient {
     ServerResponse<ArrangeDistanceDTO>  getArrangementList(@RequestParam(value = "fromAddressInfoId") Long fromAddressInfoId, @RequestParam(value = "toAddressInfoId") Long toAddressInfoId, @RequestParam(value = "goodsId") Long goodsId);
     @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/logistics/arrangeOrder")
     ServerResponse<BigDecimal> arrangeOrder(@RequestParam(value = "orderNum")String orderNum);
+    @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/logistics/recoverArrange")
+    ServerResponse<?> recoverArrange(@RequestParam(value = "orderNum")String orderNum);
 }

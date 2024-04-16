@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.ordercenter.mapper.OrderMapper">
+    <resultMap id="orderDTOMapper" type="com.xzit.common.order.model.dto.OrderDTO">
+        <id property="id" column="id"/>
+        <result property="price" column="price"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="isActive" column="is_active"/>
+        <result property="isPay" column="is_pay"/>
+        <result property="username" column="username"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="receiverAddress" column="receiver_address"/>
+        <result property="senderAddress" column="sender_address"/>
+        <result property="senderName" column="sender_name"/>
+        <result property="receiverName" column="receiver_name"/>
+        <result property="senderPhone" column="sender_phone"/>
+        <result property="receiverPhone" column="receiver_phone"/>
+
+    </resultMap>
+
+    <select id="getOrderByQuery" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
+        select o.*,
+               u.username,
+               og.name as goods_name,
+               getAddressById(o.sender_address_id) as sender_address,
+               getAddressById(o.receive_address_id) as receiver_address,
+               getPhoneById(o.sender_address_id) as sender_phone,
+               getPhoneById(o.receive_address_id) as receiver_phone,
+               getNameById(o.receive_address_id) as receiver_name,
+               getNameById(o.sender_address_id) as sender_name
+        from t_order o
+        left join t_user u on o.user_info_id=u.user_info_id
+        left join t_order_goods og on og.id=o.goods_id
+        <if test="!queryVO.query.isEmpty()">
+            where u.username like concat('%',#{queryVO.query},'%') or og.name like  concat('%',#{queryVO.query},'%') or o.create_time like ('%',#{queryVO.query},'%')
+        </if>
+
+    </select>
+    <select id="getActiveOderByQuery" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
+        select o.*,
+        u.username,
+        og.name as goods_name,
+        getAddressById(o.sender_address_id) as sender_address,
+        getAddressById(o.receive_address_id) as receiver_address,
+        getPhoneById(o.sender_address_id) as sender_phone,
+        getPhoneById(o.receive_address_id) as receiver_phone,
+        getNameById(o.receive_address_id) as receiver_name,
+        getNameById(o.sender_address_id) as sender_name
+        from t_order o
+        left join t_user u on o.user_info_id=u.user_info_id
+        left join t_order_goods og on og.id=o.goods_id
+        where o.is_active=1 and o.is_pay=1
+        <if test="!queryVO.query.isEmpty()">
+         and (u.username like concat('%',#{queryVO.query},'%') or og.name like  concat('%',#{queryVO.query},'%') or o.create_time like ('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+    <select id="getUserOrderByQuery" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
+        select o.*,
+        u.username,
+        og.name as goods_name,
+        getAddressById(o.sender_address_id) as sender_address,
+        getAddressById(o.receive_address_id) as receiver_address,
+        getPhoneById(o.sender_address_id) as sender_phone,
+        getPhoneById(o.receive_address_id) as receiver_phone,
+        getNameById(o.receive_address_id) as receiver_name,
+        getNameById(o.sender_address_id) as sender_name
+        from t_order o
+        left join t_user u on o.user_info_id=u.user_info_id
+        left join t_order_goods og on og.id=o.goods_id
+        where o.user_info_id=#{userInfoId}
+        <if test="!queryVO.query.isEmpty()">
+            and (u.username like concat('%',#{queryVO.query},'%') or og.name like  concat('%',#{queryVO.query},'%') or o.create_time like ('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+    <select id="getUserActiveOrderByQuery" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
+        select o.*,
+        u.username,
+        og.name as goods_name,
+        getAddressById(o.sender_address_id) as sender_address,
+        getAddressById(o.receive_address_id) as receiver_address,
+        getPhoneById(o.sender_address_id) as sender_phone,
+        getPhoneById(o.receive_address_id) as receiver_phone,
+        getNameById(o.receive_address_id) as receiver_name,
+        getNameById(o.sender_address_id) as sender_name
+        from t_order o
+        left join t_user u on o.user_info_id=u.user_info_id
+        left join t_order_goods og on og.id=o.goods_id
+        where o.is_active=1 and o.is_pay=1 and o.user_info_id=#{userInfoId}
+        <if test="!queryVO.query.isEmpty()">
+            and (u.username like concat('%',#{queryVO.query},'%') or og.name like  concat('%',#{queryVO.query},'%') or o.create_time like ('%',#{queryVO.query},'%'))
+        </if>
+    </select>
+    <select id="getUnpaidOrder" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
+        select o.*,
+               u.username,
+               og.name as goods_name,
+               getAddressById(o.sender_address_id) as sender_address,
+               getAddressById(o.receive_address_id) as receiver_address,
+               getPhoneById(o.sender_address_id) as sender_phone,
+               getPhoneById(o.receive_address_id) as receiver_phone,
+               getNameById(o.receive_address_id) as receiver_name,
+               getNameById(o.sender_address_id) as sender_name
+        from t_order o
+                 left join t_user u on o.user_info_id=u.user_info_id
+                 left join t_order_goods og on og.id=o.goods_id
+        where o.is_active=1 and o.is_pay=0 and u.user_info_id=#{userInfoId}
+    </select>
+</mapper>

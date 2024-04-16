@@ -27,5 +27,11 @@ public class ArrangementFeignController implements ArrangementFeignClient {
         return ServerResponse.success(logisticService.arrangeOrder(orderNum));
     }
 
+    @Override
+    public ServerResponse<?> recoverArrange(String orderNum) {
+        logisticService.recoverArrange(orderNum);
+        return ServerResponse.success();
+    }
+
 
 }

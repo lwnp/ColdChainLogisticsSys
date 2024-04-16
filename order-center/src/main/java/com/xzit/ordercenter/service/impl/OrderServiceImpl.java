@@ -1,12 +1,16 @@
 package com.xzit.ordercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.api.logistics.feign.ArrangementFeignClient;
 import com.xzit.api.user.feign.UserFeignClient;
 import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.entity.Order;
+import com.xzit.common.order.model.dto.OrderDTO;
 import com.xzit.common.order.model.vo.OrderVO;
 import com.xzit.common.sys.exception.BizException;
+import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.ordercenter.mapper.GoodsMapper;
 import com.xzit.ordercenter.mapper.OrderMapper;
@@ -85,6 +89,7 @@ public class OrderServiceImpl implements OrderService {
         }catch (Exception ignored){
         }
         if (price == null) {
+            orderMapper.deleteById(order.getId());
             throw new BizException("当前系统运力不足，请更换始发地或终到地再试");
         }
 
@@ -95,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
         try{
             return alipayService.generatePaymentUrl(order);
         }catch (Exception e){
+            orderMapper.deleteById(order.getId());
             return null;
         }
 
@@ -109,9 +115,47 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public IPage<OrderDTO> getOrderByQuery(QueryVO queryVO) {
+        Page<OrderDTO> page = new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return orderMapper.getOrderByQuery(page, queryVO);
+    }
+
+    @Override
+    public IPage<OrderDTO> getActiveOderByQuery(QueryVO queryVO) {
+        Page<OrderDTO> page = new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return orderMapper.getActiveOderByQuery(page, queryVO);
+    }
+
+    @Override
+    public IPage<OrderDTO> getUserOrderByQuery(QueryVO queryVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        Page<OrderDTO> page = new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return orderMapper.getUserOrderByQuery(page, queryVO,userInfoDTO.getId());
+    }
+
+    @Override
+    public IPage<OrderDTO> getUserActiveOrderByQuery(QueryVO queryVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        Page<OrderDTO> page = new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return orderMapper.getUserActiveOrderByQuery(page, queryVO,userInfoDTO.getId());
+    }
+
+    @Override
+    public OrderDTO getUnpaidOrder() {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        return orderMapper.getUnpaidOrder(userInfoDTO.getId());
+    }
+
+    @Override
     public Order getOrderByOrderNum(String orderNum) {
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("order_num", orderNum);
         return orderMapper.selectOne(queryWrapper);
+    }
+    private UserInfoDTO getUserInfo(){
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        return userFeignClient.getUserInfo(userId).getData();
     }
 }

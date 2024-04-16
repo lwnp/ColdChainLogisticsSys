@@ -1,8 +1,12 @@
 package com.xzit.logisticscenter.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.api.order.feign.GoodsFeignClient;
 import com.xzit.api.order.feign.OrderFeignClient;
+import com.xzit.api.user.feign.UserFeignClient;
 import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.*;
 import com.xzit.common.logistics.model.dto.*;
@@ -13,15 +17,23 @@ import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.entity.Order;
 import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.order.utils.FeeCalculator;
+import com.xzit.common.sys.constant.MQConstant;
+import com.xzit.common.sys.entity.Notice;
 import com.xzit.common.sys.exception.BizException;
+import com.xzit.common.sys.model.vo.QueryVO;
+import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.logisticscenter.mapper.*;
 import com.xzit.logisticscenter.service.FeeStatesService;
 import com.xzit.logisticscenter.service.LogisticService;
 import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.SerializationUtils;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -44,6 +56,8 @@ public class LogisticServiceImpl implements LogisticService {
     private final FeeStatesMapper feeStatesMapper;
     private final CenterMapper centerMapper;
     private final CarMapper carMapper;
+    private final UserFeignClient userFeignClient;
+    private final StreamBridge streamBridge;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -83,7 +97,7 @@ public class LogisticServiceImpl implements LogisticService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public BigDecimal arrangeOrder(String orderNum) {
         Order order=orderFeignClient.getOrderByOrderNum(orderNum).getData();
         AddressInfo fromAddress=addressInfoMapper.selectById(order.getSenderAddressId());
@@ -99,14 +113,67 @@ public class LogisticServiceImpl implements LogisticService {
             throw new BizException("没有合适的配送方案");
         }
         List<Arrangement> arrangementList=arrangeDistanceDTO.getArrangementList();
-        lockArrange(arrangementList);
         arrangementList.forEach(arrangement -> {
             arrangement.setOrderNum(orderNum);
             arrangementMapper.insert(arrangement);
         });
+        lockArrange(arrangementList);
         List<FeeStates> feeStatesList=feeStatesMapper.getAllFeeList();
         Goods goods=goodsFeignClient.getGoodsById(order.getGoodsId()).getData();
         return FeeCalculator.calculateShippingCost(arrangeDistanceDTO.getDistance().intValue()+1,goods.getWeight().intValue()+1,goods.getSpace().intValue()+1,feeStatesList);
+    }
+
+    @Override
+    public void recoverArrange(String orderNum) {
+        List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum));
+        arrangementList.forEach(arrangement -> {
+            if(arrangement.getStepId()==3L||arrangement.getStepId()==4L){
+                Goods goods=goodsFeignClient.getGoodsByOrderNum(arrangement.getOrderNum()).getData();
+                Double space=goods.getSpace();
+                Center center=centerMapper.selectById(arrangement.getToId());
+                center.setFreeSpace(center.getFreeSpace()+space);
+                centerMapper.updateById(center);
+            }
+            Courier courier=courierMapper.selectById(arrangement.getCourierId());
+            courier.setIsInUse(false);
+            courierMapper.updateById(courier);
+            Car car=carMapper.selectById(arrangement.getCarId());
+            car.setIsInUse(false);
+            carMapper.updateById(car);
+        });
+        arrangementMapper.deleteBatchIds(arrangementList.stream().map(Arrangement::getId).collect(Collectors.toList()));
+    }
+
+    @Override
+    public void startShipping(String orderNum) {
+        List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",1).and(f->f.eq("status_id",1))));
+        if(arrangementList.isEmpty()){
+            throw new BizException("非法订单号");
+        }
+        arrangementList.forEach(arrangement -> {
+            arrangement.setStatusId(2L);
+            arrangementMapper.updateById(arrangement);
+            Courier courier=courierMapper.selectById(arrangement.getCourierId());
+            Notice notice= Notice.builder()
+                    .userInfoId(courier.getUserInfoId())
+                    .title(String.format(MQConstant.COURIER_ARRANGE_TITLE, arrangement.getOrderNum()))
+                    .isAdminMessage(false)
+                    .content(MQConstant.COURIER_ARRANGE_CONTENT).build();
+            streamBridge.send(MQConstant.NOTICE_EXCHANGE, MessageBuilder.withPayload(notice).build());
+        });
+
+    }
+
+    @Override
+    public IPage<ArrangementDTO> getArrangementByQuery(QueryVO queryVO) {
+        Page<ArrangementDTO> page=new Page<>(queryVO.getPageNum(),queryVO.getPageSize());
+        return arrangementMapper.getArrangementByQuery(page,queryVO);
+    }
+
+    @Override
+    public ArrangementDTO getCourierArrangement() {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        return arrangementMapper.getArrangementByUserInfoId(userInfoDTO.getId());
     }
 
 
@@ -232,6 +299,12 @@ public class LogisticServiceImpl implements LogisticService {
         resultPairDTOList.sort(Comparator.comparingDouble(ResultPairDTO::getDistance));
         return resultPairDTOList;
     }
+    private UserInfoDTO getUserInfo(){
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        return userFeignClient.getUserInfo(userId).getData();
+    }
     public List<Arrangement> getArrangement(AddressInfo from, AddressInfo to, Goods goods) {
         Long fromAreaId = from.getAreaId();
         Long toAreaId = to.getAreaId();
@@ -319,7 +392,6 @@ public class LogisticServiceImpl implements LogisticService {
 
         return result;
     }
-    @Transactional(rollbackFor = Exception.class)
     public void lockArrange(List<Arrangement> arrangementList){
         arrangementList.forEach(arrangement -> {
             if(arrangement.getStepId()==3L||arrangement.getStepId()==4L){

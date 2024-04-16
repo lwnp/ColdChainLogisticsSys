@@ -3,6 +3,7 @@ package com.xzit.ordercenter.controller;
 import com.alipay.api.AlipayApiException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.order.model.dto.GoodsDTO;
+import com.xzit.common.order.model.dto.OrderDTO;
 import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.order.model.vo.OrderVO;
 import com.xzit.common.sys.entity.ServerResponse;
@@ -71,6 +72,21 @@ public class OrderController {
     @Operation(summary = "下单生成支付宝支付链接")
     ServerResponse<String> generateAlipayUrl(@RequestBody @Valid OrderVO orderVO) {
         return ServerResponse.success(orderService.generateAlipayUrl(orderVO));
+    }
+    @PostMapping("/getOrderByQuery")
+    @Operation(summary = "管理员分页获取所有订单")
+    ServerResponse<IPage<OrderDTO>> getOrderByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(orderService.getOrderByQuery(queryVO));
+    }
+    @PostMapping("/getActiveOderByQuery")
+    @Operation(summary = "管理员分页获取所有进行中订单")
+    ServerResponse<IPage<OrderDTO>> getActiveOderByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(orderService.getActiveOderByQuery(queryVO));
+    }
+    @GetMapping("/getUnpaidOrder")
+    @Operation(summary = "获取未支付订单")
+    ServerResponse<OrderDTO> getUnpaidOrder(){
+        return ServerResponse.success(orderService.getUnpaidOrder());
     }
 
 }

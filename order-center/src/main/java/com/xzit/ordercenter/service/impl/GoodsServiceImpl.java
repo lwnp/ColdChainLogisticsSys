@@ -1,9 +1,12 @@
 package com.xzit.ordercenter.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.api.user.feign.UserFeignClient;
 import com.xzit.common.order.entity.Goods;
+import com.xzit.common.order.entity.Order;
 import com.xzit.common.order.model.dto.GoodsDTO;
 import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.sys.constant.MQConstant;
@@ -15,6 +18,7 @@ import com.xzit.common.user.entity.AuthUser;
 import com.xzit.common.user.entity.UserInfo;
 import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.ordercenter.mapper.GoodsMapper;
+import com.xzit.ordercenter.mapper.OrderMapper;
 import com.xzit.ordercenter.service.GoodsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -24,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -33,6 +38,7 @@ public class GoodsServiceImpl implements GoodsService {
     private final StreamBridge streamBridge;
     private final GoodsMapper goodsMapper;
     private final UserFeignClient userFeignClient;
+    private final OrderMapper orderMapper;
 
     @Override
     public void addGoods(GoodsVO goodsVO) {
@@ -173,6 +179,10 @@ public class GoodsServiceImpl implements GoodsService {
         UserInfoDTO userInfoDTO=userFeignClient.getUserInfo(userId).getData();
         if(!Objects.equals(userInfoDTO.getId(), goods.getUserInfoId())){
             throw new BizException("you can't delete other's goods");
+        }
+        Order order=orderMapper.selectOne(new QueryWrapper<Order>().eq("goods_id",goodsId).and(q->q.eq("is_active",1)));
+        if (order!=null){
+            throw new BizException("该货物被订单占用,无法删除");
         }
         goodsMapper.deleteById(goodsId);
     }

@@ -22,6 +22,7 @@ public class ArrangementDTO {
     String carNum;
     String courierName;
     String belong;
+    String nextAddress;
     LocalDateTime createTime;
     LocalDateTime updateTime;
 }
