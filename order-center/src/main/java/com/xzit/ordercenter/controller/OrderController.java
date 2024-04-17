@@ -97,5 +97,31 @@ public class OrderController {
     ServerResponse<String> uploadGoodsImage(@RequestBody MultipartFile file){
         return ServerResponse.success(fileService.uploadFile(file, OrderConstant.ORDER_SEPARATOR));
     }
+    @PostMapping("/getUserOrderByQuery")
+    @Operation(summary = "用户分页获取所有订单")
+    ServerResponse<IPage<OrderDTO>> getUserOrderByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(orderService.getUserOrderByQuery(queryVO));
+    }
+    @PostMapping("/getUserActiveOrderByQuery")
+    @Operation(summary = "用户分页获取所有进行中订单")
+    ServerResponse<IPage<OrderDTO>> getUserActiveOrderByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(orderService.getUserActiveOrderByQuery(queryVO));
+    }
+    @PostMapping("/getReceiverOrderByQuery")
+    @Operation(summary = "收件人分页获取进行中收货订单")
+    ServerResponse<IPage<OrderDTO>> getReceiverOrderByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(orderService.getReceiverOrderByQuery(queryVO));
+    }
+    @PostMapping("/getReceiverHistoryOrderByQuery")
+    @Operation(summary = "收件人分页获取所有历史收货订单")
+    ServerResponse<IPage<OrderDTO>> getReceiverHistoryOrderByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(orderService.getReceiverHistoryOrderByQuery(queryVO));
+    }
+    @DeleteMapping("/deleteOrder/{orderId}")
+    @Operation(summary = "用户删除订单")
+    ServerResponse<IPage<OrderDTO>> deleteOrder(@PathVariable Long orderId){
+        orderService.deleteOrder(orderId);
+        return ServerResponse.success();
+    }
 
 }

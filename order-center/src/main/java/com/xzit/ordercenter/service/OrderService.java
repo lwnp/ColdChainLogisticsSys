@@ -20,4 +20,8 @@ public interface OrderService {
     IPage<OrderDTO> getUserOrderByQuery(QueryVO queryVO);
     IPage<OrderDTO> getUserActiveOrderByQuery(QueryVO queryVO);
     OrderDTO getUnpaidOrder();
+    void finishOrder(String orderNum);
+    IPage<OrderDTO> getReceiverOrderByQuery(QueryVO queryVO);
+    IPage<OrderDTO> getReceiverHistoryOrderByQuery(QueryVO queryVO);
+    void deleteOrder(Long orderId);
 }

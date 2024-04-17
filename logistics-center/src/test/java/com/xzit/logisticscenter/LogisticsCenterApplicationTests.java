@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzit.common.logistics.entity.Area;
 import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.entity.FeeStates;
+import com.xzit.common.logistics.entity.LogisticFlow;
 import com.xzit.logisticscenter.mapper.AreaMapper;
 import com.xzit.logisticscenter.mapper.ArrangementMapper;
 import com.xzit.logisticscenter.mapper.FeeStatesMapper;
+import com.xzit.logisticscenter.mapper.LogisticFlowMapper;
 import com.xzit.logisticscenter.service.impl.LogisticServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,22 @@ class LogisticsCenterApplicationTests {
     FeeStatesMapper statesMapper;
     @Autowired
     ArrangementMapper arrangementMapper;
+    @Autowired
+    LogisticFlowMapper logisticFlowMapper;
 
     @Test
     void contextLoads() {
-        List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num","orderNum").and(q->q.eq("step_id",5)));
-        System.out.println(arrangementList);
+        List<String> testData = new ArrayList<>();
+        testData.add("110000");
+        testData.add("110100");
+        testData.add("110101");
+        LogisticFlow logisticFlow = LogisticFlow.builder()
+                .orderNum("123456")
+                .description("测试数据")
+                .weight(10.0)
+                .images(testData)
+                .build();
+        logisticFlowMapper.insert(logisticFlow);
 
     }
 

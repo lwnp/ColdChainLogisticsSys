@@ -147,6 +147,39 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void finishOrder(String orderNum) {
+        Order order=orderMapper.selectOne(new QueryWrapper<Order>().eq("order_num", orderNum));
+        order.setIsActive(false);
+        orderMapper.updateById(order);
+    }
+
+    @Override
+    public IPage<OrderDTO> getReceiverOrderByQuery(QueryVO queryVO) {
+        UserInfoDTO userInfoDTO = getUserInfo();
+        Page<OrderDTO> page = new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return orderMapper.getReceiverOrderByQuery(page, queryVO,userInfoDTO.getId());
+    }
+
+    @Override
+    public IPage<OrderDTO> getReceiverHistoryOrderByQuery(QueryVO queryVO) {
+        UserInfoDTO userInfoDTO = getUserInfo();
+        Page<OrderDTO> page = new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return orderMapper.getReceiverHistoryOrderByQuery(page, queryVO,userInfoDTO.getId());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteOrder(Long orderId) {
+        Order order=orderMapper.selectById(orderId);
+        UserInfoDTO userInfoDTO = getUserInfo();
+        if(order.getIsActive()||!order.getUserInfoId().equals(userInfoDTO.getId())){
+            throw new BizException("非法操作");
+        }else{
+            orderMapper.deleteById(orderId);
+        }
+    }
+
+    @Override
     public Order getOrderByOrderNum(String orderNum) {
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("order_num", orderNum);

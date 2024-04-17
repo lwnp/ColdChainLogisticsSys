@@ -16,4 +16,6 @@ public interface OrderMapper extends BaseMapper<Order> {
     IPage<OrderDTO> getUserOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
     IPage<OrderDTO> getUserActiveOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
     OrderDTO getUnpaidOrder(@Param("userInfoId") Long userInfoId);
+    IPage<OrderDTO> getReceiverOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
+    IPage<OrderDTO> getReceiverHistoryOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
 }

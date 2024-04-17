@@ -73,4 +73,9 @@
             and (ar.order_num like concat('%',#{queryVO.query},'%') or lc.number like concat('%',#{queryVO.query},'%') or ar.create_time like concat('%',#{queryVO.query},'%'))
         </if>
     </select>
+    <select id="getActiveArrangementList" resultType="com.xzit.common.logistics.entity.Arrangement">
+        select a.* from t_arrangement a
+                 left join t_logistics_courier lc on lc.id=a.courier_id
+                 where (a.status_id=1 or a.status_id=2) and lc.user_info_id=#{userInfoId}
+    </select>
 </mapper>

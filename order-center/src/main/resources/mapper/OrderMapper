@@ -107,4 +107,40 @@
                  left join t_order_goods og on og.id=o.goods_id
         where o.is_active=1 and o.is_pay=0 and u.user_info_id=#{userInfoId}
     </select>
+    <select id="getReceiverOrderByQuery" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
+        select ro.* from (select o.*,
+                              u.username,
+                              og.name as goods_name,
+                              getAddressById(o.sender_address_id) as sender_address,
+                              getAddressById(o.receive_address_id) as receiver_address,
+                              getPhoneById(o.sender_address_id) as sender_phone,
+                              getPhoneById(o.receive_address_id) as receiver_phone,
+                              getNameById(o.receive_address_id) as receiver_name,
+                              getNameById(o.sender_address_id) as sender_name
+                       from t_order o
+                                left join t_user u on o.user_info_id=u.user_info_id
+                                left join t_order_goods og on og.id=o.goods_id
+                       where o.is_active=1 and o.is_pay=1) ro ,t_user_info tui  where tui.phone=receiver_phone and tui.id=#{userInfoId}
+        <if test="!queryVO.query.isEmpty()">
+            and (ro.username like concat('%',#{queryVO.query},'%') or ro.sender_address like concat('%',#{queryVO.query},'%') or ro.receiver_address like concat('%',#{queryVO.query},'%') or ro.create_time like concat('%',#{queryVO.query},'%') )
+        </if>
+    </select>
+    <select id="getReceiverHistoryOrderByQuery" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
+        select ro.* from (select o.*,
+        u.username,
+        og.name as goods_name,
+        getAddressById(o.sender_address_id) as sender_address,
+        getAddressById(o.receive_address_id) as receiver_address,
+        getPhoneById(o.sender_address_id) as sender_phone,
+        getPhoneById(o.receive_address_id) as receiver_phone,
+        getNameById(o.receive_address_id) as receiver_name,
+        getNameById(o.sender_address_id) as sender_name
+        from t_order o
+        left join t_user u on o.user_info_id=u.user_info_id
+        left join t_order_goods og on og.id=o.goods_id
+        where o.is_active=0 and o.is_pay=1) ro ,t_user_info tui  where tui.phone=receiver_phone and tui.id=#{userInfoId}
+        <if test="!queryVO.query.isEmpty()">
+            and (ro.username like concat('%',#{queryVO.query},'%') or ro.sender_address like concat('%',#{queryVO.query},'%') or ro.receiver_address like concat('%',#{queryVO.query},'%') or ro.create_time like concat('%',#{queryVO.query},'%') )
+        </if>
+    </select>
 </mapper>

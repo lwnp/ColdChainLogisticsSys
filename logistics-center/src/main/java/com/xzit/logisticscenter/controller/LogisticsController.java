@@ -36,6 +36,7 @@ public class LogisticsController {
     private final FeeStatesService feeStatesService;
     private final LogisticService logisticService;
     private final FileService fileService;
+    private final LogisticFlowService logisticFlowService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -302,5 +303,75 @@ public class LogisticsController {
         return ServerResponse.success(fileService.uploadFile(file, LogisticConstant.IMAGE_SEPARATOR));
     }
 
+    @PostMapping("/senderStationArriveConfirm")
+    @Operation(summary = "发件站到达确认")
+    ServerResponse<?> senderStationArriveConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.senderStationArriveConfirm(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/senderStationReleaseConfirm")
+    @Operation(summary = "发件站释放确认")
+    ServerResponse<?> senderStationReleaseConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.senderStationReleaseConfirm(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/receiveStationArriveConfirm")
+    @Operation(summary = "收件站到达确认")
+    ServerResponse<?> receiveStationArriveConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.receiveStationArriveConfirm(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/receiveStationReleaseConfirm")
+    @Operation(summary = "收件站释放确认")
+    ServerResponse<?> receiveStationReleaseConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.receiveStationReleaseConfirm(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/receiveConfirm")
+    @Operation(summary = "收件确认")
+    ServerResponse<?> receiveConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.receiveConfirm(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/senderCenterArriveConfirmAndStored")
+    @Operation(summary = "发件中心到达并入库确认")
+    ServerResponse<?> senderCenterArriveConfirmAndStored(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.senderCenterArriveConfirmAndStored(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/receiveCenterArriveConfirmAndStored")
+    @Operation(summary = "收件中心到达并入库确认")
+    ServerResponse<?> receiveCenterArriveConfirmAndStored(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.receiveCenterArriveConfirmAndStored(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/senderCenterDropAndReleaseConfirm")
+    @Operation(summary = "发件中心出库并释放确认")
+    ServerResponse<?> senderCenterDropAndReleaseConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.senderCenterDropAndReleaseConfirm(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/receiveCenterDropAndReleaseConfirm")
+    @Operation(summary = "收件中心出库并释放确认")
+    ServerResponse<?> receiveCenterDropAndReleaseConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO) {
+        logisticService.receiveCenterDropAndReleaseConfirm(logisticFlowVO);
+        return ServerResponse.success();
+    }
+    @PostMapping("/releaseArrange/{userInfoId}/{orderNum}")
+    @Operation(summary = "释放物流任务占用")
+    ServerResponse<?> releaseArrange(@PathVariable Long userInfoId,@PathVariable String orderNum){
+        logisticService.releaseArrange(userInfoId,orderNum);
+        return ServerResponse.success();
+    }
+    @GetMapping("/getSimpleLogisticFlowByOrderNum/{orderNum}")
+    @Operation(summary = "用户获取物流进程")
+    ServerResponse<List<SimpleLogisticFlowDTO>> getSimpleLogisticFlowByOrderNum(@PathVariable String orderNum){
+        return ServerResponse.success(logisticFlowService.getSimpleLogisticFlowByOrderNum(orderNum));
+    }
+    @GetMapping("/getLogisticFlowByOrderNum/{orderNum}")
+    @Operation(summary = "管理员获取物流进程")
+    ServerResponse<List<LogisticFlowDTO>> getLogisticFlowByOrderNum(@PathVariable String orderNum){
+        return ServerResponse.success(logisticFlowService.getLogisticFlowByOrderNum(orderNum));
+    }
 
 }

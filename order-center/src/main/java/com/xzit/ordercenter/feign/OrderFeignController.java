@@ -17,4 +17,10 @@ public class OrderFeignController implements OrderFeignClient {
     public ServerResponse<Order> getOrderByOrderNum(String orderNum) {
         return ServerResponse.success(orderService.getOrderByOrderNum(orderNum));
     }
+
+    @Override
+    public ServerResponse<?> orderFinish(String orderNum) {
+        orderService.finishOrder(orderNum);
+        return ServerResponse.success();
+    }
 }

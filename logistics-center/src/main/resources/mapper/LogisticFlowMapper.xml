@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.logisticscenter.mapper.LogisticFlowMapper">
+    <resultMap id="simpleLogisticFlowResultMapper" type="com.xzit.common.logistics.model.dto.SimpleLogisticFlowDTO">
+        <id property="id" column="id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="description" column="description"/>
+        <result property="timeStamp" column="time_stamp"/>
+    </resultMap>
+    <resultMap id="LogisticFlowResultMapper" type="com.xzit.common.logistics.model.dto.LogisticFlowDTO">
+        <id property="id" column="id"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="description" column="description"/>
+        <result property="timeStamp" column="time_stamp"/>
+        <result property="images" column="images" typeHandler="com.xzit.common.sys.typehandler.StringListTypeHandler"/>
+        <result property="weight" column="weight"/>
+    </resultMap>
+    <select id="getSimpleLogisticFlowByOrderNum"
+            resultType="com.xzit.common.logistics.model.dto.SimpleLogisticFlowDTO" resultMap="simpleLogisticFlowResultMapper">
+        select * from t_logistics_flow where order_num = #{orderNum}
+    </select>
+    <select id="getLogisticFlowByOrderNum" resultType="com.xzit.common.logistics.model.dto.LogisticFlowDTO" resultMap="LogisticFlowResultMapper">
+        select * from t_logistics_flow where order_num = #{orderNum}
+    </select>
+
+</mapper>

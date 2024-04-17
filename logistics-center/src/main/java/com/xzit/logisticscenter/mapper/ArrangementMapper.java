@@ -17,4 +17,5 @@ public interface ArrangementMapper extends BaseMapper<Arrangement> {
     IPage<ArrangementDTO> getArrangementByQuery(IPage<ArrangementDTO> page,@Param("queryVO") QueryVO queryVO);
     List<ArrangementDTO> getArrangementByUserInfoId(@Param("userInfoId") Long userInfoId);
     IPage<ArrangementDTO> getHistoryArrangementByQuery(IPage<ArrangementDTO> page,@Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
+    List<Arrangement> getActiveArrangementList(@Param("userInfoId") Long userInfoId);
 }

@@ -27,5 +27,7 @@ public interface LogisticService {
     void receiveCenterArriveConfirmAndStored(LogisticFlowVO logisticFlowVO);
     void receiveCenterDropAndReleaseConfirm(LogisticFlowVO logisticFlowVO);
     void receiveStationArriveConfirm(LogisticFlowVO logisticFlowVO);
+    void receiveStationReleaseConfirm(LogisticFlowVO logisticFlowVO);
     void receiveConfirm(LogisticFlowVO logisticFlowVO);
+    void releaseArrange(Long userInfoId,String orderNum);
 }

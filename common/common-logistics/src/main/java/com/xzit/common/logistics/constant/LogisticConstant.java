@@ -8,4 +8,7 @@ public interface LogisticConstant {
     String IMAGE_SEPARATOR="/logisticImage/";
     String ARRIVE ="货物到达%s,确认人%s";
     String RELEASE="货物已离开%s,下一站是%s,确认人%s";
+    String DELIVERY="货物已离开%s,开始配送,请保持手机畅通,确认人%s";
+    String COMPLETE="配送完毕,配送员%s";
+    String OVER="订单完成,已关闭";
 }

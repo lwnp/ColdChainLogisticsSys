@@ -11,4 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface OrderFeignClient {
     @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/order/getOrderByOrderNum")
     ServerResponse<Order> getOrderByOrderNum(@RequestParam(value = "orderNum") String orderNum);
+    @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/order/orderFinish")
+    ServerResponse<?> orderFinish(@RequestParam(value = "orderNum") String orderNum);
 }
