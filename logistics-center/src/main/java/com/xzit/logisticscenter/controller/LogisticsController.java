@@ -270,9 +270,14 @@ public class LogisticsController {
         return ServerResponse.success(logisticService.getArrangementByQuery(queryVO));
     }
     @GetMapping("/getCourierArrangement")
-    @Operation(summary = "获取快递员自己任务")
-    ServerResponse<ArrangementDTO> getCourierArrangement(){
+    @Operation(summary = "获取快递员自己当前任务")
+    ServerResponse<List<ArrangementDTO>> getCourierArrangement(){
         return ServerResponse.success(logisticService.getCourierArrangement());
+    }
+    @PostMapping("/getCourierHistoryArrangement")
+    @Operation(summary = "快递员分页查询历史任务")
+    ServerResponse<IPage<ArrangementDTO>> getCourierHistoryArrangement(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(logisticService.getHistoryArrangementByQuery(queryVO));
     }
     @GetMapping("/startShipping/{orderNum}")
     @Operation(summary = "开始物流")

@@ -1,14 +1,8 @@
 package com.xzit.logisticscenter.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzit.common.logistics.entity.AddressInfo;
-import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.model.dto.*;
-import com.xzit.common.logistics.model.vo.AddressInfoVO;
 import com.xzit.common.logistics.model.vo.LogisticFlowVO;
-import com.xzit.common.order.entity.Goods;
-import com.xzit.common.order.entity.Order;
-import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.sys.model.vo.QueryVO;
 
 import java.math.BigDecimal;
@@ -22,7 +16,13 @@ public interface LogisticService {
     void recoverArrange(String orderNum);
     void startShipping(String orderNum);
     IPage<ArrangementDTO> getArrangementByQuery(QueryVO queryVO);
-    ArrangementDTO getCourierArrangement();
+    List<ArrangementDTO> getCourierArrangement();
     AddressInfoDTO courierGetUserAddress(String orderNum);
     void pickUpConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
+    void senderStationArriveConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
+    void senderStationReleaseConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
+    void senderCenterArriveConfirmAndStored(String orderNum, LogisticFlowVO logisticFlowVO);
+    IPage<ArrangementDTO> getHistoryArrangementByQuery(QueryVO queryVO);
+    void senderCenterDropAndReleaseConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
+    void receiveCenterArriveConfirmAndStored(String orderNum, LogisticFlowVO logisticFlowVO);
 }

@@ -1,6 +1,5 @@
 package com.xzit.logisticscenter.service.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,13 +9,11 @@ import com.xzit.api.user.feign.UserFeignClient;
 import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.*;
 import com.xzit.common.logistics.model.dto.*;
-import com.xzit.common.logistics.model.vo.AddressInfoVO;
 import com.xzit.common.logistics.model.vo.LocationResultVO;
 import com.xzit.common.logistics.model.vo.LocationVO;
 import com.xzit.common.logistics.model.vo.LogisticFlowVO;
 import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.entity.Order;
-import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.order.utils.FeeCalculator;
 import com.xzit.common.sys.constant.MQConstant;
 import com.xzit.common.sys.entity.Notice;
@@ -25,9 +22,7 @@ import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.common.user.model.dto.UserInfoDTO;
 import com.xzit.logisticscenter.mapper.*;
-import com.xzit.logisticscenter.service.FeeStatesService;
 import com.xzit.logisticscenter.service.LogisticService;
-import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -42,6 +37,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,6 +57,8 @@ public class LogisticServiceImpl implements LogisticService {
     private final UserFeignClient userFeignClient;
     private final StreamBridge streamBridge;
     private final LogisticFlowMapper logisticFlowMapper;
+    private final StationMapper stationMapper;
+    private final WarehouseLogMapper warehouseLogMapper;
 
     @Override
     public Map<String, Double> address2Location(String address) {
@@ -93,6 +91,9 @@ public class LogisticServiceImpl implements LogisticService {
        Map<String,Double> fromLocation=address2Location(fromAddress.getAddress());
        Map<String,Double> toLocation=address2Location(toAddress.getAddress());
        Double distance=getDistance(fromLocation,toLocation);
+       if (distance<50){
+           throw new BizException("距离太近，请重新选择");
+       }
        ArrangeDistanceDTO  arrangeDistanceDTO=new ArrangeDistanceDTO();
         arrangeDistanceDTO.setDistance(distance*2);
         arrangeDistanceDTO.setArrangementList(arrangements);
@@ -174,7 +175,7 @@ public class LogisticServiceImpl implements LogisticService {
     }
 
     @Override
-    public ArrangementDTO getCourierArrangement() {
+    public List<ArrangementDTO> getCourierArrangement() {
         UserInfoDTO userInfoDTO=getUserInfo();
         return arrangementMapper.getArrangementByUserInfoId(userInfoDTO.getId());
     }
@@ -196,7 +197,7 @@ public class LogisticServiceImpl implements LogisticService {
             return addressInfoMapper.getAddressById(order.getReceiveAddressId());
         }
         else {
-            throw new BizException("除了收件和配送，无需获取用户地址");
+            throw new BizException("除了收件和配送，无需获取用户地址信息");
         }
     }
 
@@ -204,22 +205,174 @@ public class LogisticServiceImpl implements LogisticService {
     public void pickUpConfirm(String orderNum, LogisticFlowVO logisticFlowVO) {
         UserInfoDTO userInfoDTO=getUserInfo();
         Courier courier=courierMapper.selectOne(new QueryWrapper<Courier>().eq("user_info_id",userInfoDTO.getId()));
-        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("courier_id",courier.getId())));
+        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("courier_id",courier.getId()).and(f->f.eq("step_id",1))));
         if(arrangement==null){
             throw new BizException("非法订单号");
         }
-        if(arrangement.getStepId()!=1L){
-            throw new BizException("步骤错误");
-        }
-        if(arrangement.getStatusId()!=1L){
-            throw new BizException("状态错误");
-        }
-
-        arrangement.setStatusId(2L);
+        arrangement.setStatusId(3L);
         arrangementMapper.updateById(arrangement);
+        Arrangement toStation=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",2).and(f->f.eq("courier_id",courier.getId()))));
+        if(toStation==null||toStation.getStatusId()!=1L){
+            throw new BizException("非法操作");
+        }
+        toStation.setStatusId(2L);
+        arrangementMapper.updateById(toStation);
         LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
         logisticFlow.setDescription(String.format(LogisticConstant.PICK_UP, userInfoDTO.getUsername()));
         logisticFlowMapper.insert(logisticFlow);
+    }
+
+    @Override
+    public void senderStationArriveConfirm(String orderNum, LogisticFlowVO logisticFlowVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        long logisticId=0;
+        List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",2)));
+        for(Arrangement arrangement:arrangementList){
+            if (arrangement.getStatusId()!=2L){
+                throw new BizException("状态错误");
+            }
+            logisticId=arrangement.getToId();
+            arrangement.setStatusId(3L);
+            arrangementMapper.updateById(arrangement);
+        }
+        Station station=stationMapper.selectById(logisticId);
+        LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
+        logisticFlow.setDescription(LogisticConstant.ARRIVE.formatted(station.getName(), userInfoDTO.getUsername()));
+        logisticFlowMapper.insert(logisticFlow);
+    }
+
+    @Override
+    public void senderStationReleaseConfirm(String orderNum, LogisticFlowVO logisticFlowVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        long toId=0,logisticId=0;
+        List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",3)));
+        for(Arrangement arrangement:arrangementList){
+            if (arrangement.getStatusId()!=1L){
+                throw new BizException("状态错误");
+            }
+            arrangement.setStatusId(2L);
+            Courier courier=courierMapper.selectById(arrangement.getCourierId());
+            toId=arrangement.getToId();
+            logisticId=courier.getLogisticId();
+            Notice notice= Notice.builder()
+                    .userInfoId(courier.getUserInfoId())
+                    .title(String.format(MQConstant.COURIER_ARRANGE_TITLE, arrangement.getOrderNum()))
+                    .isAdminMessage(false)
+                    .content(MQConstant.COURIER_ARRANGE_CONTENT).build();
+            arrangementMapper.updateById(arrangement);
+            streamBridge.send(MQConstant.NOTICE_EXCHANGE, MessageBuilder.withPayload(notice).build());
+        }
+        Station station=stationMapper.selectById(logisticId);
+        Center center=centerMapper.selectById(toId);
+        LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
+        logisticFlow.setDescription(LogisticConstant.RELEASE.formatted(station.getName(),center.getName(),userInfoDTO.getUsername()));
+        logisticFlowMapper.insert(logisticFlow);
+    }
+
+    @Override
+    public void senderCenterArriveConfirmAndStored(String orderNum, LogisticFlowVO logisticFlowVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        long toId=0;
+        long nextStepId=4L;
+        List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",3)));
+        for(Arrangement arrangement:arrangementList){
+            if (arrangement.getStatusId()!=2L){
+                throw new BizException("状态错误");
+            }
+            arrangement.setStatusId(3L);
+            toId=arrangement.getToId();
+            arrangementMapper.updateById(arrangement);
+        }
+        Center center=centerMapper.selectById(toId);
+        LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
+        logisticFlow.setDescription(LogisticConstant.ARRIVE.formatted(center.getName(), userInfoDTO.getUsername()));
+        logisticFlowMapper.insert(logisticFlow);
+        List<Arrangement> nextArrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",4)));
+        if(nextArrangementList.isEmpty()){
+            nextStepId=5L;
+        }
+        WarehouseLog warehouseLog= WarehouseLog.builder()
+                .orderNum(orderNum)
+                .centerId(toId)
+                .preStepId(3L)
+                .nextStepId(nextStepId)
+                .userInfoId(userInfoDTO.getId())
+                .inTime(LocalDateTime.now())
+                .build();
+        warehouseLogMapper.insert(warehouseLog);
+
+    }
+
+    @Override
+    public IPage<ArrangementDTO> getHistoryArrangementByQuery(QueryVO queryVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        Page<ArrangementDTO> page=new Page<>(queryVO.getPageNum(),queryVO.getPageSize());
+        return arrangementMapper.getHistoryArrangementByQuery(page,queryVO,userInfoDTO.getId());
+    }
+
+    @Override
+    public void senderCenterDropAndReleaseConfirm(String orderNum, LogisticFlowVO logisticFlowVO) {
+        UserInfoDTO userInfoDTO=getUserInfo();
+        WarehouseLog warehouseLog=warehouseLogMapper.selectOne(new QueryWrapper<WarehouseLog>().eq("order_num",orderNum));
+        if(warehouseLog==null|| !warehouseLog.getIsStored()){
+            throw new BizException("库存状态错误");
+        }
+        long logisticId=0;
+        if(warehouseLog.getNextStepId()==4L){
+            List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",4)));
+            for (Arrangement arrangement : arrangementList){
+                if(arrangement.getStatusId()!=1L){
+                    throw new BizException("状态错误");
+                }
+                arrangement.setStatusId(2L);
+                Courier courier = courierMapper.selectById(arrangement.getCourierId());
+                Notice notice= Notice.builder()
+                        .userInfoId(courier.getUserInfoId())
+                        .title(String.format(MQConstant.COURIER_ARRANGE_TITLE, arrangement.getOrderNum()))
+                        .isAdminMessage(false)
+                        .content(MQConstant.COURIER_ARRANGE_CONTENT).build();
+                logisticId=arrangement.getToId();
+                arrangementMapper.updateById(arrangement);
+                streamBridge.send(MQConstant.NOTICE_EXCHANGE, MessageBuilder.withPayload(notice).build());
+            }
+            LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
+            Center fromCenter=centerMapper.selectById(warehouseLog.getCenterId());
+            Center toCenter = centerMapper.selectById(logisticId);
+            logisticFlow.setDescription(LogisticConstant.RELEASE.formatted(fromCenter.getName(),toCenter.getName(),userInfoDTO.getUsername()));
+            logisticFlowMapper.insert(logisticFlow);
+        }
+        if(warehouseLog.getNextStepId()==5L){
+            List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",5)));
+            for (Arrangement arrangement : arrangementList){
+                if(arrangement.getStatusId()!=1L){
+                    throw new BizException("状态错误");
+                }
+                arrangement.setStatusId(2L);
+                Courier courier = courierMapper.selectById(arrangement.getCourierId());
+                Notice notice= Notice.builder()
+                        .userInfoId(courier.getUserInfoId())
+                        .title(String.format(MQConstant.COURIER_ARRANGE_TITLE, arrangement.getOrderNum()))
+                        .isAdminMessage(false)
+                        .content(MQConstant.COURIER_ARRANGE_CONTENT).build();
+                logisticId=arrangement.getToId();
+                arrangementMapper.updateById(arrangement);
+                streamBridge.send(MQConstant.NOTICE_EXCHANGE, MessageBuilder.withPayload(notice).build());
+            }
+            Station station=stationMapper.selectById(logisticId);
+            Center center=centerMapper.selectById(warehouseLog.getCenterId());
+            LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
+            logisticFlow.setDescription(LogisticConstant.RELEASE.formatted(station.getName(),center.getName(),userInfoDTO.getUsername()));
+            logisticFlowMapper.insert(logisticFlow);
+        }
+        warehouseLog.setOutTime(LocalDateTime.now());
+        warehouseLog.setIsStored(false);
+        warehouseLog.setUserInfoId(userInfoDTO.getId());
+        warehouseLogMapper.updateById(warehouseLog);
+    }
+
+    @Override
+    public void receiveCenterArriveConfirmAndStored(String orderNum, LogisticFlowVO logisticFlowVO) {
+
     }
 
 

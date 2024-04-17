@@ -15,5 +15,6 @@ import java.util.List;
 public interface ArrangementMapper extends BaseMapper<Arrangement> {
     void batchInsert(List<Arrangement> arrangements);
     IPage<ArrangementDTO> getArrangementByQuery(IPage<ArrangementDTO> page,@Param("queryVO") QueryVO queryVO);
-    ArrangementDTO getArrangementByUserInfoId(@Param("userInfoId") Long userInfoId);
+    List<ArrangementDTO> getArrangementByUserInfoId(@Param("userInfoId") Long userInfoId);
+    IPage<ArrangementDTO> getHistoryArrangementByQuery(IPage<ArrangementDTO> page,@Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
 }

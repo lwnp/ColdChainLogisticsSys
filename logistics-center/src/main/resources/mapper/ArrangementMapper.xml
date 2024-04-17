@@ -52,6 +52,25 @@
                  left join t_step st on st.id=ar.step_id
                  left join t_status sta on sta.id=ar.status_id
                  left join t_order o on o.order_num=ar.order_num
-        where o.is_pay=1 and o.is_active=1 and co.user_info_id=#{userInfoId}
+        where o.is_pay=1 and o.is_active=1 and co.user_info_id=#{userInfoId} and (ar.status_id=1 or ar.status_id=2)
+    </select>
+    <select id="getHistoryArrangementByQuery" resultType="com.xzit.common.logistics.model.dto.ArrangementDTO" resultMap="arrangementDTOResultMapper">
+        select ar.*,
+               lc.number as car_num,
+               GetUsernameByUserInfoId(co.user_info_id) as courier_name,
+               get_name_by_id(co.type_id,co.logistic_id) as belong,
+               st.name as step,
+               sta.name as status,
+               GetAddress(ar.step_id,ar.order_num,ar.to_id) as next_address
+        from t_arrangement ar
+                 left join t_logistics_car lc on ar.car_id = lc.id
+                 left join t_logistics_courier co on co.id=ar.courier_id
+                 left join t_step st on st.id=ar.step_id
+                 left join t_status sta on sta.id=ar.status_id
+                 left join t_order o on o.order_num=ar.order_num
+        where o.is_pay=1 and co.user_info_id=#{userInfoId} and ar.status_id=3
+        <if test="!queryVO.query.isEmpty()">
+            and (ar.order_num like concat('%',#{queryVO.query},'%') or lc.number like concat('%',#{queryVO.query},'%') or ar.create_time like concat('%',#{queryVO.query},'%'))
+        </if>
     </select>
 </mapper>
