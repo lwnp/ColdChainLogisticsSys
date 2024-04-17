@@ -290,10 +290,10 @@ public class LogisticsController {
     ServerResponse<AddressInfoDTO> getUserAddress(@PathVariable String orderNum){
         return ServerResponse.success(logisticService.courierGetUserAddress(orderNum));
     }
-    @PutMapping("/pickUpConfirm/{orderNum}")
+    @PutMapping("/pickUpConfirm")
     @Operation(summary = "确认揽件")
-    ServerResponse<?> pickUpConfirm(@PathVariable String orderNum,@RequestBody @Valid LogisticFlowVO logisticFlowVO){
-        logisticService.pickUpConfirm(orderNum,logisticFlowVO);
+    ServerResponse<?> pickUpConfirm(@RequestBody @Valid LogisticFlowVO logisticFlowVO){
+        logisticService.pickUpConfirm(logisticFlowVO);
         return ServerResponse.success();
     }
     @PostMapping("/logisticImageUpload")

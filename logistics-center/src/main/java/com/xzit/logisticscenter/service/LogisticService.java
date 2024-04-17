@@ -18,11 +18,14 @@ public interface LogisticService {
     IPage<ArrangementDTO> getArrangementByQuery(QueryVO queryVO);
     List<ArrangementDTO> getCourierArrangement();
     AddressInfoDTO courierGetUserAddress(String orderNum);
-    void pickUpConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
-    void senderStationArriveConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
-    void senderStationReleaseConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
-    void senderCenterArriveConfirmAndStored(String orderNum, LogisticFlowVO logisticFlowVO);
+    void pickUpConfirm(LogisticFlowVO logisticFlowVO);
+    void senderStationArriveConfirm(LogisticFlowVO logisticFlowVO);
+    void senderStationReleaseConfirm(LogisticFlowVO logisticFlowVO);
+    void senderCenterArriveConfirmAndStored(LogisticFlowVO logisticFlowVO);
     IPage<ArrangementDTO> getHistoryArrangementByQuery(QueryVO queryVO);
-    void senderCenterDropAndReleaseConfirm(String orderNum, LogisticFlowVO logisticFlowVO);
-    void receiveCenterArriveConfirmAndStored(String orderNum, LogisticFlowVO logisticFlowVO);
+    void senderCenterDropAndReleaseConfirm(LogisticFlowVO logisticFlowVO);
+    void receiveCenterArriveConfirmAndStored(LogisticFlowVO logisticFlowVO);
+    void receiveCenterDropAndReleaseConfirm(LogisticFlowVO logisticFlowVO);
+    void receiveStationArriveConfirm(LogisticFlowVO logisticFlowVO);
+    void receiveConfirm(LogisticFlowVO logisticFlowVO);
 }
