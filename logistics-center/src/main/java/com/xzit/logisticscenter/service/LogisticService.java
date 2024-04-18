@@ -30,4 +30,5 @@ public interface LogisticService {
     void receiveStationReleaseConfirm(LogisticFlowVO logisticFlowVO);
     void receiveConfirm(LogisticFlowVO logisticFlowVO);
     void releaseArrange(Long userInfoId,String orderNum);
+    Long getArrangementIdByCarId(Long carId);
 }

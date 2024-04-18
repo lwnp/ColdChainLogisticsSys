@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.logcenter.mapper.ExceptionLogMapper">
+    <resultMap id="exceptionLogDTOResultMapper" type="com.xzit.common.log.model.dto.ExceptionLogDTO">
+        <id property="id" column="id"/>
+        <result property="optUri" column="opt_uri"/>
+        <result property="optMethod" column="opt_method"/>
+        <result property="requestMethod" column="request_method"/>
+        <result property="requestParam" column="request_param"/>
+        <result property="optDesc" column="opt_desc"/>
+        <result property="exceptionInfo" column="exception_info"/>
+        <result property="ipAddress" column="ip_address"/>
+        <result property="ipSource" column="ip_source"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <select id="getExceptionLogByQuery" resultType="com.xzit.common.log.model.dto.ExceptionLogDTO" resultMap="exceptionLogDTOResultMapper">
+        select tel.* from t_exception_log tel
+        <if test="!queryVO.query.isEmpty()">
+            where tel.create_time like concat('%',#{queryVO.query},'%') or tel.opt_uri like concat('%',#{queryVO.query},'%') or tel.opt_method like concat('%',#{queryVO.query},'%') or tel.request_method like concat('%',#{queryVO.query},'%') or tel.request_param like concat('%',#{queryVO.query},'%') or tel.opt_desc like concat('%',#{queryVO.query},'%') or tel.exception_info like concat('%',#{queryVO.query},'%') or tel.ip_address like concat('%',#{queryVO.query},'%') or tel.ip_source like concat('%',#{queryVO.query},'%')
+        </if>
+    </select>
+
 
 </mapper>

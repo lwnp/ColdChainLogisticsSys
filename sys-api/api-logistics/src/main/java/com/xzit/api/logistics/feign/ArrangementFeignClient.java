@@ -23,4 +23,6 @@ public interface ArrangementFeignClient {
     ServerResponse<BigDecimal> arrangeOrder(@RequestParam(value = "orderNum")String orderNum);
     @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/logistics/recoverArrange")
     ServerResponse<?> recoverArrange(@RequestParam(value = "orderNum")String orderNum);
+    @GetMapping(FeignClientAuthorizationConstant.AUTHORIZATION_PREFIX+"/logistics/getArrangementList")
+    ServerResponse<Long> getArrangementIdByCarId(@RequestParam(value = "carId")Long carId);
 }

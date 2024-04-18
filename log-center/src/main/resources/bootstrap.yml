@@ -2,7 +2,7 @@ spring:
   application:
     name: log-service
   profiles:
-    active: dev
+    active: prod
   main:
     allow-bean-definition-overriding: true
 mybatis-plus:
@@ -10,5 +10,17 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan:
+        - com.xzit.logcenter.controller
 server:
   port: 8002

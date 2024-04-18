@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.logcenter.mapper.OperationLogMapper">
+    <resultMap id="operationLogDTOResultMapper" type="com.xzit.common.log.model.dto.OperationLogDTO">
+        <id property="id" column="id"/>
+        <result property="optModule" column="opt_module"/>
+        <result property="optUri" column="opt_uri"/>
+        <result property="optType" column="opt_type"/>
+        <result property="optMethod" column="opt_method"/>
+        <result property="optDesc" column="opt_desc"/>
+        <result property="requestMethod" column="request_method"/>
+        <result property="requestParam" column="request_param"/>
+        <result property="responseData" column="response_data"/>
+        <result property="userId" column="user_id"/>
+        <result property="ipAddress" column="ip_address"/>
+        <result property="ipSource" column="ip_source"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <select id="getOperationLogByQuery" resultType="com.xzit.common.log.model.dto.OperationLogDTO" resultMap="operationLogDTOResultMapper">
+        select tol.* from t_operation_log tol
+        <if test="!queryVO.query.isEmpty()">
+            where tol.create_time like concat('%',#{queryVO.query},'%') or tol.opt_module like concat('%',#{queryVO.query},'%') or tol.opt_uri like concat('%',#{queryVO.query},'%') or tol.opt_type like concat('%',#{queryVO.query},'%') or tol.opt_method like concat('%',#{queryVO.query},'%') or tol.opt_desc like concat('%',#{queryVO.query},'%') or tol.request_method like concat('%',#{queryVO.query},'%') or tol.request_param like concat('%',#{queryVO.query},'%') or tol.response_data like concat('%',#{queryVO.query},'%') or tol.ip_address like concat('%',#{queryVO.query},'%') or tol.ip_source like concat('%',#{queryVO.query},'%')
+        </if>
+    </select>
+
 
 </mapper>

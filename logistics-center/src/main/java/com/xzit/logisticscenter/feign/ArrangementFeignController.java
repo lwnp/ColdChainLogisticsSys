@@ -33,5 +33,10 @@ public class ArrangementFeignController implements ArrangementFeignClient {
         return ServerResponse.success();
     }
 
+    @Override
+    public ServerResponse<Long> getArrangementIdByCarId(Long carId) {
+        return ServerResponse.success(logisticService.getArrangementIdByCarId(carId));
+    }
+
 
 }

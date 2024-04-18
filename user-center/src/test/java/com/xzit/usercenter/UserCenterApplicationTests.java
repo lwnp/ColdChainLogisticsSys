@@ -37,11 +37,16 @@ class UserCenterApplicationTests {
     }
     @Test
     void roleTest(){
-        Long[] ids=new Long[]{46L,47L,48L,49L,55L,56L,57L,62L,63L,66L,68L};
+        long[] ids=new long[]{62,63,66,68,75,83,84,86,87,88,93};
+//        Long[] ids=new Long[]{71L,74L,75L,76L,77L,80L,99L};
         for (Long id:ids){
-            RoleResource roleResource=new RoleResource(null,4L,id);
+            RoleResource roleResource=new RoleResource(null,3L,id);
             resourceRoleMapper.insert(roleResource);
         }
+//        for(int i=70;i<105;i++){
+//            RoleResource roleResource=new RoleResource(null,1L, (long) i);
+//            resourceRoleMapper.insert(roleResource);
+//        }
     }
 
 }

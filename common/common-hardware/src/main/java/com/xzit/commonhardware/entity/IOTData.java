@@ -1,8 +1,6 @@
 package com.xzit.commonhardware.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -20,14 +18,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @TableName("t_iot_data")
 public class IOTData {
+    @TableId(type = IdType.AUTO)
     Long id;
-    Long carId;
-    Double dioxide;        //单位ppm
-    Double temperature;           //单位摄氏度
-    Double humidity;
-    Double oxide;
-    Double methane;
-    Double ethylene;
+    Long arrangementId;
     Double longitude;
     Double latitude;
     @JsonSerialize(using = LocalDateTimeSerializer.class)

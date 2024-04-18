@@ -123,5 +123,10 @@ public class OrderController {
         orderService.deleteOrder(orderId);
         return ServerResponse.success();
     }
+    @GetMapping("/continuePay/{orderNum}")
+    @Operation(summary = "继续支付",description = "若在订单创建后未立即支付,可通过该接口重新获取支付链接,这个并非重新生成的，时效5min是从订单创建开始的")
+    ServerResponse<String> continuePay(@PathVariable String orderNum){
+        return ServerResponse.success(orderService.continuePay(orderNum));
+    }
 
 }

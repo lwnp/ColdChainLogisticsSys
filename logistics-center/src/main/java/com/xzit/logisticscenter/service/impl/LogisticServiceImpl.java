@@ -187,7 +187,7 @@ public class LogisticServiceImpl implements LogisticService {
     public AddressInfoDTO courierGetUserAddress(String orderNum) {
         UserInfoDTO userInfoDTO=getUserInfo();
         Courier courier=courierMapper.selectOne(new QueryWrapper<Courier>().eq("user_info_id",userInfoDTO.getId()));
-        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("courier_id",courier.getId())));
+        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("courier_id",courier.getId()).and(f->f.eq("step_id",1).or(g->g.eq("step_id",6)))));
         if(arrangement==null){
             throw new BizException("获取用户地址信息失败");
         }
@@ -254,6 +254,12 @@ public class LogisticServiceImpl implements LogisticService {
         String orderNum=logisticFlowVO.getOrderNum();
         UserInfoDTO userInfoDTO=getUserInfo();
         long toId=0,logisticId=0;
+        List<Arrangement> arr=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",2)));
+        arr.forEach(arrangement -> {
+            if(arrangement.getStatusId()!=3L){
+                throw new BizException("状态错误");
+            }
+        });
         List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",3)));
         for(Arrangement arrangement:arrangementList){
             if (arrangement.getStatusId()!=1L){
@@ -432,7 +438,7 @@ public class LogisticServiceImpl implements LogisticService {
     public void receiveCenterDropAndReleaseConfirm(LogisticFlowVO logisticFlowVO) {
         String orderNum=logisticFlowVO.getOrderNum();
         UserInfoDTO userInfoDTO = getUserInfo();
-        long toId=0;
+        long toId=0,centerId = 0;
         List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",5)));
         for(Arrangement arrangement : arrangementList){
             if(arrangement.getStatusId()!=1L){
@@ -441,6 +447,7 @@ public class LogisticServiceImpl implements LogisticService {
             arrangement.setStatusId(2L);
             toId=arrangement.getToId();
             Courier courier = courierMapper.selectById(arrangement.getCourierId());
+            centerId=courier.getLogisticId();
             Notice notice= Notice.builder()
                     .userInfoId(courier.getUserInfoId())
                     .title(String.format(MQConstant.COURIER_ARRANGE_TITLE, arrangement.getOrderNum()))
@@ -449,7 +456,9 @@ public class LogisticServiceImpl implements LogisticService {
             streamBridge.send(MQConstant.NOTICE_EXCHANGE, MessageBuilder.withPayload(notice).build());
             arrangementMapper.updateById(arrangement);
         }
-        WarehouseLog warehouseLog=warehouseLogMapper.selectOne(new QueryWrapper<WarehouseLog>().eq("order_num",orderNum));
+
+        long finalCenterId = centerId;
+        WarehouseLog warehouseLog=warehouseLogMapper.selectOne(new QueryWrapper<WarehouseLog>().eq("order_num",orderNum).and(q->q.eq("center_id", finalCenterId)));
         if(warehouseLog == null||!warehouseLog.getIsStored()){
             throw new BizException("库存状态错误");
         }
@@ -478,9 +487,6 @@ public class LogisticServiceImpl implements LogisticService {
         UserInfoDTO userInfoDTO = getUserInfo();
         long logisticId=0;
         List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",5)));
-        if (arrangementList.isEmpty()){
-            arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",4)));
-        }
         for(Arrangement arrangement : arrangementList){
             if(arrangement.getStatusId()!=2L){
                 throw new BizException("状态错误");
@@ -492,6 +498,7 @@ public class LogisticServiceImpl implements LogisticService {
         LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
         Station station=stationMapper.selectById(logisticId);
         logisticFlow.setDescription(LogisticConstant.ARRIVE.formatted(station.getName(),userInfoDTO.getUsername()));
+        logisticFlowMapper.insert(logisticFlow);
     }
 
     @Override
@@ -500,6 +507,12 @@ public class LogisticServiceImpl implements LogisticService {
         String orderNum=logisticFlowVO.getOrderNum();
         UserInfoDTO userInfoDTO = getUserInfo();
         long logisticId=0;
+        List<Arrangement> arr=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",5)));
+        arr.forEach(arrangement -> {
+            if(arrangement.getStatusId()!=3){
+                throw new BizException("状态错误");
+            }
+        });
         List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",6)));
         for(Arrangement arrangement : arrangementList){
             if(arrangement.getStatusId()!=1L){
@@ -519,6 +532,7 @@ public class LogisticServiceImpl implements LogisticService {
         LogisticFlow logisticFlow= BeanCopyUtil.copyObject(logisticFlowVO,LogisticFlow.class);
         Station station=stationMapper.selectById(logisticId);
         logisticFlow.setDescription(LogisticConstant.DELIVERY.formatted(station.getName(),userInfoDTO.getUsername()));
+        logisticFlowMapper.insert(logisticFlow);
 
     }
 
@@ -527,7 +541,8 @@ public class LogisticServiceImpl implements LogisticService {
     public void receiveConfirm(LogisticFlowVO logisticFlowVO) {
         String orderNum=logisticFlowVO.getOrderNum();
         UserInfoDTO userInfoDTO = getUserInfo();
-        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",6)));
+        Courier courier=courierMapper.selectOne(new QueryWrapper<Courier>().eq("user_info_id",userInfoDTO.getId()));
+        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",6).and(f->f.eq("courier_id",courier.getId()))));
         if(arrangement==null||arrangement.getStatusId()!=2L){
             throw new BizException("状态错误");
         }
@@ -537,7 +552,7 @@ public class LogisticServiceImpl implements LogisticService {
         logisticFlow.setDescription(LogisticConstant.COMPLETE.formatted(userInfoDTO.getUsername()));
         logisticFlowMapper.insert(logisticFlow);
         List<Arrangement> arrangementList=arrangementMapper.selectList(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",6)));
-        List<Arrangement> list = arrangementList.stream().filter(a->a.getStepId()==3).toList();
+        List<Arrangement> list = arrangementList.stream().filter(a->a.getStatusId()==3).toList();
         if(list.size()==arrangementList.size()){
             LogisticFlow completeFlow=new LogisticFlow();
             completeFlow.setOrderNum(orderNum);
@@ -562,6 +577,15 @@ public class LogisticServiceImpl implements LogisticService {
                 carMapper.updateById(car);
             }
         }
+    }
+
+    @Override
+    public Long getArrangementIdByCarId(Long carId) {
+        Arrangement arrangement=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("car_id",carId).and(q->q.eq("status_id",2)));
+        if(arrangement==null){
+            return null;
+        }
+        return arrangement.getId();
     }
 
 

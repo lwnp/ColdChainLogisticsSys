@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.hardwarecenter.mapper.IOTMapper">
     <insert id="batchInsert" parameterType="java.util.List">
-        INSERT INTO t_iot_data (car_id, dioxide, temperature, humidity, longitude, latitude, create_time,oxide,methane,ethylene)
+        INSERT INTO t_iot_data (arrangement_id,  create_time ,longitude,latitude)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.carId}, #{item.dioxide}, #{item.temperature}, #{item.humidity}, #{item.longitude}, #{item.latitude}, #{item.createTime},#{item.oxide},#{item.methane},#{item.ethylene})
+            (#{item.arrangementId}, #{item.createTime}, #{item.longitude}, #{item.latitude})
         </foreach>
     </insert>
 

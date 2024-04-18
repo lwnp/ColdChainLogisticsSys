@@ -1,4 +1,7 @@
 spring:
+  data:
+    redis:
+      database: 1
   cloud:
     stream:
       bindings:
@@ -17,6 +20,15 @@ spring:
           refresh: true
         shared-configs[1]:
           data-id: sys-common-resource-security.yaml
+          refresh: true
+        shared-configs[2]:
+          data-id: sys-common-redis.yaml
+          refresh: true
+        shared-configs[3]:
+          data-id: sys-common-upload.yaml
+          refresh: true
+        shared-configs[4]:
+          data-id: sys-common-rabbit.yaml
           refresh: true
 alipay:
   notify: http://www.marshmello.tech/notify

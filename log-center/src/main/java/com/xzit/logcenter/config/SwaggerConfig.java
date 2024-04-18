@@ -1,6 +1,5 @@
-package com.xzit.usercenter.config;
+package com.xzit.logcenter.config;
 
-import com.xzit.common.sys.constant.AuthorizationConstant;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.models.security.OAuthFlow;
 import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,9 +42,9 @@ public class SwaggerConfig {
                 .addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION))
                 // 接口信息定义
                 .info(new Info()
-                        .title("用户模块")
+                        .title("日志模块")
                         .version("0.0.1")
-                        .description("用户模块接口")
+                        .description("日志模块接口")
                         .license(new License().name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0"))
                 );

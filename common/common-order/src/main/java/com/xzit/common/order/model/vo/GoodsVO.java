@@ -44,8 +44,4 @@ public class GoodsVO {
     Double maxMethane;
     @Schema(name = "minMethane", description = "货物最低甲烷",type = "double",requiredMode = Schema.RequiredMode.AUTO)
     Double minMethane;
-    @Schema(name = "maxEthylene", description = "货物最高乙烯",type = "double",requiredMode = Schema.RequiredMode.AUTO)
-    Double maxEthylene;
-    @Schema(name = "minEthylene", description = "货物最低乙烯",type = "double",requiredMode = Schema.RequiredMode.AUTO)
-    Double minEthylene;
 }

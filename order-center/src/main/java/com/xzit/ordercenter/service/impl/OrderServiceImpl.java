@@ -19,6 +19,7 @@ import com.xzit.ordercenter.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
     private final ArrangementFeignClient arrangementFeignClient;
     private final AlipayService alipayService;
     private final RabbitTemplate rabbitTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public String generateAlipayUrl(OrderVO orderVO) {
@@ -98,7 +101,9 @@ public class OrderServiceImpl implements OrderService {
 
         rabbitTemplate.convertAndSend("order-exchange", "order-create", order);
         try{
-            return alipayService.generatePaymentUrl(order);
+            String payUrl = alipayService.generatePaymentUrl(order);
+            redisTemplate.opsForValue().set(orderNum,payUrl,5, TimeUnit.MINUTES);
+            return payUrl;
         }catch (Exception e){
             orderMapper.deleteById(order.getId());
             return null;
@@ -177,6 +182,15 @@ public class OrderServiceImpl implements OrderService {
         }else{
             orderMapper.deleteById(orderId);
         }
+    }
+
+    @Override
+    public String continuePay(String orderNum) {
+        String payUrl=redisTemplate.opsForValue().get(orderNum);
+        if (payUrl==null){
+            throw new BizException("订单不存在或已支付");
+        }
+        return payUrl;
     }
 
     @Override

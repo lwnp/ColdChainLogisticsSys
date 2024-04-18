@@ -12,14 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IOTDataVO {
-    Long carId;
-    Double dioxide;
-    Double temperature;
-    Double humidity;
+    Long arrangementId;
     Double longitude;
     Double latitude;
-    Double oxide;
-    Double methane;
-    Double ethylene;
     LocalDateTime createTime;
 }

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   cloud:
     gateway:
       globalcors:
@@ -42,6 +42,18 @@ spring:
             - Path=/message/**
           filters:
             - StripPrefix=1
+        - id: log-center
+          uri: lb://log-service
+          predicates:
+            - Path=/log/**
+          filters:
+            - StripPrefix=1
+        - id: hardware-center
+          uri: lb://hardware-service
+          predicates:
+            - Path=/hardware/**
+          filters:
+            - StripPrefix=1
 knife4j:
   gateway:
     enabled: true
@@ -49,7 +61,7 @@ knife4j:
     discover:
       enabled: true
       version: openapi3
-      excluded-services: hardware-service,log-service
+      excluded-services: hardware-service
   cors: true
 logging:
   level:

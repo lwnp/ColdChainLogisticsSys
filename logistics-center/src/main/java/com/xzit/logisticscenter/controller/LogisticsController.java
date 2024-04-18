@@ -357,7 +357,7 @@ public class LogisticsController {
         logisticService.receiveCenterDropAndReleaseConfirm(logisticFlowVO);
         return ServerResponse.success();
     }
-    @PostMapping("/releaseArrange/{userInfoId}/{orderNum}")
+    @GetMapping("/releaseArrange/{userInfoId}/{orderNum}")
     @Operation(summary = "释放物流任务占用")
     ServerResponse<?> releaseArrange(@PathVariable Long userInfoId,@PathVariable String orderNum){
         logisticService.releaseArrange(userInfoId,orderNum);

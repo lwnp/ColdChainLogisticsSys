@@ -14,26 +14,49 @@ public class StringListTypeHandler extends BaseTypeHandler<List<String>> {
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, List<String> parameter, JdbcType jdbcType) throws SQLException {
-        // 将 List 转换为逗号分隔的字符串存储到数据库中
+        // Convert List to a comma-separated string and store it in the database
         ps.setString(i, String.join(",", parameter));
     }
 
     @Override
     public List<String> getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        // 从数据库中读取逗号分隔的字符串并转换为 List
+        // Get the column value from the ResultSet
         String value = rs.getString(columnName);
-        return Arrays.asList(value.split(","));
+        // Check if the value is null
+        if (value != null) {
+            // Split the value and return the result as a List
+            return Arrays.asList(value.split(","));
+        } else {
+            // If the value is null, return null or an empty List, depending on your requirements
+            return null; // Or return an empty List: return Collections.emptyList();
+        }
     }
 
     @Override
     public List<String> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+        // Get the column value from the ResultSet
         String value = rs.getString(columnIndex);
-        return Arrays.asList(value.split(","));
+        // Check if the value is null
+        if (value != null) {
+            // Split the value and return the result as a List
+            return Arrays.asList(value.split(","));
+        } else {
+            // If the value is null, return null or an empty List, depending on your requirements
+            return null; // Or return an empty List: return Collections.emptyList();
+        }
     }
 
     @Override
     public List<String> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+        // Get the column value from the CallableStatement
         String value = cs.getString(columnIndex);
-        return Arrays.asList(value.split(","));
+        // Check if the value is null
+        if (value != null) {
+            // Split the value and return the result as a List
+            return Arrays.asList(value.split(","));
+        } else {
+            // If the value is null, return null or an empty List, depending on your requirements
+            return null; // Or return an empty List: return Collections.emptyList();
+        }
     }
 }

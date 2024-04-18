@@ -34,7 +34,7 @@
         left join t_user u on o.user_info_id=u.user_info_id
         left join t_order_goods og on og.id=o.goods_id
         <if test="!queryVO.query.isEmpty()">
-            where u.username like concat('%',#{queryVO.query},'%') or og.name like  concat('%',#{queryVO.query},'%') or o.create_time like ('%',#{queryVO.query},'%')
+            where u.username like concat('%',#{queryVO.query},'%') or og.name like concat('%',#{queryVO.query},'%') or o.create_time like ('%',#{queryVO.query},'%')
         </if>
 
     </select>

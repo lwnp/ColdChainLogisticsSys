@@ -46,7 +46,6 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsVO.getMaxHumidity() == null || goodsVO.getMinHumidity() == null ||
                 goodsVO.getMaxDioxide() == null || goodsVO.getMinDioxide() == null ||
                 goodsVO.getMaxMethane() == null || goodsVO.getMinMethane() == null ||
-                goodsVO.getMaxEthylene() == null || goodsVO.getMinEthylene() == null ||
                 goodsVO.getMaxOxide() == null || goodsVO.getMinOxide() == null) {
             throw new BizException("All temperature, humidity, dioxide, methane, ethylene, and oxide values must be provided.");
         }
@@ -62,9 +61,6 @@ public class GoodsServiceImpl implements GoodsService {
         }
         if (goodsVO.getMaxMethane() < goodsVO.getMinMethane()) {
             throw new BizException("maxMethane must be greater than minMethane");
-        }
-        if (goodsVO.getMaxEthylene() < goodsVO.getMinEthylene()) {
-            throw new BizException("maxEthylene must be greater than minEthylene");
         }
         if (goodsVO.getMaxOxide() < goodsVO.getMinOxide()) {
             throw new BizException("maxOxide must be greater than minOxide");

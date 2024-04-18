@@ -37,8 +37,6 @@ public class Goods {
     Double minOxide;
     Double maxMethane;
     Double minMethane;
-    Double maxEthylene;
-    Double minEthylene;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")

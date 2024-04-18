@@ -24,4 +24,5 @@ public interface OrderService {
     IPage<OrderDTO> getReceiverOrderByQuery(QueryVO queryVO);
     IPage<OrderDTO> getReceiverHistoryOrderByQuery(QueryVO queryVO);
     void deleteOrder(Long orderId);
+    String continuePay(String orderNum);
 }

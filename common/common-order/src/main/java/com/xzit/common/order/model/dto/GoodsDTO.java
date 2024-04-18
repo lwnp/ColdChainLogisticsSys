@@ -30,8 +30,6 @@ public class GoodsDTO {
     Double minOxide;
     Double maxMethane;
     Double minMethane;
-    Double maxEthylene;
-    Double minEthylene;
     LocalDateTime createTime;
     LocalDateTime updateTime;
 
