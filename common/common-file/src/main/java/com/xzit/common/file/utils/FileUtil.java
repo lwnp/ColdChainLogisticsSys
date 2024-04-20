@@ -1,4 +1,4 @@
-package com.xzit.common.file.config.utils;
+package com.xzit.common.file.utils;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.log4j.Log4j2;

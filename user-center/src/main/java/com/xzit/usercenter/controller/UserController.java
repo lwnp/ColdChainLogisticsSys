@@ -2,7 +2,7 @@ package com.xzit.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.api.log.annotation.OptLog;
-import com.xzit.common.file.config.service.FileService;
+import com.xzit.common.file.service.FileService;
 import com.xzit.common.sys.annotation.AccessLimit;
 import com.xzit.common.sys.constant.UserConstant;
 import com.xzit.common.sys.entity.ServerResponse;

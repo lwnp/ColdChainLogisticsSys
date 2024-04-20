@@ -1,4 +1,4 @@
-package com.xzit.common.file.config.service;
+package com.xzit.common.file.service;
 
 import org.springframework.web.multipart.MultipartFile;
 

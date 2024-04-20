@@ -2,7 +2,7 @@ spring:
   application:
     name: message-service
   profiles:
-    active: prod
+    active: dev
   main:
     allow-bean-definition-overriding: true
 springdoc:

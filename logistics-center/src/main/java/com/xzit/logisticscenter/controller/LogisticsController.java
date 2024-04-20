@@ -1,11 +1,9 @@
 package com.xzit.logisticscenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzit.common.file.config.service.FileService;
+import com.xzit.common.file.service.FileService;
 import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.Area;
-import com.xzit.common.logistics.entity.Arrangement;
-import com.xzit.common.logistics.entity.FeeStates;
 import com.xzit.common.logistics.model.dto.*;
 import com.xzit.common.logistics.model.vo.*;
 import com.xzit.common.sys.annotation.AccessLimit;

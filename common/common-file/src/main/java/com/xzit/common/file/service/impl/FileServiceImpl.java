@@ -1,9 +1,9 @@
-package com.xzit.common.file.config.service.impl;
+package com.xzit.common.file.service.impl;
 
 
 import com.xzit.common.file.config.properties.MinioProperties;
-import com.xzit.common.file.config.service.FileService;
-import com.xzit.common.file.config.utils.FileUtil;
+import com.xzit.common.file.service.FileService;
+import com.xzit.common.file.utils.FileUtil;
 import com.xzit.common.sys.exception.BizException;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
