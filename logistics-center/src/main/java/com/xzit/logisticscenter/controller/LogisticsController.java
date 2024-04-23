@@ -14,11 +14,20 @@ import com.xzit.logisticscenter.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 @RestController
@@ -370,6 +379,18 @@ public class LogisticsController {
     @Operation(summary = "管理员获取物流进程")
     ServerResponse<List<LogisticFlowDTO>> getLogisticFlowByOrderNum(@PathVariable String orderNum){
         return ServerResponse.success(logisticFlowService.getLogisticFlowByOrderNum(orderNum));
+    }
+    @GetMapping("/getLocationFile/{orderNum}")
+    @Operation(summary = "获取物流定位文件")
+    void getLocationFile(@PathVariable String orderNum,HttpServletResponse response) throws IOException {
+        InputStream is = new ByteArrayInputStream(logisticFlowService.getLocationFile(orderNum));
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename="+orderNum+".json");
+        OutputStream os =response.getOutputStream();
+        IOUtils.copy(is,os);
+        os.flush();
+        os.close();
+        is.close();
     }
 
 }

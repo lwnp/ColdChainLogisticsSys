@@ -27,5 +27,8 @@ spring:
         shared-configs[2]:
           data-id: sys-common-stream.yaml
           refresh: true
+        shared-configs[3]:
+          data-id: sys-common-rabbit.yaml
+          refresh: true
 mqtt:
   url: tcp://120.55.161.138:6656

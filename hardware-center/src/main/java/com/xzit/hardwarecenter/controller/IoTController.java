@@ -17,4 +17,5 @@ public class IoTController {
     Mono<ServerResponse<Long>> getArrangeId(@PathVariable Long carId){
         return Mono.just(ServerResponse.success(ioTService.getArrangementIdByCarId(carId)));
     }
+
 }

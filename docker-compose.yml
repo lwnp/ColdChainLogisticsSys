@@ -20,6 +20,8 @@ services:
       - mynetwork
   hardware-service:
     container_name: hardware-service
+    environment:
+      - "SPRING_AMQP_DESERIALIZATION_TRUST_ALL=true"
     build:
       context: ./hardware-center
       dockerfile: Dockerfile

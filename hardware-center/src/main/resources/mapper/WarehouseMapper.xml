@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.hardwarecenter.mapper.WarehouseMapper">
+    <insert id="batchInsert" parameterType="java.util.List">
+            INSERT INTO t_warehouse_data (center_id, temperature, humidity, dioxide, oxide, methane, create_time)
+            VALUES
+            <foreach item="item" collection="list" separator=",">
+                (#{item.centerId}, #{item.temperature}, #{item.humidity}, #{item.dioxide}, #{item.oxide}, #{item.methane}, #{item.createTime})
+            </foreach>
+    </insert>
+</mapper>

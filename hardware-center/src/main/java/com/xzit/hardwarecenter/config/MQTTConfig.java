@@ -31,11 +31,25 @@ public class MQTTConfig {
     @Bean
     public MessageProducer inbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-                new MqttPahoMessageDrivenChannelAdapter(serverUrl,MQTTConstant.CLIENT_ID, MQTTConstant.TOPIC);
+                new MqttPahoMessageDrivenChannelAdapter(serverUrl,MQTTConstant.CLIENT_ID, MQTTConstant.CAR_TOPIC);
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(0);
         adapter.setOutputChannel(mqttInputChannel());
+        return adapter;
+    }
+    @Bean
+    public MessageChannel warehouseChannel(){
+        return new DirectChannel();
+    }
+    @Bean
+    public MessageProducer warehouseInbound(){
+        MqttPahoMessageDrivenChannelAdapter adapter =
+                new MqttPahoMessageDrivenChannelAdapter(serverUrl,MQTTConstant.CLIENT_ID, MQTTConstant.WAREHOUSE_TOPIC);
+        adapter.setCompletionTimeout(5000);
+        adapter.setConverter(new DefaultPahoMessageConverter());
+        adapter.setQos(0);
+        adapter.setOutputChannel(warehouseChannel());
         return adapter;
     }
 }

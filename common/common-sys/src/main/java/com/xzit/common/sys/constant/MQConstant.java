@@ -14,4 +14,5 @@ public interface MQConstant {
     String USER_PAID_CONTENT="请尽快通知相应人员运输,订单安排见管理页";
     String COURIER_ARRANGE_TITLE="订单%s任务状态已更新";
     String COURIER_ARRANGE_CONTENT="请查看自己任务";
+    String WAREHOUSE_EXCHANGE="warehouse-out-1";
 }

@@ -3,11 +3,11 @@ package com.xzit.hardwarecenter.handler;
 import com.alibaba.fastjson2.JSON;
 import com.xzit.common.sys.constant.MQConstant;
 import com.xzit.common.sys.utils.BeanCopyUtil;
-import com.xzit.commonhardware.constant.MQTTConstant;
-import com.xzit.commonhardware.entity.IOTData;
-import com.xzit.commonhardware.model.vo.IOTDataVO;
+import com.xzit.commonhardware.entity.WarehouseData;
+import com.xzit.commonhardware.model.vo.WarehouseDataVO;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
@@ -18,16 +18,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MessageHandlerImpl implements MessageHandler {
-    private final StreamBridge streamBridge;
+public class WarehouseMessageHandlerImpl implements MessageHandler {
+    private final RabbitTemplate rabbitTemplate;
     @Override
-    @ServiceActivator(inputChannel = "mqttInputChannel")
+    @ServiceActivator(inputChannel = "warehouseChannel")
     public void handleMessage(@NotNull Message<?> message) throws MessagingException {
-        IOTDataVO dataVO = JSON.parseObject(message.getPayload().toString(),IOTDataVO.class);
-        IOTData data= BeanCopyUtil.copyObject(dataVO,IOTData.class);
-        Message<IOTData> iotDataMessage= MessageBuilder.withPayload(data).build();
-        streamBridge.send(MQConstant.IOT_EXCHANGE, iotDataMessage);
+        WarehouseDataVO warehouseDataVO= JSON.parseObject(message.getPayload().toString(),WarehouseDataVO.class);
+        WarehouseData warehouseData= BeanCopyUtil.copyObject(warehouseDataVO,WarehouseData.class);
+        rabbitTemplate.convertAndSend("warehouse-exchange","warehouse-create",warehouseData);
 
     }
-
 }
