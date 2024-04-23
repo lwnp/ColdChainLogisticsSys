@@ -1,4 +1,4 @@
-package com.xzit.commonhardware;
+package com.xzit.common.hardware;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

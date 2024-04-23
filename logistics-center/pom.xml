@@ -158,6 +158,11 @@
             <artifactId>common-hardware</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.xzit</groupId>
+            <artifactId>api-hardware</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
     </dependencies>
 

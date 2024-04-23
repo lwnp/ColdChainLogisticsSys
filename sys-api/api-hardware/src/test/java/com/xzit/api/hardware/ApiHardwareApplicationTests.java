@@ -1,10 +1,10 @@
-package com.xzit.commonhardware;
+package com.xzit.api.hardware;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CommonHardwareApplicationTests {
+class ApiHardwareApplicationTests {
 
     @Test
     void contextLoads() {

@@ -1,19 +1,16 @@
 package com.xzit.hardwarecenter.handler;
 
 import com.alibaba.fastjson2.JSON;
-import com.xzit.common.sys.constant.MQConstant;
 import com.xzit.common.sys.utils.BeanCopyUtil;
-import com.xzit.commonhardware.entity.WarehouseData;
-import com.xzit.commonhardware.model.vo.WarehouseDataVO;
+import com.xzit.common.hardware.entity.WarehouseData;
+import com.xzit.common.hardware.model.vo.WarehouseDataVO;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,4 +1,4 @@
-package com.xzit.commonhardware.model.vo;
+package com.xzit.common.hardware.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

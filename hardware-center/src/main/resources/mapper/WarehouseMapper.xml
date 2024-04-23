@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xzit.hardwarecenter.mapper.WarehouseMapper">
+    <resultMap id="warehouseDataResultMapper" type="com.xzit.common.hardware.model.dto.WarehouseDataDTO">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="temperature" property="temperature"/>
+        <result column="humidity" property="humidity"/>
+        <result column="dioxide" property="dioxide"/>
+        <result column="oxide" property="oxide"/>
+        <result column="methane" property="methane"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
     <insert id="batchInsert" parameterType="java.util.List">
             INSERT INTO t_warehouse_data (center_id, temperature, humidity, dioxide, oxide, methane, create_time)
             VALUES
@@ -8,4 +18,12 @@
                 (#{item.centerId}, #{item.temperature}, #{item.humidity}, #{item.dioxide}, #{item.oxide}, #{item.methane}, #{item.createTime})
             </foreach>
     </insert>
+    <select id="getWarehouseData" resultType="com.xzit.common.hardware.model.dto.WarehouseDataDTO" resultMap="warehouseDataResultMapper">
+        SELECT wd.*, lc.name
+        FROM t_warehouse_data wd
+        LEFT JOIN t_logistics_center lc ON wd.center_id = lc.id
+        LEFT JOIN t_warehouse_log wl ON wl.center_id = wd.center_id
+        WHERE wl.order_num = #{orderNum}
+        AND (wd.create_time between wl.in_time and (select getWarehouseStatus(#{orderNum},wd.center_id)))
+    </select>
 </mapper>

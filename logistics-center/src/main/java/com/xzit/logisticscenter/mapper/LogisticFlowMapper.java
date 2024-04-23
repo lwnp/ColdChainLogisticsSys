@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzit.common.logistics.entity.LogisticFlow;
 import com.xzit.common.logistics.model.dto.LogisticFlowDTO;
 import com.xzit.common.logistics.model.dto.SimpleLogisticFlowDTO;
-import com.xzit.commonhardware.entity.IOTData;
-import com.xzit.commonhardware.entity.WarehouseData;
-import com.xzit.commonhardware.model.dto.WarehouseDataDTO;
+import com.xzit.common.hardware.entity.IOTData;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

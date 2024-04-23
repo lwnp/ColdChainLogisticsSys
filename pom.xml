@@ -43,6 +43,8 @@
 		<user.agent.version>1.20</user.agent.version>
 		<pagehelper.version>2.1.0</pagehelper.version>
 		<alipay.sdk.version>4.38.61.ALL</alipay.sdk.version>
+		<javacv.version>1.5.10</javacv.version>
+		<ffmpeg.version>6.1.1-1.5.10</ffmpeg.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -161,6 +163,26 @@
 				<groupId>com.alipay.sdk</groupId>
 				<artifactId>alipay-sdk-java</artifactId>
 				<version>${alipay.sdk.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bytedeco</groupId>
+				<artifactId>javacv</artifactId>
+				<version>${javacv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bytedeco</groupId>
+				<artifactId>javacv-platform</artifactId>
+				<version>${javacv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bytedeco</groupId>
+				<artifactId>ffmpeg</artifactId>
+				<version>${ffmpeg.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bytedeco</groupId>
+				<artifactId>ffmpeg-platform</artifactId>
+				<version>${ffmpeg.version}</version>
 			</dependency>
 
 

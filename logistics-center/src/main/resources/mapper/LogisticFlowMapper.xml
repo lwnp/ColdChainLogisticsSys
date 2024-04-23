@@ -22,7 +22,7 @@
     <select id="getLogisticFlowByOrderNum" resultType="com.xzit.common.logistics.model.dto.LogisticFlowDTO" resultMap="LogisticFlowResultMapper">
         select * from t_logistics_flow where order_num = #{orderNum}
     </select>
-    <select id="getLocationDataByOrderNum" resultType="com.xzit.commonhardware.entity.IOTData">
+    <select id="getLocationDataByOrderNum" resultType="com.xzit.common.hardware.entity.IOTData">
         SELECT id.*
         FROM t_iot_data id
                  LEFT JOIN t_arrangement a ON a.id = id.arrangement_id

@@ -1,8 +1,7 @@
 package com.xzit.hardwarecenter.listener;
 
 import com.rabbitmq.client.Channel;
-import com.xzit.common.order.entity.Order;
-import com.xzit.commonhardware.entity.WarehouseData;
+import com.xzit.common.hardware.entity.WarehouseData;
 import com.xzit.hardwarecenter.mapper.WarehouseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Message;

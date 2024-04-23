@@ -1,4 +1,4 @@
-package com.xzit.commonhardware.constant;
+package com.xzit.common.hardware.constant;
 
 public interface MQTTConstant {
     String CLIENT_ID="MY_MQTT_CLIENT";

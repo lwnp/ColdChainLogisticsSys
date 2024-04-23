@@ -1,7 +1,7 @@
 package com.xzit.hardwarecenter;
 
 import com.alibaba.fastjson2.JSON;
-import com.xzit.commonhardware.entity.IOTData;
+import com.xzit.common.hardware.entity.IOTData;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

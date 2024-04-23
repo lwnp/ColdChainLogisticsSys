@@ -2,6 +2,7 @@ package com.xzit.logisticscenter.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.file.service.FileService;
+import com.xzit.common.hardware.model.dto.WarehouseDataDTO;
 import com.xzit.common.logistics.constant.LogisticConstant;
 import com.xzit.common.logistics.entity.Area;
 import com.xzit.common.logistics.model.dto.*;
@@ -18,9 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -391,6 +389,21 @@ public class LogisticsController {
         os.flush();
         os.close();
         is.close();
+    }
+    @GetMapping("/getWarehouseData/{orderNum}")
+    @Operation(summary = "获取仓库监测数据")
+    ServerResponse<List<WarehouseDataDTO>> getWarehouseData(@PathVariable String orderNum){
+        return ServerResponse.success(logisticFlowService.getWarehouseData(orderNum));
+    }
+    @GetMapping("/getWarehouseLiveStreamUrl/{orderNum}")
+    @Operation(summary = "获取仓库实时视频流" )
+    ServerResponse<String> getLiveStreamUrl(@PathVariable String orderNum){
+        return ServerResponse.success(logisticFlowService.getWarehouseLiveStreamUrl(orderNum));
+    }
+    @GetMapping("/getCarLiveStreamUrl/{orderNum}")
+    @Operation(summary = "获取车辆实时视频流" )
+    ServerResponse<List<String>> getCarLiveStreamUrl(@PathVariable String orderNum){
+        return ServerResponse.success(logisticFlowService.getCarLiveStreamUrl(orderNum));
     }
 
 }

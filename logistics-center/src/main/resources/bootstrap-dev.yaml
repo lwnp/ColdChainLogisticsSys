@@ -47,3 +47,5 @@ upload:
     accesskey: kYt6cPBTdZQBrVLKw11S
     secretKey: MHgsnwsd39zfm4oM3Lr0zzZ8RHApB2drAupDVw3T
     bucketName: coldchainsys
+live:
+  stream: rtmp://127.0.0.1:6666/live

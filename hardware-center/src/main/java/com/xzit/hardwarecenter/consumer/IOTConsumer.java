@@ -1,6 +1,6 @@
 package com.xzit.hardwarecenter.consumer;
 
-import com.xzit.commonhardware.entity.IOTData;
+import com.xzit.common.hardware.entity.IOTData;
 import com.xzit.hardwarecenter.mapper.IOTMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

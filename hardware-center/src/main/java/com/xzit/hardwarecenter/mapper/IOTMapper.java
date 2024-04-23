@@ -1,7 +1,7 @@
 package com.xzit.hardwarecenter.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xzit.commonhardware.entity.IOTData;
+import com.xzit.common.hardware.entity.IOTData;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
