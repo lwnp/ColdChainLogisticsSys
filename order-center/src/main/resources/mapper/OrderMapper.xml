@@ -19,6 +19,21 @@
         <result property="receiverPhone" column="receiver_phone"/>
 
     </resultMap>
+    <resultMap id="orderStaticData" type="com.xzit.common.order.model.dto.OrderStaticsDataDTO">
+        <id property="month" column="month"/>
+        <result property="orderCount" column="order_count"/>
+        <result property="paymentCount" column="payment_count"/>
+    </resultMap>
+    <resultMap id="paymentStaticsData" type="com.xzit.common.order.model.dto.PaymentStaticsDataDTO">
+        <id property="totalOrder" column="total_order"/>
+        <result property="totalCompleted" column="total_completed"/>
+        <result property="inDelivery" column="in_delivery"/>
+        <result property="totalAmount" column="total_amount"/>
+    </resultMap>
+    <resultMap id="areaStaticsData" type="com.xzit.common.order.model.dto.AreaStaticsDataDTO">
+        <id property="name" column="name"/>
+        <result property="count" column="count"/>
+    </resultMap>
 
     <select id="getOrderByQuery" resultType="com.xzit.common.order.model.dto.OrderDTO" resultMap="orderDTOMapper">
         select o.*,
@@ -146,4 +161,46 @@
     <select id="getInStoreOrder" resultType="com.xzit.common.order.entity.Order">
         select o.* from t_order o left join t_warehouse_log wl on wl.order_num=o.order_num where wl.is_stored=1
     </select>
+    <select id="getOrderStaticsData" resultType="com.xzit.common.order.model.dto.OrderStaticsDataDTO" resultMap="orderStaticData">
+        SELECT months.month AS month,
+               COALESCE(SUM(CASE WHEN t_order.is_pay = 1 THEN 1 ELSE 0 END), 0) AS payment_count,
+               COALESCE(COUNT(t_order.id), 0) AS order_count
+        FROM
+            (SELECT DATE_FORMAT((CURDATE() - INTERVAL (a.a + (10 * b.a) + (100 * c.a)) MONTH), '%Y-%m') AS month
+             FROM
+                 (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS a
+                     CROSS JOIN
+                 (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS b
+                     CROSS JOIN
+                 (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) AS c
+            ) AS months
+                LEFT JOIN t_order
+                          ON DATE_FORMAT(t_order.create_time, '%Y-%m') = months.month
+        WHERE months.month >= DATE_FORMAT(NOW(), '%Y-%m-01') - INTERVAL 12 MONTH
+        GROUP BY months.month;
+    </select>
+    <select id="getPaymentStaticsData" resultType="com.xzit.common.order.model.dto.PaymentStaticsDataDTO" resultMap="paymentStaticsData">
+        SELECT
+            COUNT(*) AS total_order,
+            SUM(CASE WHEN is_pay = 1 THEN 1 ELSE 0 END) AS total_completed,
+            SUM(CASE WHEN is_active = 0 AND is_pay = 1 THEN 1 ELSE 0 END) AS in_delivery,
+            SUM(CASE WHEN is_pay = 1 THEN price ELSE 0 END) AS total_amount
+        FROM
+            t_order;
+    </select>
+    <select id="getAreaStaticsData" resultType="com.xzit.common.order.model.dto.AreaStaticsDataDTO" resultMap="areaStaticsData">
+        SELECT
+            a.province AS name,
+            COALESCE(SUM(CASE WHEN o.is_pay = 1 THEN 1 ELSE 0 END), 0) AS count
+        FROM
+            t_area a
+                LEFT JOIN
+            t_address_info ai ON ai.area_id = a.id
+                LEFT JOIN
+            t_order o ON o.receive_address_id = ai.id AND o.is_pay = 1
+        GROUP BY
+            a.province;
+    </select>
+
+
 </mapper>

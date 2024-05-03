@@ -3,8 +3,7 @@ package com.xzit.ordercenter.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzit.common.file.service.FileService;
 import com.xzit.common.order.constant.OrderConstant;
-import com.xzit.common.order.model.dto.GoodsDTO;
-import com.xzit.common.order.model.dto.OrderDTO;
+import com.xzit.common.order.model.dto.*;
 import com.xzit.common.order.model.vo.GoodsVO;
 import com.xzit.common.order.model.vo.OrderVO;
 import com.xzit.common.sys.entity.ServerResponse;
@@ -18,6 +17,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -131,6 +132,21 @@ public class OrderController {
     @Operation(summary = "用户分页获取已审核货物")
     ServerResponse<IPage<GoodsDTO>> getAvailableGoods(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(goodsService.getAvailableGoodsByQuery(queryVO));
+    }
+    @GetMapping("/getOrderStaticsData")
+    @Operation(summary = "获取12个月订单付款统计数据")
+    ServerResponse<List<OrderStaticsDataDTO>> getOrderStaticsData(){
+        return ServerResponse.success(orderService.getOrderStaticsData());
+    }
+    @GetMapping("/getPaymentStaticsData")
+    @Operation(summary = "总成交量等数据")
+    ServerResponse<PaymentStaticsDataDTO> getPaymentStaticsData(){
+        return ServerResponse.success(orderService.getPaymentStaticsData());
+    }
+    @GetMapping("/getAreaStaticsData/{areaId}")
+    @Operation(summary = "获取区域订单统计数据")
+    ServerResponse<List<AreaStaticsDataDTO>> getAreaStaticsData(@PathVariable Long areaId){
+        return ServerResponse.success(orderService.getAreaStaticsData(areaId));
     }
 
 }

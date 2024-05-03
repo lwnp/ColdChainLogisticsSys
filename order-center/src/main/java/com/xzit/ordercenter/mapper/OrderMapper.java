@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.common.order.entity.Order;
+import com.xzit.common.order.model.dto.AreaStaticsDataDTO;
 import com.xzit.common.order.model.dto.OrderDTO;
+import com.xzit.common.order.model.dto.OrderStaticsDataDTO;
+import com.xzit.common.order.model.dto.PaymentStaticsDataDTO;
 import com.xzit.common.sys.model.vo.QueryVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +24,7 @@ public interface OrderMapper extends BaseMapper<Order> {
     IPage<OrderDTO> getReceiverOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
     IPage<OrderDTO> getReceiverHistoryOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
     List<Order> getInStoreOrder();
+    List<OrderStaticsDataDTO> getOrderStaticsData();
+    PaymentStaticsDataDTO getPaymentStaticsData();
+    List<AreaStaticsDataDTO> getAreaStaticsData(@Param("areaId") Long areaId);
 }

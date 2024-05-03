@@ -5,7 +5,10 @@ import com.alipay.api.AlipayApiException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.common.order.entity.Order;
+import com.xzit.common.order.model.dto.AreaStaticsDataDTO;
 import com.xzit.common.order.model.dto.OrderDTO;
+import com.xzit.common.order.model.dto.OrderStaticsDataDTO;
+import com.xzit.common.order.model.dto.PaymentStaticsDataDTO;
 import com.xzit.common.order.model.vo.OrderVO;
 import com.xzit.common.sys.model.vo.QueryVO;
 
@@ -27,4 +30,7 @@ public interface OrderService {
     void deleteOrder(Long orderId);
     String continuePay(String orderNum);
     List<Order> getInStoreOrder();
+    List<OrderStaticsDataDTO> getOrderStaticsData();
+    PaymentStaticsDataDTO getPaymentStaticsData();
+    List<AreaStaticsDataDTO> getAreaStaticsData(Long areaId);
 }

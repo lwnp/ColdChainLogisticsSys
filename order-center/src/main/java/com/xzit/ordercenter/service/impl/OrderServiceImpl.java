@@ -7,7 +7,10 @@ import com.xzit.api.logistics.feign.ArrangementFeignClient;
 import com.xzit.api.user.feign.UserFeignClient;
 import com.xzit.common.order.entity.Goods;
 import com.xzit.common.order.entity.Order;
+import com.xzit.common.order.model.dto.AreaStaticsDataDTO;
 import com.xzit.common.order.model.dto.OrderDTO;
+import com.xzit.common.order.model.dto.OrderStaticsDataDTO;
+import com.xzit.common.order.model.dto.PaymentStaticsDataDTO;
 import com.xzit.common.order.model.vo.OrderVO;
 import com.xzit.common.sys.exception.BizException;
 import com.xzit.common.sys.model.vo.QueryVO;
@@ -195,7 +198,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getInStoreOrder() {
-        return List.of();
+        return orderMapper.getInStoreOrder();
+    }
+
+    @Override
+    public List<OrderStaticsDataDTO> getOrderStaticsData() {
+        return orderMapper.getOrderStaticsData();
+    }
+
+    @Override
+    public PaymentStaticsDataDTO getPaymentStaticsData() {
+        return orderMapper.getPaymentStaticsData();
+    }
+
+    @Override
+    public List<AreaStaticsDataDTO> getAreaStaticsData(Long areaId) {
+        return orderMapper.getAreaStaticsData(areaId);
     }
 
     @Override
