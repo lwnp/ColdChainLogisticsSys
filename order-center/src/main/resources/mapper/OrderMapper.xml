@@ -143,4 +143,7 @@
             and (ro.username like concat('%',#{queryVO.query},'%') or ro.sender_address like concat('%',#{queryVO.query},'%') or ro.receiver_address like concat('%',#{queryVO.query},'%') or ro.create_time like concat('%',#{queryVO.query},'%') )
         </if>
     </select>
+    <select id="getInStoreOrder" resultType="com.xzit.common.order.entity.Order">
+        select o.* from t_order o left join t_warehouse_log wl on wl.order_num=o.order_num where wl.is_stored=1
+    </select>
 </mapper>

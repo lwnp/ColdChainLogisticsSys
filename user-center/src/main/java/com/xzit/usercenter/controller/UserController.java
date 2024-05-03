@@ -71,7 +71,7 @@ public class UserController {
 
     }
     @PostMapping("/getUserInfoByQuery")
-    @Operation(summary = "获取用户信息",description = "query为空则返回全部")
+    @Operation(summary = "获取普通用户信息",description = "query为空则返回全部")
     ServerResponse<IPage<UserInfoDTO>> getUserInfoByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(userInfoService.loadUserInfo(queryVO));
     }
@@ -164,6 +164,11 @@ public class UserController {
     @Operation(summary = "分页查询管理员信息")
     ServerResponse<IPage<UserInfoDTO>> listAdminByQuery(@RequestBody @Valid QueryVO queryVO){
         return ServerResponse.success(userInfoService.listAdminInfoByQuery(queryVO));
+    }
+    @PostMapping("/listCourierByQuery")
+    @Operation(summary = "分页查询司机信息")
+    ServerResponse<IPage<UserInfoDTO>> listCourierByQuery(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(userInfoService.getCourierInfoByQuery(queryVO));
     }
 
 }

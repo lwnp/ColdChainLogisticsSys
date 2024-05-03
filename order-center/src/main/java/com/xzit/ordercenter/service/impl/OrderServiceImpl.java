@@ -194,6 +194,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getInStoreOrder() {
+        return List.of();
+    }
+
+    @Override
     public Order getOrderByOrderNum(String orderNum) {
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("order_num", orderNum);

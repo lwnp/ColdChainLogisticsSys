@@ -64,4 +64,16 @@
     <select id="getGoodsByOrderNum" resultType="com.xzit.common.order.entity.Goods">
         select og.* from t_order_goods og left join t_order o on og.id=o.goods_id where o.order_num=#{orderNum}
     </select>
+    <select id="getAvailableGoodsByQuery" resultType="com.xzit.common.order.model.dto.GoodsDTO" resultMap="goodsDTOMapper">
+        select og.* ,
+        u.username as username,
+        gs.name as check_status_name
+        from t_order_goods og
+        left join t_user u on og.user_info_id=u.user_info_id
+        left join t_goods_status gs on og.status_id=gs.id
+        where u.user_info_id=#{userInfoId} and og.status_id=2
+        <if test="!queryVO.query.isEmpty()">
+            and (og.name like concat('%',#{queryVO.query},'%') or og.description like concat('%',#{queryVO.query},'%'))
+        </if>
+    </select>
 </mapper>

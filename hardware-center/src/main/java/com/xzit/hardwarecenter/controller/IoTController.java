@@ -1,5 +1,6 @@
 package com.xzit.hardwarecenter.controller;
 
+import com.xzit.common.hardware.model.dto.LimitDTO;
 import com.xzit.common.sys.entity.ServerResponse;
 import com.xzit.hardwarecenter.service.IoTService;
 import lombok.RequiredArgsConstructor;

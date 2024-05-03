@@ -13,5 +13,7 @@ public interface LogisticFlowService {
     List<WarehouseDataDTO> getWarehouseData(String orderNum);
     String getWarehouseLiveStreamUrl(String orderNum);
     List<String> getCarLiveStreamUrl(String orderNum);
+    Long getCenterIdByOrderNum(String orderNum);
+
 
 }

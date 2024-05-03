@@ -9,6 +9,7 @@ import com.xzit.common.order.model.dto.OrderDTO;
 import com.xzit.common.order.model.vo.OrderVO;
 import com.xzit.common.sys.model.vo.QueryVO;
 
+import java.util.List;
 import java.util.function.Function;
 
 public interface OrderService {
@@ -25,4 +26,5 @@ public interface OrderService {
     IPage<OrderDTO> getReceiverHistoryOrderByQuery(QueryVO queryVO);
     void deleteOrder(Long orderId);
     String continuePay(String orderNum);
+    List<Order> getInStoreOrder();
 }

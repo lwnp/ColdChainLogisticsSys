@@ -127,5 +127,10 @@ public class OrderController {
     ServerResponse<String> continuePay(@PathVariable String orderNum){
         return ServerResponse.success(orderService.continuePay(orderNum));
     }
+    @PostMapping("/getAvailableGoods")
+    @Operation(summary = "用户分页获取已审核货物")
+    ServerResponse<IPage<GoodsDTO>> getAvailableGoods(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(goodsService.getAvailableGoodsByQuery(queryVO));
+    }
 
 }

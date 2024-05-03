@@ -42,6 +42,7 @@ public class LogisticsController {
     private final LogisticService logisticService;
     private final FileService fileService;
     private final LogisticFlowService logisticFlowService;
+    private final LimitTempService limitTempService;
     @GetMapping("/areaInfo")
     @Operation(summary = "获取id地区表")
     @AccessLimit(seconds = 600,maxCount = 1)
@@ -404,6 +405,17 @@ public class LogisticsController {
     @Operation(summary = "获取车辆实时视频流" )
     ServerResponse<List<String>> getCarLiveStreamUrl(@PathVariable String orderNum){
         return ServerResponse.success(logisticFlowService.getCarLiveStreamUrl(orderNum));
+    }
+    @PostMapping("/getWarehouseTempLimit")
+    @Operation(summary = "获取仓库温度报警阈值" )
+    ServerResponse<IPage<LimitTempDTO>> getWarehouseTempLimit(@RequestBody @Valid QueryVO queryVO){
+        return ServerResponse.success(limitTempService.getLimitTempByQuery(queryVO));
+    }
+    @PatchMapping("/modifyWarehouseTempLimit")
+    @Operation(summary = "修改仓库温度报警阈值" )
+    ServerResponse<?> modifyWarehouseTempLimit(@RequestBody @Valid LimitTempVO limitTempVO){
+        limitTempService.modifyLimitTemp(limitTempVO);
+        return ServerResponse.success();
     }
 
 }

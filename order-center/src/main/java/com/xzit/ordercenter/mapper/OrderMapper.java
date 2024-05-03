@@ -9,6 +9,8 @@ import com.xzit.common.sys.model.vo.QueryVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface OrderMapper extends BaseMapper<Order> {
     IPage<OrderDTO> getOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO);
@@ -18,4 +20,5 @@ public interface OrderMapper extends BaseMapper<Order> {
     OrderDTO getUnpaidOrder(@Param("userInfoId") Long userInfoId);
     IPage<OrderDTO> getReceiverOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
     IPage<OrderDTO> getReceiverHistoryOrderByQuery(Page<OrderDTO> page, @Param("queryVO") QueryVO queryVO,@Param("userInfoId") Long userInfoId);
+    List<Order> getInStoreOrder();
 }

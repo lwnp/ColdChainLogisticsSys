@@ -30,3 +30,5 @@ spring:
         shared-configs[5]:
           data-id: sys-common-upload.yaml
           refresh: true
+live:
+  stream: rtmp://120.55.161.138/live

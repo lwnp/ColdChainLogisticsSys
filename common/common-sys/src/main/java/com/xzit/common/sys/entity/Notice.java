@@ -25,6 +25,7 @@ public class Notice {
     Boolean isAdminMessage;
     String title;
     String content;
+    Boolean isAlarm;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @TableField(fill = FieldFill.INSERT,value = "create_time")

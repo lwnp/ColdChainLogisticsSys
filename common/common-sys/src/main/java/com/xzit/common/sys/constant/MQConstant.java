@@ -15,4 +15,7 @@ public interface MQConstant {
     String COURIER_ARRANGE_TITLE="订单%s任务状态已更新";
     String COURIER_ARRANGE_CONTENT="请查看自己任务";
     String WAREHOUSE_EXCHANGE="warehouse-out-1";
+    String ALARM_TITLE="发生告警";
+    String ALARM_CONTENT="订单%s,在%s仓库,发生告警请前往查看";
+    String ALARM_USER_CONTENT= "您的订单%s,发生告警,请等待管理员联系";
 }

@@ -1,11 +1,13 @@
 package com.xzit.common.hardware.model.vo;
 
+import co.elastic.clients.util.DateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -18,5 +20,5 @@ public class WarehouseDataVO {
     Double dioxide;
     Double methane;
     Double oxide;
-    LocalDateTime createTime;
+    Date createTime;
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzit.logisticscenter.mapper.LimitTempMapper">
+    <resultMap id="limitTempDTOResultMapper" type="com.xzit.common.logistics.model.dto.LimitTempDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="min" column="min"/>
+        <result property="max" column="max"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="getLimitTempByQuery" resultType="com.xzit.common.logistics.model.dto.LimitTempDTO" resultMap="limitTempDTOResultMapper">
+        select lt.*, lc.name as name from t_limit_temp lt left join t_logistics_center lc on lt.center_id=lc.id
+        <if test="!queryVO.query.isEmpty()">
+            where lc.name like concat('%',#{queryVO.query},'%') or lt.id like concat('%',#{queryVO.query},'%')
+        </if>
+    </select>
+</mapper>

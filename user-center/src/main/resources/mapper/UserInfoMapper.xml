@@ -27,7 +27,7 @@
             on u.user_info_id=ui.id
             left join t_role r
             on r.id=u.role_id
-            where u.role_id in (3,4)
+            where u.role_id =4
             <if test="!queryVO.query.isEmpty()">
                 and (u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%') or r.name like concat('%',#{queryVO.query},'%'))
             </if>
@@ -53,5 +53,16 @@
         left join t_role r
         on r.id=u.role_id
         where u.id=#{userId}
+    </select>
+    <select id="getCourierInfoByQuery" resultType="com.xzit.common.user.model.dto.UserInfoDTO" resultMap="userInfoDTOResultMapper">
+        select ui.id,u.username,u.is_disable,ui.email,ui.avatar,ui.nickname,ui.phone,ui.create_time,ui.update_time,r.name
+        from t_user_info ui left join t_user u
+        on u.user_info_id=ui.id
+        left join t_role r
+        on r.id=u.role_id
+        where u.role_id =3
+        <if test="!queryVO.query.isEmpty()">
+            and (u.username like concat('%',#{queryVO.query},'%') or ui.nickname like concat('%',#{queryVO.query},'%') or ui.phone like concat('%',#{queryVO.query},'%') or ui.email like concat('%',#{queryVO.query},'%') or r.name like concat('%',#{queryVO.query},'%'))
+        </if>
     </select>
 </mapper>

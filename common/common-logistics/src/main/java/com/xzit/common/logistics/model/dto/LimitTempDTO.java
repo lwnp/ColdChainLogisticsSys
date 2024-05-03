@@ -1,4 +1,4 @@
-package com.xzit.common.sys.model.dto;
+package com.xzit.common.logistics.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +11,11 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeDTO {
+public class LimitTempDTO {
     Long id;
-    String username;
-    Boolean isRead;
-    String title;
-    String content;
-    Boolean isAlarm;
+    String name;
+    Double min;
+    Double max;
     LocalDateTime createTime;
+    LocalDateTime updateTime;
 }

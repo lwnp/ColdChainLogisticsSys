@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.entity.Center;
+import com.xzit.common.logistics.entity.LimitTemp;
 import com.xzit.common.logistics.model.dto.CenterDTO;
 import com.xzit.common.logistics.model.vo.CenterVO;
 import com.xzit.common.sys.exception.BizException;
@@ -13,11 +14,13 @@ import com.xzit.common.sys.model.vo.QueryVO;
 import com.xzit.common.sys.utils.BeanCopyUtil;
 import com.xzit.logisticscenter.mapper.ArrangementMapper;
 import com.xzit.logisticscenter.mapper.CenterMapper;
+import com.xzit.logisticscenter.mapper.LimitTempMapper;
 import com.xzit.logisticscenter.service.CenterService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,7 @@ import java.util.function.Function;
 public class CenterServiceImpl implements CenterService {
     private final CenterMapper centerMapper;
     private final ArrangementMapper arrangementMapper;
+    private final LimitTempMapper limitTempMapper;
     @Override
     public Boolean addLogisticsCenter(CenterVO centerVO) {
         if (centerVO == null) {
@@ -44,7 +48,9 @@ public class CenterServiceImpl implements CenterService {
         }
         Center center= BeanCopyUtil.copyObject(centerVO, Center.class);
         center.setFreeSpace(centerVO.getMaxSpace());
-        return centerMapper.insert(center)==1;
+        centerMapper.insert(center);
+        LimitTemp limitTemp= LimitTemp.builder().centerId(center.getId()).createTime(new Date()).updateTime(new Date()).build();
+        return limitTempMapper.insert(limitTemp)==1;
     }
 
     @Override

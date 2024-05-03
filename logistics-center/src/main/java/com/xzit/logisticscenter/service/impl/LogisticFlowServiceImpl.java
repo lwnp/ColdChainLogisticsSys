@@ -95,5 +95,11 @@ public class LogisticFlowServiceImpl implements LogisticFlowService {
         return keys;
     }
 
+    @Override
+    public Long getCenterIdByOrderNum(String orderNum) {
+        WarehouseLog warehouseLog = warehouseLogMapper.selectOne(new QueryWrapper<WarehouseLog>().eq("order_num", orderNum).eq("is_stored", 1));
+        return warehouseLog.getCenterId();
+    }
+
 
 }

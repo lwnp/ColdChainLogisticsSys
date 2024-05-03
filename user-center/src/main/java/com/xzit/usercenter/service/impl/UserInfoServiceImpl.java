@@ -126,5 +126,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         return user != null && user.getRoleId() == 3;
     }
 
+    @Override
+    public IPage<UserInfoDTO> getCourierInfoByQuery(QueryVO queryVO) {
+        Page<UserInfoDTO> userInfoDTOPage=new Page<>(queryVO.getPageNum(), queryVO.getPageSize());
+        return userInfoMapper.getCourierInfoByQuery(userInfoDTOPage,queryVO);
+    }
+
 
 }

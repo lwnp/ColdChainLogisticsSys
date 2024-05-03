@@ -6,11 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(scanBasePackages = {"com.xzit"})
 @EnableFeignClients(basePackages = {"com.xzit.api.**.feign"})
 @EnableScheduling
+@IntegrationComponentScan
 public class HardwareCenterApplication {
 
     public static void main(String[] args) {

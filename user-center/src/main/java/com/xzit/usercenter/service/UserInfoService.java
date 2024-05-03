@@ -17,5 +17,5 @@ public interface UserInfoService {
     IPage<UserInfoDTO> listAdminInfoByQuery(QueryVO queryVO);
     UserInfoDTO getUserInfoByUserId(Long userId);
     Boolean isValidCourier(Long userInfoId);
-
+    IPage<UserInfoDTO> getCourierInfoByQuery(QueryVO queryVO);
 }

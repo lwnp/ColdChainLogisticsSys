@@ -192,4 +192,15 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods getGoodsByOrderNum(String orderNum) {
         return goodsMapper.getGoodsByOrderNum(orderNum);
     }
+
+    @Override
+    public IPage<GoodsDTO> getAvailableGoodsByQuery(QueryVO queryVO) {
+        Jwt jwt= (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String,Object> map=jwt.getClaims();
+        Long userId= (Long) map.get("userId");
+        UserInfoDTO userInfoDTO=userFeignClient.getUserInfo(userId).getData();
+        Page<GoodsDTO> page=new Page<>(queryVO.getPageNum(),queryVO.getPageSize());
+        return goodsMapper.getAvailableGoodsByQuery(page,queryVO,userInfoDTO.getId());
+    }
+
 }

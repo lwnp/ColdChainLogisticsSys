@@ -8,6 +8,8 @@ import com.xzit.ordercenter.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class OrderFeignController implements OrderFeignClient {
@@ -22,5 +24,10 @@ public class OrderFeignController implements OrderFeignClient {
     public ServerResponse<?> orderFinish(String orderNum) {
         orderService.finishOrder(orderNum);
         return ServerResponse.success();
+    }
+
+    @Override
+    public ServerResponse<List<Order>> getInStoreOrder() {
+        return ServerResponse.success(orderService.getInStoreOrder());
     }
 }

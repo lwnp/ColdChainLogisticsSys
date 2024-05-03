@@ -1,9 +1,11 @@
 package com.xzit.common.sys.config;
 
+import co.elastic.clients.util.DateTime;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.xzit.common.sys.typehandler.DateTimeTypeHandler;
 import com.xzit.common.sys.typehandler.StringListTypeHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
