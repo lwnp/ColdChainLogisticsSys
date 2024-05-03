@@ -5,6 +5,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.core.MessageProducer;
@@ -63,9 +64,9 @@ public class MQTTConfig {
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler mqttOutbound() {
         MqttPahoMessageHandler messageHandler =
-                new MqttPahoMessageHandler(MQTTConstant.CLIENT_ID, mqttClientFactory());
-        messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic(MQTTConstant.WAREHOUSE_TOPIC);
+                new MqttPahoMessageHandler(MQTTConstant.CLIENT_ID_REPLY, mqttClientFactory());
+        messageHandler.setAsync(false);
+        messageHandler.setDefaultTopic(MQTTConstant.REPLY_TOPIC);
         return messageHandler;
     }
 
@@ -73,4 +74,5 @@ public class MQTTConfig {
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
+
 }
