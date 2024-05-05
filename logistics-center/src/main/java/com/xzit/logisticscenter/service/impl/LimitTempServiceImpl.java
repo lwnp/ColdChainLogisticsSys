@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,5 +52,10 @@ public class LimitTempServiceImpl implements LimitTempService {
     @Override
     public LimitTemp getLimitTempById(Long id) {
         return limitTempRepository.findByCenterId(id);
+    }
+
+    @Override
+    public List<LimitTemp> getLimitTempList() {
+        return limitTempRepository.findAllBy();
     }
 }

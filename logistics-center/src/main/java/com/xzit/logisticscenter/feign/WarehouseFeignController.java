@@ -8,6 +8,8 @@ import com.xzit.logisticscenter.service.LogisticFlowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class WarehouseFeignController implements WarehouseFeignClient {
@@ -22,5 +24,10 @@ public class WarehouseFeignController implements WarehouseFeignClient {
     @Override
     public ServerResponse<LimitTemp> getLimitTempById(Long id) {
         return ServerResponse.success(limitTempService.getLimitTempById(id));
+    }
+
+    @Override
+    public ServerResponse<List<LimitTemp>> getLimitTempList() {
+        return ServerResponse.success(limitTempService.getLimitTempList());
     }
 }

@@ -6,7 +6,7 @@ spring:
         acknowledge-mode: manual
         default-requeue-rejected: false
   profiles:
-    active: dev
+    active: prod
   main:
     allow-bean-definition-overriding: true
 mybatis-plus:
