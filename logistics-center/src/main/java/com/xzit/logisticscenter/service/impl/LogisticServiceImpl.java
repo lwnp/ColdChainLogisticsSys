@@ -214,6 +214,9 @@ public class LogisticServiceImpl implements LogisticService {
         if(arrangement==null){
             throw new BizException("非法订单号");
         }
+        if(arrangement.getStatusId()!=2L){
+            throw new BizException("非法操作");
+        }
         arrangement.setStatusId(3L);
         arrangementMapper.updateById(arrangement);
         Arrangement toStation=arrangementMapper.selectOne(new QueryWrapper<Arrangement>().eq("order_num",orderNum).and(q->q.eq("step_id",2).and(f->f.eq("courier_id",courier.getId()))));

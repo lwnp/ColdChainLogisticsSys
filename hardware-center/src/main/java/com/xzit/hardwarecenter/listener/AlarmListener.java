@@ -30,12 +30,13 @@ public class AlarmListener {
     @Scheduled(fixedDelay = 600000)
     public void scanData(){
         List<Order> orderList = orderFeignClient.getInStoreOrder().getData();
+        long timestamp = new Date().getTime();
+        long startTime = timestamp - 600000;
+        warehouseDataRepository.deleteAllByCreateTimeIsBefore(new Date(startTime));
         if(orderList != null && !orderList.isEmpty()){
             for(Order order : orderList){
                 Long centerId= warehouseFeignClient.getCenterIdByOrderNum(order.getOrderNum()).getData();
                 Goods goods = goodsFeignClient.getGoodsByOrderNum(order.getOrderNum()).getData();
-                long timestamp = new Date().getTime();
-                long startTime = timestamp - 600000;
                 List<WarehouseData> warehouseData=warehouseDataRepository.getAllByCenterIdAndCreateTimeIsAfter(centerId,new Date(startTime));
                 for (WarehouseData scanData : warehouseData){
                     if(scanData.getHumidity() > goods.getMaxHumidity() || scanData.getHumidity() < goods.getMinHumidity()

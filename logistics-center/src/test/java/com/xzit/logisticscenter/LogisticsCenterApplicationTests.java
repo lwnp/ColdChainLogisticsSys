@@ -5,10 +5,7 @@ import com.xzit.common.logistics.entity.Area;
 import com.xzit.common.logistics.entity.Arrangement;
 import com.xzit.common.logistics.entity.FeeStates;
 import com.xzit.common.logistics.entity.LogisticFlow;
-import com.xzit.logisticscenter.mapper.AreaMapper;
-import com.xzit.logisticscenter.mapper.ArrangementMapper;
-import com.xzit.logisticscenter.mapper.FeeStatesMapper;
-import com.xzit.logisticscenter.mapper.LogisticFlowMapper;
+import com.xzit.logisticscenter.mapper.*;
 import com.xzit.logisticscenter.repository.LimitTempRepository;
 import com.xzit.logisticscenter.service.impl.LogisticServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -35,10 +32,11 @@ class LogisticsCenterApplicationTests {
     LogisticFlowMapper logisticFlowMapper;
     @Autowired
     LimitTempRepository limitTempRepository;
+    @Autowired
+    CourierMapper courierMapper;
 
     @Test
     void contextLoads() {
-        limitTempRepository.findAll().forEach(System.out::println);
 
     }
 

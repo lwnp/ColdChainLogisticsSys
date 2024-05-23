@@ -42,12 +42,13 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public void addGoods(GoodsVO goodsVO) {
+        System.out.println("goodsVO: " + goodsVO);
         if (goodsVO.getMaxTemperature() == null || goodsVO.getMinTemperature() == null ||
                 goodsVO.getMaxHumidity() == null || goodsVO.getMinHumidity() == null ||
                 goodsVO.getMaxDioxide() == null || goodsVO.getMinDioxide() == null ||
                 goodsVO.getMaxMethane() == null || goodsVO.getMinMethane() == null ||
                 goodsVO.getMaxOxide() == null || goodsVO.getMinOxide() == null) {
-            throw new BizException("All temperature, humidity, dioxide, methane, ethylene, and oxide values must be provided.");
+            throw new BizException("All temperature, humidity, dioxide, methane,and oxide values must be provided.");
         }
 
         if (goodsVO.getMaxTemperature() < goodsVO.getMinTemperature()) {

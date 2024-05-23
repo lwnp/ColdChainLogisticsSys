@@ -17,6 +17,7 @@ import java.util.List;
 public interface WarehouseDataRepository extends ElasticsearchRepository<WarehouseData,Long> {
     List<WarehouseData> findAllByCenterId(Long centerId);
     List<WarehouseData> getAllByCenterIdAndCreateTimeIsAfter(Long centerId, Date createTime);
+    void deleteAllByCreateTimeIsBefore(Date createTime);
 
 }
 

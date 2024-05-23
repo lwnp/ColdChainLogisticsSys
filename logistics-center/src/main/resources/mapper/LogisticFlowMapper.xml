@@ -27,11 +27,9 @@
         FROM t_iot_data id
                  LEFT JOIN t_arrangement a ON a.id = id.arrangement_id
         WHERE a.order_num = #{orderNum}
-          AND id.create_time = (SELECT MAX(create_time)
-                                FROM t_iot_data
-                                WHERE arrangement_id = a.id
-                                  AND step_id = a.step_id)
+          AND FIND_IN_SET(id.arrangement_id, get_arrangement_ids(#{orderNum})) > 0
         ORDER BY id.create_time ASC;
     </select>
+
 
 </mapper>

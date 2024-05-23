@@ -137,6 +137,8 @@ public class UserServiceImpl implements UserService {
         user.setRoleId(4L);
         return userMapper.updateById(user)==1;
     }
+
+
     private AuthUser isValidUser(String username){
         if (StringUtils.isAnyBlank(username)){
             return null;

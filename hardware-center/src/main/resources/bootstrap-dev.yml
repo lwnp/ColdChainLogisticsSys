@@ -11,7 +11,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/cold_chain_logistics_sys
+    url: jdbc:mysql://localhost:3306/cold_chain_logistics_sys?Timezone=Asia/Shanghai
   security:
     oauth2:
       resourceserver:
